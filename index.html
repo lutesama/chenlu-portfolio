@@ -376,22 +376,25 @@
     }
     @media (max-width:520px){
       .mast{ flex-direction:column; align-items:flex-start; }
-      .right{ width:100%; gap:10px; }
 
-    /* ✅ 关键：不换行，改为横向滚动 */
+      .right{
+        width:100%;
+        gap:10px;
+        flex-wrap: nowrap;        /* ✅ 新增：不允许 .right 自己换行 */
+        justify-content:flex-end; /* ✅ 可选：让导航靠右（你想要的话） */
+      }
+
       .nav{
-         width:100%;
-         flex-wrap:nowrap;
-         overflow-x:auto;
-         -webkit-overflow-scrolling:touch;
-         gap:18px;
-         padding-bottom:6px;       /* 给一点空间避免滚动条挤 */
-         scrollbar-width:none;     /* Firefox 隐藏滚动条 */
-       }
-       .nav::-webkit-scrollbar{ display:none; } /* Safari/Chrome 隐藏滚动条 */
+        width:100%;
+        flex-wrap: nowrap;        /* ✅ 新增：不允许 nav 换行 */
+        gap:12px;                 /* ✅ 可选：收紧一点 */
+        white-space: nowrap;      /* ✅ 新增：整体不拆行 */
+      }
 
-       .h-title{ font-size:34px; }
-       }
+      .lang-toggle{
+        white-space: nowrap;      /* ✅ 新增：EN | CN 不拆 */
+      }
+    }
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .item, .nav a::after, .chip{ transition:none !important; }
