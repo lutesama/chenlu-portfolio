@@ -118,6 +118,13 @@
       color:var(--muted);
       user-select:none;
     }
+    .nav .lang-toggle{
+      display:inline-flex;
+      align-items:flex-end;
+      gap:8px;
+      white-space:nowrap;
+      margin-left: 2px;
+    }
     .lang-toggle .sep{
       opacity:.55;
       padding-bottom:2px;
@@ -136,7 +143,7 @@
       outline-offset: 3px;
       border-radius: 10px;
     }
-
+    
     .main{ padding-top: 14px; }
 
     .banner{ margin:10px 0 56px; }
@@ -415,13 +422,13 @@
 
         <!-- 这里把 cv.pdf 换成你的真实文件名/路径 -->
         <a href="cv.pdf" target="_blank" rel="noopener">CV ↗</a>
-      </nav>
 
-      <div class="lang-toggle" aria-label="Language toggle">
-        <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
-        <span class="sep">|</span>
-        <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
-      </div>
+        <span class="lang-toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </span>
+      </nav>
     </div>
   </div>
 </div>
