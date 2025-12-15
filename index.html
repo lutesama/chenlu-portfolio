@@ -81,6 +81,7 @@
     .right{
       display:flex;
       align-items:flex-end;
+      justify-content:flex-end;
       gap:18px;
       flex-wrap:wrap;
     }
@@ -373,12 +374,24 @@
       .thumb{ height:220px; }
       .h-title{ font-size:40px; }
     }
-    @media(max-width:520px){
+    @media (max-width:520px){
       .mast{ flex-direction:column; align-items:flex-start; }
-      .nav{ flex-wrap:wrap; }
-      .h-title{ font-size:34px; }
-      .right{ gap:10px; }
-    }
+      .right{ width:100%; gap:10px; }
+
+    /* ✅ 关键：不换行，改为横向滚动 */
+      .nav{
+         width:100%;
+         flex-wrap:nowrap;
+         overflow-x:auto;
+         -webkit-overflow-scrolling:touch;
+         gap:18px;
+         padding-bottom:6px;       /* 给一点空间避免滚动条挤 */
+         scrollbar-width:none;     /* Firefox 隐藏滚动条 */
+       }
+       .nav::-webkit-scrollbar{ display:none; } /* Safari/Chrome 隐藏滚动条 */
+
+       .h-title{ font-size:34px; }
+       }
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .item, .nav a::after, .chip{ transition:none !important; }
