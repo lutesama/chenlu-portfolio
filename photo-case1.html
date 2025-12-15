@@ -17,9 +17,11 @@
       --muted:#565656;
       --line:#e6e1d7;
       --hair:#f0ece4;
+
       --glass: rgba(251,250,247,.78);
       --glassLine: rgba(230,225,215,.75);
       --focus: rgba(15,15,15,.22);
+
       --card: rgba(255,255,255,.55);
     }
 
@@ -33,6 +35,7 @@
       line-height:1.65;
       -webkit-font-smoothing:antialiased;
     }
+
     a{color:var(--fg); text-decoration:none;}
     a:hover{text-decoration:underline; text-underline-offset:4px;}
     a:focus-visible, button:focus-visible{
@@ -47,7 +50,7 @@
     .wrap{
       max-width:1040px;
       margin:0 auto;
-      padding:0 22px 90px;
+      padding:0 22px 96px;
     }
 
     .mast-shell{
@@ -78,6 +81,7 @@
     .right{
       display:flex;
       align-items:flex-end;
+      justify-content:flex-end;
       gap:18px;
       flex-wrap:wrap;
     }
@@ -92,7 +96,10 @@
       position:relative;
       padding-bottom:2px;
     }
-    .nav a:hover, .lang-toggle button:hover{ color:var(--fg); text-decoration:none; }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
     .nav a::after{
       content:"";
       position:absolute;
@@ -112,198 +119,243 @@
       color:var(--muted);
       user-select:none;
     }
-    .lang-toggle .sep{ opacity:.55; padding-bottom:2px; }
+    .nav .lang-toggle{
+      display:inline-flex;
+      align-items:flex-end;
+      gap:8px;
+      white-space:nowrap;
+      margin-left: 2px;
+    }
+    .lang-toggle .sep{
+      opacity:.55;
+      padding-bottom:2px;
+    }
     .lang-toggle button{
       font: inherit;
       background: transparent;
       border: 0;
       cursor:pointer;
     }
-    .lang-toggle button.active{ color:var(--fg); }
-
-    .main{ padding-top: 16px; }
-
-    /* ===== Head ===== */
-    .breadcrumb{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      font-size:13px; color:var(--muted);
-      margin: 18px 0 6px;
+    .lang-toggle button.active{
+      color:var(--fg);
     }
-    .breadcrumb a{ color:var(--muted); }
-    .breadcrumb a:hover{ color:var(--fg); text-decoration:none; }
-    .breadcrumb .sep{ opacity:.55; }
+    .lang-toggle button:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+    
+    .main{ padding-top: 14px; }
 
-    .page-title{
+    .banner{ margin:10px 0 56px; }
+    .cover{
+      margin: 32px auto 12px;
+      background: none;
+      border-radius: 0;
+      overflow: visible;
+    }
+    .cover img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .cover-caption{
+      font-size: 14px;
+      line-height: 1.6;
+      color: #777;
+      margin: 10px 0 22px;
+      max-width: 720px;
+    }
+
+    .hero{
+      max-width:760px;
+      margin-top: 6px;
+      margin-bottom:88px;
+    }
+    .h-title{
       font-family:"Libre Baskerville", serif;
-      font-size:44px;
-      margin:0 0 10px;
+      font-size:52px;
+      margin:0 0 16px;
       line-height:1.15;
     }
-    .page-deck{
-      max-width: 860px;
-      font-size:16px;
+    .h-deck{
+      font-size:18px;
       color:var(--muted);
-      margin:0 0 10px;
+      margin:0;
     }
-    .meta{
-      max-width:860px;
+    .h-links{
+      margin-top:22px;
       display:flex;
+      gap:14px;
       flex-wrap:wrap;
-      gap:10px;
+      font-size:14.5px;
+    }
+    .h-links a{
+      border-bottom:1px solid var(--line);
+      padding-bottom:2px;
+    }
+    .h-links a:hover{
+      border-bottom-color:var(--fg);
+      text-decoration:none;
+    }
+
+    section{ margin-bottom:96px; scroll-margin-top: 92px; }
+    .sec-head{
+      display:flex;
+      justify-content:space-between;
       align-items:baseline;
-      font-size:12.5px;
+      margin-bottom:16px;
+      gap:18px;
+    }
+    .sec-title{
+      font-family:"Libre Baskerville", serif;
+      font-size:28px;
+      margin:0;
+    }
+    .sec-note{
+      font-size:13.5px;
       color:var(--muted);
-      margin: 8px 0 0;
-    }
-    .meta .dot{ opacity:.55; }
-
-    .rule{ border-top:1px solid var(--line); margin: 18px 0; }
-
-    /* ===== Viewer ===== */
-    .viewer{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
+      margin:0;
     }
 
-    .stage{
-      position:relative;
-      border-top:1px solid var(--line);
-      padding-top: 18px;
-    }
-
-    .frame{
-      position:relative;
-      width:100%;
-      border: 1px solid var(--hair);
-      border-radius: 12px;
-      overflow:hidden;
-      background: transparent;
-    }
-
-    /* 主图区域：不用瀑布流，保持“杂志版心”感 */
-    .hero{
-      width:100%;
-      aspect-ratio: 16 / 9; /* 你可以改成 3/2 或 4/3 */
-      background: var(--hair);
+    .sec-left{
       display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
-    .hero img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      display:block;
-      transform: translateZ(0);
+      align-items:baseline;
+      gap:10px;
     }
 
-    .navbtn{
-      position:absolute;
-      top:50%;
-      transform: translateY(-50%);
-      width:42px;
-      height:42px;
-      border-radius: 999px;
-      border: 1px solid var(--hair);
-      background: rgba(251,250,247,.84);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      cursor:pointer;
+    .sec-actions{
       display:flex;
-      align-items:center;
-      justify-content:center;
-      color: var(--fg);
-      transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
-    }
-    .navbtn:hover{
-      background: rgba(255,255,255,.78);
-      border-color: var(--line);
-      transform: translateY(-50%) scale(1.02);
-    }
-    .navbtn:active{ transform: translateY(-50%) scale(.98); }
-    .navbtn.prev{ left: 12px; }
-    .navbtn.next{ right: 12px; }
-
-    .navbtn svg{ width:18px; height:18px; opacity:.92; }
-
-    .counter{
-      position:absolute;
-      left: 12px;
-      bottom: 12px;
-      font-size: 12.5px;
-      color: var(--muted);
-      background: rgba(251,250,247,.86);
-      border: 1px solid var(--hair);
-      border-radius: 999px;
-      padding: 6px 10px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      align-items:baseline;
+      gap:14px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    .cap{
-      max-width: 860px;
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 10px;
-      line-height: 1.5;
+    .view-all{
+      font-size:13.5px;
+      color:var(--muted);
+      border-bottom:1px solid var(--line);
+      padding-bottom:2px;
+    }
+    .view-all:hover{
+      color:var(--fg);
+      border-bottom-color:var(--fg);
+      text-decoration:none;
     }
 
-    /* ===== Thumbnail strip ===== */
-    .strip{
+    .chips{
       display:flex;
       gap:10px;
-      overflow:auto;
-      padding: 10px 2px 2px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
+      flex-wrap:wrap;
+      align-items:center;
+      margin: 0 0 22px;
     }
+    .chip{
+      appearance:none;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color .16s ease, color .16s ease, transform .16s ease;
+    }
+    .chip:hover{
+      color: var(--fg);
+      background: var(--card);
+      transform: translateY(-1px);
+    }
+    .chip.is-active{
+      color: var(--fg);
+      background: var(--card);
+      border-color: var(--fg);
+    }
+
+    .toc{ border-top:1px solid var(--line); }
+
+    .item{
+      display:grid;
+      grid-template-columns:280px 1fr;
+      gap:32px;
+      padding:28px 0;
+      border-bottom:1px solid var(--hair);
+      border-radius:6px;
+      transition: transform .16s ease, background-color .16s ease;
+    }
+    .item:hover{
+      transform: translateY(-2px);
+      background: var(--card);
+    }
+    .item.is-hidden{ display:none; }
+    .toc .item:last-child{ border-bottom:none; }
+
     .thumb{
-      flex: 0 0 auto;
-      width: 112px;
-      aspect-ratio: 16 / 10;
-      border-radius: 6px;      /* 可以保留很小的圆角，也可以改成 0 */
+      width:100%;
+      height:180px;
       overflow:hidden;
-      border: none;            /* ❗ 去掉边框 */
-      background: transparent; /* ❗ 去掉背景 */
-      cursor:pointer;
-      scroll-snap-align: start;
-      position: relative;
-      opacity: .45;            /* ❗ 默认更“轻” */
-      transition: opacity .18s ease, transform .18s ease;
-    }
-    .thumb:hover{
-      opacity: .75;
-      transform: translateY(-1px); /* 很轻就好 */
+      background:var(--hair);
+      border:1px solid var(--line);
+      border-radius:6px;
     }
     .thumb img{
       width:100%;
       height:100%;
-      object-fit: cover;
+      object-fit:cover;
+      object-position:center;
       display:block;
+      transform:scale(1.01);
     }
-    .thumb.is-active{
-      opacity: 1;              /* 当前图最清晰 */
+    .item:hover .thumb img{
+      transform: scale(1.03);
+      transition: transform .32s ease;
     }
 
-    /* ===== Notes block ===== */
-    .notes{
-      max-width: 860px;
-      border-top: 1px solid var(--line);
-      padding-top: 16px;
-      margin-top: 22px;
+    .item-text{
+      max-width:560px;
+      padding-right: 10px;
     }
-    .notes h2{
-      margin:0 0 10px;
+    .item-text strong{
+      display:block;
+      font-size:20px;
+      margin-bottom:6px;
+      letter-spacing:.1px;
+    }
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      margin: 0 0 10px;
       font-size:12.5px;
       color:var(--muted);
-      letter-spacing:.08em;
-      text-transform:uppercase;
     }
-    .notes h2.zh{ text-transform:none; letter-spacing:.02em; }
-    .notes p{ margin:0 0 12px; font-size: 15px; }
-    .notes p.muted{ color: var(--muted); }
+    .meta .dot{ opacity:.55; }
+    .item-text span.desc{
+      display:block;
+      font-size:15px;
+      color:var(--muted);
+    }
+
+    .about{
+      border-top:1px solid var(--line);
+      padding-top:24px;
+    }
+    .about p{
+      max-width:820px;
+      color:var(--muted);
+      font-size:16px;
+      margin:0;
+    }
+    .sec-note a{
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .sec-note a:hover{
+      color: var(--fg);
+    }
 
     footer{
       margin-top:90px;
@@ -316,26 +368,44 @@
       gap:18px;
       flex-wrap:wrap;
     }
-    footer a{ color:var(--muted); }
-    footer a:hover{ color:var(--fg); text-decoration:none; }
 
     @media(max-width:860px){
-      .page-title{ font-size:36px; }
-      .thumb{ width: 96px; }
+      .item{ grid-template-columns:1fr; }
+      .thumb{ height:220px; }
+      .h-title{ font-size:40px; }
     }
-    @media(max-width:520px){
+    @media (max-width:520px){
       .mast{ flex-direction:column; align-items:flex-start; }
-      .nav{ flex-wrap:wrap; }
-      .page-title{ font-size:32px; }
-      .navbtn{ width:40px; height:40px; }
-      .hero{ aspect-ratio: 4 / 3; }
+
+      .right{
+        width:100%;
+        gap:10px;
+        flex-wrap: nowrap;        /* ✅ 新增：不允许 .right 自己换行 */
+        justify-content:flex-end; /* ✅ 可选：让导航靠右（你想要的话） */
+      }
+
+      .nav{
+        width:100%;
+        flex-wrap: nowrap;        /* ✅ 新增：不允许 nav 换行 */
+        gap:12px;                 /* ✅ 可选：收紧一点 */
+        white-space: nowrap;      /* ✅ 新增：整体不拆行 */
+      }
+
+      .lang-toggle{
+        white-space: nowrap;      /* ✅ 新增：EN | CN 不拆 */
+      }
     }
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
-      .navbtn, .thumb{ transition:none !important; }
-      .thumb:hover{ transform:none; }
-      .navbtn:hover{ transform: translateY(-50%); }
+      .item, .nav a::after, .chip{ transition:none !important; }
+      .item:hover{ transform:none; }
+      .chip:hover{ transform:none; }
+      .item:hover .thumb img{ transform:scale(1.01); }
     }
+
+    /* Language toggle (stable) */
+    html[lang="en"] .lang-cn { display: none; }
+    html[lang="zh"] .lang-en { display: none; }
   </style>
 </head>
 
