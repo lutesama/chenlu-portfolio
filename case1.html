@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case · Xiao Zhan Incident — Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    /* progress */
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    /* mast (match your site) */
+    .mast-shell{
+      position:sticky; top:0; z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px; margin:0 auto;
+      padding:14px 22px;
+      display:flex; justify-content:space-between; align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{display:flex; align-items:flex-end; gap:18px; flex-wrap:wrap;}
+    .nav{display:flex; gap:22px; font-size:13.5px; align-items:flex-end;}
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{color:var(--fg);text-decoration:none;}
+    .nav a::after{
+      content:"";
+      position:absolute; left:0; right:0; bottom:-2px;
+      height:1px; background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex; align-items:flex-end; gap:8px;
+      font-size:13.5px; color:var(--muted); user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{font:inherit;background:transparent;border:0;cursor:pointer;}
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* layout */
+    .wrap{max-width:1040px; margin:0 auto; padding:0 22px 96px;}
+    .case-wrap{max-width:860px; margin:0 auto; padding:0 24px 80px;}
+
+    .top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+    .breadcrumbs{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      font-size:13px; color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+    .deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .meta{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:baseline;
+      font-size:12.5px; color:var(--muted); margin-top:10px;
+    }
+    .meta .dot{opacity:.55;}
+
+    .section{
+      margin-top:26px;
+      padding-top:18px;
+      border-top:0;
+    }
+/* Only one divider between hero and first section */
+    .section:first-of-type{
+      border-top:0;
+      padding-top:0;
+    }
+    .h2{
+      font-family:var(--serif);
+      font-size:26px;
+      line-height:1.2;
+      margin:0 0 12px;
+    }
+    .p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 16px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    /* system grid */
+    .system{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:10px;
+    }
+    /* Flatten cards to match editorial list style */
+    .card,
+    .metric{
+      border:0;
+      border-radius:0;
+      background:transparent;
+      padding:0;
+    }
+
+/* System design: clearer structure, still editorial */
+    .system{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:10px;
+      border:0;               /* 去掉整块外边框 */
+    }
+
+    .system .card{
+      padding:18px 18px 16px;
+      border:1px solid var(--line);
+      border-radius:8px;      /* 很轻的圆角：比“卡片化”克制 */
+      background:rgba(251,250,247,.55); /* 非常淡：保持纸感 */
+    }
+
+    .system .card .k{
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .system .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:14.5px;
+      line-height:1.7;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+/* Impact: keep 3 columns, add vertical dividers, only ONE top rule (from .section) */
+    .impact{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:0;                /* 关键：让分割线贴合 */
+      margin-top:10px;
+    }
+
+   .impact .metric{
+      padding:14px 18px;
+    }
+
+    .impact .metric + .metric{
+      border-left:1px solid var(--line);   /* 中间细线 */
+    }
+
+/* Outputs：取消 section 自带的顶部分割线 */
+#outputs.section{
+  border-top:0;
+  padding-top:0;
+}
+    /* outputs list */
+  .list{
+    margin:10px 0 0;
+    padding:0;
+    list-style:none;
+    border-top:0;                /* ✅ 去掉：标题下面那条多余的线 */
+  }
+
+  .list li{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns: 120px 1fr;
+    gap:16px;
+    align-items:baseline;
+  }
+
+/* ✅ 去掉：Outputs 和 Impact 之间叠出来的那条线 */
+  .list li:last-child{
+    border-bottom:0;
+  }
+    .list .type{
+      color:var(--muted);
+      font-size:12.5px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .list .main{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .list .t{
+      font-size:14.5px;
+      font-weight:600;
+      line-height:1.35;
+    }
+    .list .d{
+      color:var(--muted);
+      font-size:13.5px;
+      line-height:1.6;
+      text-align:justify;
+      text-justify:inter-word;
+    }
+
+    .note{
+      margin-top:12px;
+      font-size:12.5px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .case-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .case-nav a{color:var(--muted);}
+    .case-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .title{font-size:36px;}
+      .impact{grid-template-columns: 1fr 1fr;}
+      .system{grid-template-columns: 1fr;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .case-wrap{padding:0 18px 64px;}
+      .title{font-size:32px;}
+      .list li{grid-template-columns: 1fr; gap:8px;}
+      .list .type{text-transform:none; letter-spacing:0;}
+      .impact{grid-template-columns: 1fr;}
+    }
+  @media (max-width: 860px) {
+  .impact {
+    grid-template-columns: 1fr 1fr;
+  }
+  .impact .metric:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+    @media (max-width: 520px) {
+     .impact {
+      grid-template-columns: 1fr;
+    }
+    .impact .metric + .metric {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+}
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+/* === Single divider system === */
+    .rule{
+      height:1px;
+      background:var(--line);
+      margin:26px 0;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>
+
+          <a href="case.html" class="is-active" data-lang="en">Cases</a>
+          <a href="case.html" class="is-active" data-lang="zh" style="display:none">案例</a>
+
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+          <a href="assets/pdf/ChenLu_CV.pdf" target="_blank" rel="noopener" aria-label="Open CV PDF">CV ↗</a>
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="case-wrap">
+
+      <header class="top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <span data-lang="en">Case</span>
+          <span data-lang="zh" style="display:none">案例</span>
+        </div>
+
+        <h1 class="title" data-lang="en">Xiao Zhan Incident: Turning Explanation into Participation</h1>
+        <h1 class="title" data-lang="zh" style="display:none">肖战事件：把“解释”做成“参与”</h1>
+
+        <p class="deck" data-lang="en">
+          A cross-media editorial package that moved from written explainers to scholar interviews, audience question-collecting,
+          and video explainers — designed as a system, not a single article.
+        </p>
+        <p class="deck" data-lang="zh" style="display:none">
+          一个跨媒体的编辑传播系统：从“解释稿”建立共识，到学者访谈提供框架，再到新媒体征集问题、视频答疑与知识点拆条，把热点转译成可理解、可参与、可传播的内容链路。
+        </p>
+
+        <div class="meta">
+          <span class="badge" data-lang="en">Cross-media</span>
+          <span class="badge" data-lang="zh" style="display:none">跨媒体</span>
+
+          <span class="badge" data-lang="en">Editorial system</span>
+          <span class="badge" data-lang="zh" style="display:none">编辑系统</span>
+
+          <span class="dot">·</span>
+          <span data-lang="en">Role: Editor / Producer (planning · writing · distribution)</span>
+          <span data-lang="zh" style="display:none">角色：策划编辑 / 统筹（选题 · 写作 · 分发联动）</span>
+        </div>
+      </header>
+
+      <!-- 1) Context -->
+      <section class="section" id="context">
+        <h2 class="h2" data-lang="en">Context</h2>
+        <h2 class="h2" data-lang="zh" style="display:none">背景</h2>
+
+        <p class="p" data-lang="en">
+          When a public controversy accelerates online, audiences often lack shared vocabulary and interpretive frameworks.
+          The goal was to build a calm, research-based explanation layer — then convert it into participation and repeatable distribution units.
+        </p>
+        <p class="p" data-lang="zh" style="display:none">
+          热点加速时，公众往往缺少共同语言与解释框架。这个专题的目标是：先建立可理解的“解释层”，再把解释转化为参与与可复用的传播单元，让复杂议题变得可讨论、可延展。
+        </p>
+      </section>
+
+      <div class="rule"></div>
+
+      <!-- 2) System / workflow -->
+      <section class="section" id="system">
+        <h2 class="h2" data-lang="en">System design</h2>
+        <h2 class="h2" data-lang="zh" style="display:none">系统设计</h2>
+
+        <div class="system">
+          <div class="card">
+            <div class="k">
+              <span class="badge">01</span>
+              <h3 data-lang="en">Explainer</h3>
+              <h3 data-lang="zh" style="display:none">解释稿</h3>
+            </div>
+            <p data-lang="en">Define vocabulary and baseline knowledge (e.g., what fan fiction / fandom culture is).</p>
+            <p data-lang="zh" style="display:none">先解释基本概念与语境（如“同人文化是什么”），建立共同语言。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">02</span>
+              <h3 data-lang="en">Scholar interview</h3>
+              <h3 data-lang="zh" style="display:none">学者访谈</h3>
+            </div>
+            <p data-lang="en">Add an interpretive framework: why fans mobilize, how communities form, and what “madness” means structurally.</p>
+            <p data-lang="zh" style="display:none">通过学者提供解释框架：粉丝为何会“疯狂”、社群机制如何运作。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">03</span>
+              <h3 data-lang="en">Question collecting</h3>
+              <h3 data-lang="zh" style="display:none">征集问题</h3>
+            </div>
+            <p data-lang="en">Co-design with the audience: collect questions on social channels and convert them into a structured FAQ.</p>
+            <p data-lang="zh" style="display:none">新媒体联动征集问题，把读者的困惑“结构化”，形成 Q&A 目录。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">04</span>
+              <h3 data-lang="en">Video dialogue</h3>
+              <h3 data-lang="zh" style="display:none">视频对话</h3>
+            </div>
+            <p data-lang="en">A second interview in video format to answer audience questions — increasing trust and retention.</p>
+            <p data-lang="zh" style="display:none">与学者二次视频对话，围绕征集问题答疑，增强参与感与留存。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">05</span>
+              <h3 data-lang="en">Modular explainers</h3>
+              <h3 data-lang="zh" style="display:none">知识点拆条</h3>
+            </div>
+            <p data-lang="en">Translate key concepts into short video units for multi-platform distribution.</p>
+            <p data-lang="zh" style="display:none">把文章里的关键知识点拆成短视频/卡片式内容，用于多平台传播。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">06</span>
+              <h3 data-lang="en">Distribution loop</h3>
+              <h3 data-lang="zh" style="display:none">分发闭环</h3>
+            </div>
+            <p data-lang="en">Articles → social posts → questions → video → short units → back-links — forming an editorial flywheel.</p>
+            <p data-lang="zh" style="display:none">文章→社媒→征集→视频→拆条→回流文章，形成编辑飞轮。</p>
+          </div>
+        </div>
+
+      </section>
+
+      <div class="rule"></div>
+
+      <!-- 3) Outputs -->
+      <section class="section" id="outputs">
+        <h2 class="h2" data-lang="en">Outputs</h2>
+        <h2 class="h2" data-lang="zh" style="display:none">产出形态</h2>
+
+        <ul class="list">
+          <li>
+            <div class="type" data-lang="en">Article</div>
+            <div class="type" data-lang="zh" style="display:none">文章</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Explainer: What is fan fiction / fandom culture?</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
+              </div>
+              <div class="d" data-lang="en">Baseline definitions and vocabulary to stabilize discussion.</div>
+              <div class="d" data-lang="zh" style="display:none">用解释稿建立共同语言，稳定讨论语境。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Interview</div>
+            <div class="type" data-lang="zh" style="display:none">访谈</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Scholar interview: Why fans mobilize and amplify</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
+              </div>
+              <div class="d" data-lang="en">A research-based framework for understanding collective behavior.</div>
+              <div class="d" data-lang="zh" style="display:none">学者提供解释框架，帮助理解集体行为。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Social</div>
+            <div class="type" data-lang="zh" style="display:none">新媒体</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Question collecting post</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO link / screenshot)</span>
+              </div>
+              <div class="d" data-lang="en">Audience questions were structured into an editorial Q&A outline.</div>
+              <div class="d" data-lang="zh" style="display:none">征集问题并结构化成 Q&A 目录，为视频答疑做准备。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Video</div>
+            <div class="type" data-lang="zh" style="display:none">视频</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Video dialogue with scholar (Q&A)</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
+              </div>
+              <div class="d" data-lang="en">Second-round dialogue to answer the collected questions.</div>
+              <div class="d" data-lang="zh" style="display:none">围绕征集问题做二次视频对话答疑。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Clips</div>
+            <div class="type" data-lang="zh" style="display:none">拆条</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Short explainers (series)</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO playlist)</span>
+              </div>
+              <div class="d" data-lang="en">Key concepts were converted into modular units for multi-platform circulation.</div>
+              <div class="d" data-lang="zh" style="display:none">把知识点拆成可传播的短内容，用于多平台循环分发。</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <div class="rule"></div>
+
+      <!-- 4) Impact (keep it calm) -->
+      <section class="section" id="impact">
+        <h2 class="h2" data-lang="en">Impact (selected)</h2>
+        <h2 class="h2" data-lang="zh" style="display:none">传播结果（节选）</h2>
+
+        <div class="impact">
+          <div class="metric">
+            <p class="num">10M+</p>
+            <p class="lab" data-lang="en">Engagements (total)</p>
+            <p class="lab" data-lang="zh" style="display:none">总互动量（累计）</p>
+          </div>
+          <div class="metric">
+            <p class="num">TODO</p>
+            <p class="lab" data-lang="en">Reads / views</p>
+            <p class="lab" data-lang="zh" style="display:none">阅读 / 播放</p>
+          </div>
+          <div class="metric">
+            <p class="num">TODO</p>
+            <p class="lab" data-lang="en">Questions collected</p>
+            <p class="lab" data-lang="zh" style="display:none">征集问题数量</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="rule"></div>
+
+      <!-- 5) What this shows -->
+      <section class="section" id="learning">
+        <h2 class="h2" data-lang="en">What this demonstrates</h2>
+        <h2 class="h2" data-lang="zh" style="display:none">这个案例证明了什么</h2>
+
+        <p class="p" data-lang="en">
+          I build editorial systems that convert complexity into shared language, then translate that language into participation and distribution:
+          writing → interaction → video → modular units → feedback loop.
+        </p>
+        <p class="p" data-lang="zh" style="display:none">
+          我擅长把复杂议题转译成共同语言，并把“解释”进一步转化为“参与 + 分发”的系统：写作 → 互动 → 视频 → 拆条 → 回流闭环。
+        </p>
+      </section>
+
+      <nav class="case-nav" aria-label="Case navigation">
+        <a href="index.html#writing">← Back to Writing</a>
+        <a href="index.html#visual">Go to Visual →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

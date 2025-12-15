@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chen Lu</title>
+  <meta name="description" content="Chen Lu — Writing & Visual at the intersection of technology, art, and culture." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+    }
+
+    *{box-sizing:border-box;}
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    a{color:var(--fg); text-decoration:none;}
+    a:hover{text-decoration:underline; text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    .progress{ height:2px; width:100%; background:transparent; }
+    .progress > i{ display:block; height:2px; width:0%; background:var(--fg); opacity:.9; }
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    .mast-shell{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:"Libre Baskerville", serif;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background: transparent;
+      transition: background .18s ease;
+    }
+    .nav a.is-active{ color:var(--fg); }
+    .nav a.is-active::after{ background: var(--fg); }
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{
+      opacity:.55;
+      padding-bottom:2px;
+    }
+    .lang-toggle button{
+      font: inherit;
+      background: transparent;
+      border: 0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{
+      color:var(--fg);
+    }
+    .lang-toggle button:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    .main{ padding-top: 14px; }
+
+    .banner{ margin:10px 0 56px; }
+    .cover{
+      margin: 32px auto 12px;
+      background: none;
+      border-radius: 0;
+      overflow: visible;
+    }
+    .cover img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .cover-caption{
+      font-size: 14px;
+      line-height: 1.6;
+      color: #777;
+      margin: 10px 0 22px;
+      max-width: 720px;
+    }
+
+    .hero{
+      max-width:760px;
+      margin-top: 6px;
+      margin-bottom:88px;
+    }
+    .h-title{
+      font-family:"Libre Baskerville", serif;
+      font-size:52px;
+      margin:0 0 16px;
+      line-height:1.15;
+    }
+    .h-deck{
+      font-size:18px;
+      color:var(--muted);
+      margin:0;
+    }
+    .h-links{
+      margin-top:22px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      font-size:14.5px;
+    }
+    .h-links a{
+      border-bottom:1px solid var(--line);
+      padding-bottom:2px;
+    }
+    .h-links a:hover{
+      border-bottom-color:var(--fg);
+      text-decoration:none;
+    }
+
+    section{ margin-bottom:96px; scroll-margin-top: 92px; }
+    .sec-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      margin-bottom:16px;
+      gap:18px;
+    }
+    .sec-title{
+      font-family:"Libre Baskerville", serif;
+      font-size:28px;
+      margin:0;
+    }
+    .sec-note{
+      font-size:13.5px;
+      color:var(--muted);
+      margin:0;
+    }
+
+    .sec-left{
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+    }
+
+    .sec-actions{
+      display:flex;
+      align-items:baseline;
+      gap:14px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .view-all{
+      font-size:13.5px;
+      color:var(--muted);
+      border-bottom:1px solid var(--line);
+      padding-bottom:2px;
+    }
+    .view-all:hover{
+      color:var(--fg);
+      border-bottom-color:var(--fg);
+      text-decoration:none;
+    }
+
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin: 0 0 22px;
+    }
+    .chip{
+      appearance:none;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color .16s ease, color .16s ease, transform .16s ease;
+    }
+    .chip:hover{
+      color: var(--fg);
+      background: var(--card);
+      transform: translateY(-1px);
+    }
+    .chip.is-active{
+      color: var(--fg);
+      background: var(--card);
+      border-color: var(--fg);
+    }
+
+    .toc{ border-top:1px solid var(--line); }
+
+    .item{
+      display:grid;
+      grid-template-columns:280px 1fr;
+      gap:32px;
+      padding:28px 0;
+      border-bottom:1px solid var(--hair);
+      border-radius:6px;
+      transition: transform .16s ease, background-color .16s ease;
+    }
+    .item:hover{
+      transform: translateY(-2px);
+      background: var(--card);
+    }
+    .item.is-hidden{ display:none; }
+    .toc .item:last-child{ border-bottom:none; }
+
+    .thumb{
+      width:100%;
+      height:180px;
+      overflow:hidden;
+      background:var(--hair);
+      border:1px solid var(--line);
+      border-radius:6px;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+      transform:scale(1.01);
+    }
+    .item:hover .thumb img{
+      transform: scale(1.03);
+      transition: transform .32s ease;
+    }
+
+    .item-text{
+      max-width:560px;
+      padding-right: 10px;
+    }
+    .item-text strong{
+      display:block;
+      font-size:20px;
+      margin-bottom:6px;
+      letter-spacing:.1px;
+    }
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      margin: 0 0 10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+    .meta .dot{ opacity:.55; }
+    .item-text span.desc{
+      display:block;
+      font-size:15px;
+      color:var(--muted);
+    }
+
+    .about{
+      border-top:1px solid var(--line);
+      padding-top:24px;
+    }
+    .about p{
+      max-width:820px;
+      color:var(--muted);
+      font-size:16px;
+      margin:0;
+    }
+    .sec-note a{
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .sec-note a:hover{
+      color: var(--fg);
+    }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    @media(max-width:860px){
+      .item{ grid-template-columns:1fr; }
+      .thumb{ height:220px; }
+      .h-title{ font-size:40px; }
+    }
+    @media(max-width:520px){
+      .mast{ flex-direction:column; align-items:flex-start; }
+      .nav{ flex-wrap:wrap; }
+      .h-title{ font-size:34px; }
+      .right{ gap:10px; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .item, .nav a::after, .chip{ transition:none !important; }
+      .item:hover{ transform:none; }
+      .chip:hover{ transform:none; }
+      .item:hover .thumb img{ transform:scale(1.01); }
+    }
+
+    /* Language toggle (stable) */
+    html[lang="en"] .lang-cn { display: none; }
+    html[lang="zh"] .lang-en { display: none; }
+  </style>
+</head>
+
+<body>
+
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+<div class="mast-shell">
+  <div class="mast">
+    <!-- Chen Lu = Home（回到 index.html） -->
+    <a class="brand" href="index.html" aria-label="Home">Chen Lu</a>
+
+    <div class="right">
+      <nav class="nav" aria-label="Primary">
+        <a href="writing.html" data-section="writing">
+          <span class="lang-en">Writing</span><span class="lang-cn">写作</span>
+        </a>
+
+        <a href="visual.html" data-section="visual">
+          <span class="lang-en">Visual</span><span class="lang-cn">视觉</span>
+        </a>
+
+        <a href="cases.html" data-section="cases">
+          <span class="lang-en">Cases</span><span class="lang-cn">案例</span>
+        </a>
+
+        <a href="about.html" data-section="about">
+          <span class="lang-en">About</span><span class="lang-cn">关于</span>
+        </a>
+
+        <!-- 这里把 cv.pdf 换成你的真实文件名/路径 -->
+        <a href="cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+      </nav>
+
+      <div class="lang-toggle" aria-label="Language toggle">
+        <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+        <span class="sep">|</span>
+        <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap main">
+
+  <div class="banner">
+    <div class="cover">
+      <!-- 这里换成你的封面路径 -->
+      <img src="assets/img/cover.png" alt="Cover illustration" />
+    </div>
+
+    <p class="cover-caption" data-lang="en">Editing as a way of seeing.</p>
+    <p class="cover-caption" data-lang="zh" style="display:none">编辑作为一种观看方式。</p>
+  </div>
+
+  <div class="hero">
+    <h1 class="h-title">Chen Lu</h1>
+
+    <p class="h-deck" data-lang="en">
+      I work at the intersection of technology, art, and culture—translating complex systems into clear, usable narratives through writing and visual storytelling.
+    </p>
+    <p class="h-deck" data-lang="zh" style="display:none">
+      我在科技、艺术与文化的交叉地带工作，通过写作与视觉叙事，将复杂系统转化为清晰、可被使用的内容结构。
+    </p>
+
+    <div class="h-links">
+      <a href="writing.html" data-lang="en">Start with Writing →</a>
+      <a href="writing.html" data-lang="zh" style="display:none">从写作开始 →</a>
+
+      <a href="visual.html" data-lang="en">Go to Visual →</a>
+      <a href="visual.html" data-lang="zh" style="display:none">进入视觉 →</a>
+
+      <a href="cases.html" data-lang="en">Go to Cases →</a>
+      <a href="cases.html" data-lang="zh" style="display:none">进入案例 →</a>
+
+      <a href="mailto:lutesama@gmail.com">Email →</a>
+    </div>
+  </div>
+
+  <!-- Writing (index overview) -->
+  <section id="writing">
+    <div class="sec-head">
+      <div class="sec-left">
+        <h2 class="sec-title" data-lang="en">Writing</h2>
+        <h2 class="sec-title" data-lang="zh" style="display:none">写作</h2>
+      </div>
+
+      <div class="sec-actions">
+        <p class="sec-note" data-lang="en">Topics</p>
+        <p class="sec-note" data-lang="zh" style="display:none">主题</p>
+
+        <a class="view-all" href="writing.html" data-lang="en">View all →</a>
+        <a class="view-all" href="writing.html" data-lang="zh" style="display:none">查看全部 →</a>
+      </div>
+    </div>
+
+    <div class="chips" data-lang="en" aria-label="Filter writing topics">
+      <button class="chip is-active" type="button" data-filter="all">All</button>
+      <button class="chip" type="button" data-filter="tech">Tech</button>
+      <button class="chip" type="button" data-filter="art">Art</button>
+      <button class="chip" type="button" data-filter="culture">Culture</button>
+      <button class="chip" type="button" data-filter="lifestyle">Lifestyle</button>
+    </div>
+
+    <div class="chips" data-lang="zh" style="display:none" aria-label="筛选写作主题">
+      <button class="chip is-active" type="button" data-filter="all">全部</button>
+      <button class="chip" type="button" data-filter="tech">科技</button>
+      <button class="chip" type="button" data-filter="art">艺术</button>
+      <button class="chip" type="button" data-filter="culture">文化</button>
+      <button class="chip" type="button" data-filter="lifestyle">生活方式</button>
+    </div>
+
+    <div class="toc" id="writingList">
+      <a class="item" href="tech.html" data-topic="tech">
+        <div class="thumb"><img src="assets/img/tech.png" alt="Tech illustration"></div>
+        <div class="item-text">
+          <strong data-lang="en">Tech</strong>
+          <strong data-lang="zh" style="display:none">科技</strong>
+          <span class="desc" data-lang="en">Systems, AI, platforms, and infrastructures.</span>
+          <span class="desc" data-lang="zh" style="display:none">系统、AI、平台与基础设施的叙事与解释。</span>
+        </div>
+      </a>
+
+      <a class="item" href="art.html" data-topic="art">
+        <div class="thumb"><img src="assets/img/art3.jpg" alt="Art illustration"></div>
+        <div class="item-text">
+          <strong data-lang="en">Art</strong>
+          <strong data-lang="zh" style="display:none">艺术</strong>
+          <span class="desc" data-lang="en">Exhibitions, criticism, and visual culture.</span>
+          <span class="desc" data-lang="zh" style="display:none">展览、评论与视觉文化的观察与写作。</span>
+        </div>
+      </a>
+
+      <a class="item" href="culture.html" data-topic="culture">
+        <div class="thumb"><img src="assets/img/culture5.png" alt="Culture illustration" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Culture</strong>
+          <strong data-lang="zh" style="display:none">文化</strong>
+          <span class="desc" data-lang="en">Media, cities, archives, and social narratives.</span>
+          <span class="desc" data-lang="zh" style="display:none">媒体、城市、档案与社会叙事。</span>
+        </div>
+      </a>
+
+      <a class="item" href="lifestyle.html" data-topic="lifestyle">
+        <div class="thumb"><img src="assets/img/lifestyle3.png" alt="Lifestyle" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Lifestyle</strong>
+          <strong data-lang="zh" style="display:none">生活方式</strong>
+          <span class="desc" data-lang="en">Travel, nature, and everyday observation.</span>
+          <span class="desc" data-lang="zh" style="display:none">旅行、自然与日常观察。</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Visual (index overview) -->
+  <section id="visual">
+    <div class="sec-head">
+      <div class="sec-left">
+        <h2 class="sec-title" data-lang="en">Visual</h2>
+        <h2 class="sec-title" data-lang="zh" style="display:none">视觉</h2>
+      </div>
+
+      <div class="sec-actions">
+        <p class="sec-note" data-lang="en">Mediums</p>
+        <p class="sec-note" data-lang="zh" style="display:none">媒介</p>
+
+        <a class="view-all" href="visual.html" data-lang="en">View all →</a>
+        <a class="view-all" href="visual.html" data-lang="zh" style="display:none">查看全部 →</a>
+      </div>
+    </div>
+
+    <div class="chips" data-lang="en" aria-label="Filter visual mediums">
+      <button class="chip is-active" type="button" data-vfilter="all">All</button>
+      <button class="chip" type="button" data-vfilter="photo">Photography</button>
+      <button class="chip" type="button" data-vfilter="video">Video</button>
+      <button class="chip" type="button" data-vfilter="design">Design</button>
+    </div>
+
+    <div class="chips" data-lang="zh" style="display:none" aria-label="筛选视觉媒介">
+      <button class="chip is-active" type="button" data-vfilter="all">全部</button>
+      <button class="chip" type="button" data-vfilter="photo">摄影</button>
+      <button class="chip" type="button" data-vfilter="video">视频</button>
+      <button class="chip" type="button" data-vfilter="design">设计</button>
+    </div>
+
+    <div class="toc" id="visualList">
+      <a class="item" href="photo.html" data-vtopic="photo">
+        <div class="thumb"><img src="assets/img/photography3.png" alt="Photography" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Photography</strong>
+          <strong data-lang="zh" style="display:none">摄影</strong>
+          <span class="desc" data-lang="en">Field notes and long-term observation.</span>
+          <span class="desc" data-lang="zh" style="display:none">田野笔记与长期观察的摄影记录。</span>
+        </div>
+      </a>
+
+      <a class="item" href="video.html" data-vtopic="video">
+        <div class="thumb"><img src="assets/img/video.png" alt="Video" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Video</strong>
+          <strong data-lang="zh" style="display:none">视频</strong>
+          <span class="desc" data-lang="en">Documentary and narrative projects.</span>
+          <span class="desc" data-lang="zh" style="display:none">纪录片式与叙事型影像项目。</span>
+        </div>
+      </a>
+
+      <a class="item" href="design.html" data-vtopic="design">
+        <div class="thumb"><img src="assets/img/design.png" alt="Design" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Design</strong>
+          <strong data-lang="zh" style="display:none">设计</strong>
+          <span class="desc" data-lang="en">Editorial layouts and content systems.</span>
+          <span class="desc" data-lang="zh" style="display:none">编辑排版与内容系统设计。</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Cases -->
+  <section id="cases">
+    <div class="sec-head">
+      <h2 class="sec-title" data-lang="en">Cases</h2>
+      <h2 class="sec-title" data-lang="zh" style="display:none">案例</h2>
+      <p class="sec-note" data-lang="en">Cross-media impact</p>
+      <p class="sec-note" data-lang="zh" style="display:none">跨媒介传播</p>
+    </div>
+
+    <div class="toc">
+      <a class="item" href="cases.html">
+        <div class="thumb"><img src="assets/img/cases.png" alt="Cases" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Cross-media storytelling</strong>
+          <strong data-lang="zh" style="display:none">跨媒介叙事与传播</strong>
+          <span class="desc" data-lang="en">From explainers to writing, video and social engagement—turning topics into sustained public conversation.</span>
+          <span class="desc" data-lang="zh" style="display:none">从解释到写作、再到视频与社媒互动，把选题做成可持续的公共讨论。</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- About (index preview) -->
+  <section id="about" class="about">
+    <div class="sec-head">
+      <h2 class="sec-title" data-lang="en">About</h2>
+      <h2 class="sec-title" data-lang="zh" style="display:none">关于</h2>
+
+      <p class="sec-note" data-lang="en"><a href="about.html">Read more →</a></p>
+      <p class="sec-note" data-lang="zh" style="display:none"><a href="about.html">阅读更多 →</a></p>
+    </div>
+
+    <p data-lang="en">
+      I am a writer and content strategist with an editorial background, working across media, creative studios, cultural institutions, and brands.
+    </p>
+    <p data-lang="zh" style="display:none">
+      我是一名具有编辑背景的写作者与内容策略者，曾与媒体、创意工作室、文化机构与品牌合作。
+    </p>
+  </section>
+
+  <footer>
+    <div>© Chen Lu</div>
+    <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+  </footer>
+
+</div>
+
+<script>
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-lang]').forEach(el=>{
+      el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+    });
+    document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+    document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+
+    // reset filters to All/全部 on language switch
+    setWritingFilter('all', true);
+    setVisualFilter('all', true);
+  }
+
+  /* progress */
+  function updateProgress(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+  }
+
+  /* nav highlight (robust) */
+  (function(){
+    const ids = ["writing","visual","cases","about"];
+    const headerOffset = 92;
+
+    const linksFor = (id) => Array.from(document.querySelectorAll(`.nav a[data-section="${id}"]`));
+
+    function setActive(id){
+      ids.forEach(sid=>{
+        linksFor(sid).forEach(a => a.classList.toggle("is-active", sid === id));
+      });
+    }
+
+    const sections = ids
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    function pickActive(){
+      // 规则：离顶部（扣掉 header）最近、且已经“到达”的 section 就算当前
+      let current = null;
+      for(const sec of sections){
+        const top = sec.getBoundingClientRect().top;
+        if(top - headerOffset <= 1) current = sec.id;
+      }
+      if(!current){
+        // 还没到第一个 section：全部取消高亮（或你也可以默认高亮 writing）
+        setActive("writing");
+        return;
+      }
+      setActive(current);
+    }
+
+    let ticking = false;
+    function onScroll(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(()=>{
+        pickActive();
+        ticking = false;
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, {passive:true});
+    window.addEventListener("resize", onScroll);
+
+    // init once
+    pickActive();
+  })();
+
+  /* Writing filter */
+  const writingItems = Array.from(document.querySelectorAll('#writingList .item'));
+  const writingChipGroups = Array.from(document.querySelectorAll('#writing .chips'));
+
+  function setWritingFilter(topic, silent){
+    writingChipGroups.forEach(group=>{
+      group.querySelectorAll('.chip').forEach(btn=>{
+        btn.classList.toggle('is-active', btn.getAttribute('data-filter') === topic);
+      });
+    });
+    writingItems.forEach(item=>{
+      const t = item.getAttribute('data-topic');
+      const show = (topic === 'all') || (t === topic);
+      item.classList.toggle('is-hidden', !show);
+    });
+    if(!silent){
+      const y = document.getElementById('writing').getBoundingClientRect().top + window.scrollY - 88;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+  writingChipGroups.forEach(group=>{
+    group.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.chip'); if(!btn) return;
+      setWritingFilter(btn.getAttribute('data-filter'));
+    });
+  });
+
+  /* Visual filter */
+  const visualItems = Array.from(document.querySelectorAll('#visualList .item'));
+  const visualChipGroups = Array.from(document.querySelectorAll('#visual .chips'));
+
+  function setVisualFilter(topic, silent){
+    visualChipGroups.forEach(group=>{
+      group.querySelectorAll('.chip').forEach(btn=>{
+        btn.classList.toggle('is-active', btn.getAttribute('data-vfilter') === topic);
+      });
+    });
+    visualItems.forEach(item=>{
+      const t = item.getAttribute('data-vtopic');
+      const show = (topic === 'all') || (t === topic);
+      item.classList.toggle('is-hidden', !show);
+    });
+    if(!silent){
+      const y = document.getElementById('visual').getBoundingClientRect().top + window.scrollY - 88;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+  visualChipGroups.forEach(group=>{
+    group.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.chip'); if(!btn) return;
+      setVisualFilter(btn.getAttribute('data-vfilter'));
+    });
+  });
+
+  /* init */
+  updateProgress();
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+</script>
+
+</body>
+</html>

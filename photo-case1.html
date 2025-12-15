@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Photo Case · Chen Lu</title>
+  <meta name="description" content="Photo case — Chen Lu." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+      --card: rgba(255,255,255,.55);
+    }
+
+    *{box-sizing:border-box;}
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg); text-decoration:none;}
+    a:hover{text-decoration:underline; text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    .progress{ height:2px; width:100%; background:transparent; }
+    .progress > i{ display:block; height:2px; width:0%; background:var(--fg); opacity:.9; }
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 90px;
+    }
+
+    .mast-shell{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:"Libre Baskerville", serif;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{ color:var(--fg); text-decoration:none; }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background: transparent;
+      transition: background .18s ease;
+    }
+    .nav a.is-active{ color:var(--fg); }
+    .nav a.is-active::after{ background: var(--fg); }
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{ opacity:.55; padding-bottom:2px; }
+    .lang-toggle button{
+      font: inherit;
+      background: transparent;
+      border: 0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{ color:var(--fg); }
+
+    .main{ padding-top: 16px; }
+
+    /* ===== Head ===== */
+    .breadcrumb{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      font-size:13px; color:var(--muted);
+      margin: 18px 0 6px;
+    }
+    .breadcrumb a{ color:var(--muted); }
+    .breadcrumb a:hover{ color:var(--fg); text-decoration:none; }
+    .breadcrumb .sep{ opacity:.55; }
+
+    .page-title{
+      font-family:"Libre Baskerville", serif;
+      font-size:44px;
+      margin:0 0 10px;
+      line-height:1.15;
+    }
+    .page-deck{
+      max-width: 860px;
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+    }
+    .meta{
+      max-width:860px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin: 8px 0 0;
+    }
+    .meta .dot{ opacity:.55; }
+
+    .rule{ border-top:1px solid var(--line); margin: 18px 0; }
+
+    /* ===== Viewer ===== */
+    .viewer{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .stage{
+      position:relative;
+      border-top:1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    .frame{
+      position:relative;
+      width:100%;
+      border: 1px solid var(--hair);
+      border-radius: 12px;
+      overflow:hidden;
+      background: transparent;
+    }
+
+    /* 主图区域：不用瀑布流，保持“杂志版心”感 */
+    .hero{
+      width:100%;
+      aspect-ratio: 16 / 9; /* 你可以改成 3/2 或 4/3 */
+      background: var(--hair);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .hero img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: translateZ(0);
+    }
+
+    .navbtn{
+      position:absolute;
+      top:50%;
+      transform: translateY(-50%);
+      width:42px;
+      height:42px;
+      border-radius: 999px;
+      border: 1px solid var(--hair);
+      background: rgba(251,250,247,.84);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: var(--fg);
+      transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+    }
+    .navbtn:hover{
+      background: rgba(255,255,255,.78);
+      border-color: var(--line);
+      transform: translateY(-50%) scale(1.02);
+    }
+    .navbtn:active{ transform: translateY(-50%) scale(.98); }
+    .navbtn.prev{ left: 12px; }
+    .navbtn.next{ right: 12px; }
+
+    .navbtn svg{ width:18px; height:18px; opacity:.92; }
+
+    .counter{
+      position:absolute;
+      left: 12px;
+      bottom: 12px;
+      font-size: 12.5px;
+      color: var(--muted);
+      background: rgba(251,250,247,.86);
+      border: 1px solid var(--hair);
+      border-radius: 999px;
+      padding: 6px 10px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .cap{
+      max-width: 860px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ===== Thumbnail strip ===== */
+    .strip{
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      padding: 10px 2px 2px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .thumb{
+      flex: 0 0 auto;
+      width: 112px;
+      aspect-ratio: 16 / 10;
+      border-radius: 6px;      /* 可以保留很小的圆角，也可以改成 0 */
+      overflow:hidden;
+      border: none;            /* ❗ 去掉边框 */
+      background: transparent; /* ❗ 去掉背景 */
+      cursor:pointer;
+      scroll-snap-align: start;
+      position: relative;
+      opacity: .45;            /* ❗ 默认更“轻” */
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .thumb:hover{
+      opacity: .75;
+      transform: translateY(-1px); /* 很轻就好 */
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+    .thumb.is-active{
+      opacity: 1;              /* 当前图最清晰 */
+    }
+
+    /* ===== Notes block ===== */
+    .notes{
+      max-width: 860px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 22px;
+    }
+    .notes h2{
+      margin:0 0 10px;
+      font-size:12.5px;
+      color:var(--muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .notes h2.zh{ text-transform:none; letter-spacing:.02em; }
+    .notes p{ margin:0 0 12px; font-size: 15px; }
+    .notes p.muted{ color: var(--muted); }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{ color:var(--muted); }
+    footer a:hover{ color:var(--fg); text-decoration:none; }
+
+    @media(max-width:860px){
+      .page-title{ font-size:36px; }
+      .thumb{ width: 96px; }
+    }
+    @media(max-width:520px){
+      .mast{ flex-direction:column; align-items:flex-start; }
+      .nav{ flex-wrap:wrap; }
+      .page-title{ font-size:32px; }
+      .navbtn{ width:40px; height:40px; }
+      .hero{ aspect-ratio: 4 / 3; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .navbtn, .thumb{ transition:none !important; }
+      .thumb:hover{ transform:none; }
+      .navbtn:hover{ transform: translateY(-50%); }
+    }
+  </style>
+</head>
+
+<body>
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+<div class="mast-shell">
+  <div class="mast">
+    <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+    <div class="right">
+      <nav class="nav" aria-label="Primary">
+        <a href="writing.html" data-lang="en">Writing</a>
+        <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+
+        <a href="visual.html" class="is-active" data-lang="en">Visual</a>
+        <a href="visual.html" class="is-active" data-lang="zh" style="display:none">视觉</a>
+
+        <a href="cases.html" data-lang="en">Cases</a>
+        <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+        <a href="about.html" data-lang="en">About</a>
+        <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        <a href="assets/pdf/ChenLu_CV.pdf" target="_blank" rel="noopener" aria-label="Open CV PDF">CV ↗</a>
+      </nav>
+
+      <div class="lang-toggle" aria-label="Language toggle">
+        <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+        <span class="sep">|</span>
+        <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap main">
+  <div class="breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+
+    <a href="visual.html" data-lang="en">Visual</a>
+    <a href="visual.html" data-lang="zh" style="display:none">视觉</a>
+    <span class="sep">/</span>
+
+    <!-- 如果你摄影页叫 photo.html，就把这里改成 photo.html -->
+    <a href="photo.html" data-lang="en">Photography</a>
+    <a href="photo.html" data-lang="zh" style="display:none">摄影</a>
+    <span class="sep">/</span>
+
+    <span data-lang="en">Project</span>
+    <span data-lang="zh" style="display:none">项目</span>
+  </div>
+
+  <h1 class="page-title" data-lang="en">Street moments — New York</h1>
+  <h1 class="page-title" data-lang="zh" style="display:none">纽约街头｜快乐的瞬间</h1>
+
+  <p class="page-deck" data-lang="en">
+    A brief observation of collective joy in public space.
+  </p>
+  <p class="page-deck" data-lang="zh" style="display:none">
+    对公共空间里“短暂许可的快乐”的片段式观察。
+  </p>
+
+  <div class="meta" data-lang="en">
+    <span>2017</span><span class="dot">·</span><span>Photo essay</span><span class="dot">·</span><span>New York</span>
+  </div>
+  <div class="meta" data-lang="zh" style="display:none">
+    <span>2017</span><span class="dot">·</span><span>影像随笔</span><span class="dot">·</span><span>纽约</span>
+  </div>
+
+  <div class="viewer">
+    <div class="stage">
+      <div class="frame" aria-label="Image viewer">
+        <div class="hero">
+          <!-- 主图由 JS 注入 -->
+          <img id="heroImg" src="" alt="" />
+        </div>
+
+        <button class="navbtn prev" id="btnPrev" type="button" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M14.5 5L8 12l6.5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="navbtn next" id="btnNext" type="button" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9.5 5L16 12l-6.5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="counter" id="counter">1 / 8</div>
+      </div>
+
+      <!-- Caption（双语） -->
+      <div class="cap">
+        <div id="capEN" data-lang="en"></div>
+        <div id="capZH" data-lang="zh" style="display:none"></div>
+      </div>
+
+      <!-- 缩略条（可留可删；它是“免得你一直翻”的捷径） -->
+      <div class="strip" id="strip" aria-label="Thumbnail strip"></div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <h2 data-lang="en">Notes</h2>
+    <h2 class="zh" data-lang="zh" style="display:none">说明</h2>
+
+    <p data-lang="en">
+      What interested me was not who they were, but how joy briefly became permissible —
+      unplanned, unperformed, and shared.
+    </p>
+    <p data-lang="zh" style="display:none">
+      我关注的并不是他们是谁，而是快乐在某一刻如何变得“被允许”——它并非表演，也无需解释。
+    </p>
+  </div>
+
+  <footer>
+    <div>© Chen Lu</div>
+    <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+  </footer>
+</div>
+
+<script>
+/* ===== Language (same logic you use elsewhere) ===== */
+function setLang(lang){
+  localStorage.setItem('siteLang', lang);
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-lang]').forEach(el=>{
+    el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+  });
+
+  const btnEN = document.getElementById('btnEN');
+  const btnCN = document.getElementById('btnCN');
+  if(btnEN && btnCN){
+    btnEN.classList.toggle('active', lang === 'en');
+    btnCN.classList.toggle('active', lang === 'zh');
+  }
+}
+(function initLang(){
+  const saved = localStorage.getItem('siteLang');
+  setLang(saved === 'zh' ? 'zh' : 'en');
+})();
+
+/* ===== Progress ===== */
+function updateProgress(){
+  const doc = document.documentElement;
+  const scrollTop = doc.scrollTop || document.body.scrollTop;
+  const scrollHeight = doc.scrollHeight - doc.clientHeight;
+  const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  const bar = document.getElementById('progressBar');
+  if(bar) bar.style.width = p.toFixed(2) + '%';
+}
+updateProgress();
+window.addEventListener('scroll', updateProgress, {passive:true});
+window.addEventListener('resize', updateProgress);
+
+/* ===== Slides: replace with your images + captions =====
+   建议：8–14 张最合适。太多就会变“相册”，太少又不成“essay”。 */
+const slides = [
+  { src: "assets/img/photocase1/1.jpg", alt: "Photo 01", capEN: "01", capZH: "01" },
+  { src: "assets/img/photocase1/2.jpg", alt: "Photo 02", capEN: "02", capZH: "02" },
+  { src: "assets/img/photocase1/3.jpg", alt: "Photo 03", capEN: "03", capZH: "03" },
+  { src: "assets/img/photocase1/4.jpg", alt: "Photo 04", capEN: "04", capZH: "04" },
+  { src: "assets/img/photocase1/5.jpg", alt: "Photo 05", capEN: "05", capZH: "05" },
+  { src: "assets/img/photocase1/6.jpg", alt: "Photo 06", capEN: "06", capZH: "06" },
+  { src: "assets/img/photocase1/7.jpg", alt: "Photo 07", capEN: "07", capZH: "07" },
+  { src: "assets/img/photocase1/8.jpg", alt: "Photo 08", capEN: "08", capZH: "08" },
+  { src: "assets/img/photocase1/9.jpg", alt: "Photo 09", capEN: "08", capZH: "08" }
+];
+
+let idx = 0;
+const heroImg = document.getElementById('heroImg');
+const capEN = document.getElementById('capEN');
+const capZH = document.getElementById('capZH');
+const counter = document.getElementById('counter');
+const strip = document.getElementById('strip');
+
+function renderThumbs(){
+  if(!strip) return;
+  strip.innerHTML = "";
+  slides.forEach((s, i)=>{
+    const t = document.createElement('button');
+    t.type = "button";
+    t.className = "thumb" + (i===idx ? " is-active" : "");
+    t.setAttribute('aria-label', `Go to image ${i+1}`);
+    t.addEventListener('click', ()=> go(i));
+
+    const img = document.createElement('img');
+    img.src = s.src;
+    img.alt = "";
+    t.appendChild(img);
+
+    strip.appendChild(t);
+  });
+  // 尽量让当前缩略图在可视区域内
+  const active = strip.querySelector('.thumb.is-active');
+  if(active) active.scrollIntoView({block:'nearest', inline:'nearest'});
+}
+
+function go(next){
+  idx = (next + slides.length) % slides.length;
+  const s = slides[idx];
+  if(heroImg){
+    heroImg.src = s.src;
+    heroImg.alt = s.alt || "";
+  }
+  if(counter) counter.textContent = `${idx+1} / ${slides.length}`;
+  if(capEN) capEN.textContent = s.capEN || "";
+  if(capZH) capZH.textContent = s.capZH || "";
+
+  // update thumb active state
+  if(strip){
+    strip.querySelectorAll('.thumb').forEach((el, i)=>{
+      el.classList.toggle('is-active', i===idx);
+    });
+    const active = strip.querySelector('.thumb.is-active');
+    if(active) active.scrollIntoView({block:'nearest', inline:'nearest'});
+  }
+}
+
+document.getElementById('btnPrev')?.addEventListener('click', ()=> go(idx-1));
+document.getElementById('btnNext')?.addEventListener('click', ()=> go(idx+1));
+
+/* Keyboard ← → */
+window.addEventListener('keydown', (e)=>{
+  if(e.key === "ArrowLeft") go(idx-1);
+  if(e.key === "ArrowRight") go(idx+1);
+});
+
+/* Touch swipe on hero */
+(function enableSwipe(){
+  const area = document.querySelector('.hero');
+  if(!area) return;
+  let x0 = null;
+  area.addEventListener('touchstart', (e)=>{
+    x0 = e.touches[0].clientX;
+  }, {passive:true});
+  area.addEventListener('touchend', (e)=>{
+    if(x0 === null) return;
+    const x1 = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : x0;
+    const dx = x1 - x0;
+    x0 = null;
+    if(Math.abs(dx) < 40) return;
+    if(dx > 0) go(idx-1); else go(idx+1);
+  }, {passive:true});
+})();
+
+/* Init */
+renderThumbs();
+go(0);
+</script>
+
+</body>
+</html>
