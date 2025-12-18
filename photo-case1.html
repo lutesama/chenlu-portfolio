@@ -332,11 +332,18 @@
   .nav{ flex-wrap:wrap; gap:14px; }
   .nav a{ padding:6px 0; }
 
-  .hero{ aspect-ratio: auto; }        /* 取消固定裁切比例 */
+  /* 1. 不要在手机端强行规定 hero 的比例 */
+  .hero{
+    aspect-ratio: auto;
+  }
+
+  /* 2. 让图片决定高度，而不是容器决定 */
   .hero img{
-    height: auto;                      /* 让图片按宽度等比缩放 */
-    object-fit: contain;               /* 确保完整显示 */
-    background: var(--hair);
+    width: 100%;
+    height: auto;        /* ⭐关键：干掉 height:100% */
+    object-fit: contain;/* 不裁切 */
+    display: block;
+  }
   }
 
   /* 页面左右边距略收，避免小屏显得“挤” */
