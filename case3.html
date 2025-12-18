@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Case · Xiao Zhan Incident — Chen Lu</title>
+  <title>Case · Museum Launch Campaign — Chen Lu</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -132,7 +132,6 @@
       padding-top:18px;
       border-top:0;
     }
-/* Only one divider between hero and first section */
     .section:first-of-type{
       border-top:0;
       padding-top:0;
@@ -159,38 +158,25 @@
       gap:14px;
       margin-top:10px;
     }
-    /* Flatten cards to match editorial list style */
-    .card,
-    .metric{
-      border:0;
-      border-radius:0;
-      background:transparent;
-      padding:0;
-    }
-
-/* System design: clearer structure, still editorial */
     .system{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:14px;
       margin-top:10px;
-      border:0;               /* 去掉整块外边框 */
+      border:0;
     }
-
     .system .card{
       padding:18px 18px 16px;
       border:1px solid var(--line);
-      border-radius:8px;      /* 很轻的圆角：比“卡片化”克制 */
-      background:rgba(251,250,247,.55); /* 非常淡：保持纸感 */
+      border-radius:8px;
+      background:rgba(251,250,247,.55);
     }
-
     .system .card .k{
       display:flex;
       align-items:baseline;
       gap:10px;
       margin-bottom:10px;
     }
-
     .system .card p{
       margin:0;
       color:var(--muted);
@@ -201,48 +187,43 @@
       hyphens:auto;
     }
 
-/* Impact: keep 3 columns, add vertical dividers, only ONE top rule (from .section) */
+    /* Impact */
     .impact{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:0;                /* 关键：让分割线贴合 */
+      gap:0;
       margin-top:10px;
     }
-
-   .impact .metric{
+    .impact .metric{
       padding:14px 18px;
+      border:0;
+      border-radius:0;
+      background:transparent;
     }
-
     .impact .metric + .metric{
-      border-left:1px solid var(--line);   /* 中间细线 */
+      border-left:1px solid var(--line);
     }
 
-/* Outputs：取消 section 自带的顶部分割线 */
-#outputs.section{
-  border-top:0;
-  padding-top:0;
-}
-    /* outputs list */
-  .list{
-    margin:10px 0 0;
-    padding:0;
-    list-style:none;
-    border-top:0;                /* ✅ 去掉：标题下面那条多余的线 */
-  }
-
-  .list li{
-    padding:14px 0;
-    border-bottom:1px solid var(--line);
-    display:grid;
-    grid-template-columns: 120px 1fr;
-    gap:16px;
-    align-items:baseline;
-  }
-
-/* ✅ 去掉：Outputs 和 Impact 之间叠出来的那条线 */
-  .list li:last-child{
-    border-bottom:0;
-  }
+    /* Outputs */
+    #outputs.section{
+      border-top:0;
+      padding-top:0;
+    }
+    .list{
+      margin:10px 0 0;
+      padding:0;
+      list-style:none;
+      border-top:0;
+    }
+    .list li{
+      padding:14px 0;
+      border-bottom:1px solid var(--line);
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap:16px;
+      align-items:baseline;
+    }
+    .list li:last-child{border-bottom:0;}
     .list .type{
       color:var(--muted);
       font-size:12.5px;
@@ -317,35 +298,49 @@
       .list .type{text-transform:none; letter-spacing:0;}
       .impact{grid-template-columns: 1fr;}
     }
-  @media (max-width: 860px) {
-  .impact {
-    grid-template-columns: 1fr 1fr;
-  }
-  .impact .metric:nth-child(3) {
-    border-left: 0;
-    border-top: 1px solid var(--line);
-  }
-}
-
+    @media (max-width: 860px) {
+      .impact { grid-template-columns: 1fr 1fr; }
+      .impact .metric:nth-child(3) {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
     @media (max-width: 520px) {
-     .impact {
-      grid-template-columns: 1fr;
+      .impact { grid-template-columns: 1fr; }
+      .impact .metric + .metric {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
     }
-    .impact .metric + .metric {
-      border-left: 0;
-      border-top: 1px solid var(--line);
-    }
-}
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto;}
     }
-/* === Single divider system === */
+
+    /* === Single divider system === */
     .rule{
       height:1px;
       background:var(--line);
       margin:26px 0;
     }
 
+    /* small badges used inside system cards */
+    .badge{
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .num{
+      font-family:var(--serif);
+      font-size:26px;
+      margin:0 0 6px;
+    }
+    .lab{
+      margin:0;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.4;
+    }
   </style>
 </head>
 
@@ -365,11 +360,10 @@
           <a href="writing.html" data-lang="zh" style="display:none">写作</a>
 
           <a href="visual.html" data-lang="en">Visual</a>
-          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>    
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>
 
           <a href="about.html" data-lang="en">About</a>
           <a href="about.html" data-lang="zh" style="display:none">关于</a>
-        
         </nav>
 
         <div class="lang-toggle" aria-label="Language toggle">
@@ -393,27 +387,30 @@
           <span data-lang="zh" style="display:none">案例</span>
         </div>
 
-        <h1 class="title" data-lang="en">Xiao Zhan Incident: Turning Explanation into Participation</h1>
-        <h1 class="title" data-lang="zh" style="display:none">肖战事件：把“解释”做成“参与”</h1>
+        <h1 class="title" data-lang="en">Museum Launch: Turning “Play” into Public Conversation</h1>
+        <h1 class="title" data-lang="zh" style="display:none">儿童博物馆项目：把“玩”变成公共讨论</h1>
 
         <p class="deck" data-lang="en">
-          A cross-media editorial package that moved from written explainers to scholar interviews, audience question-collecting,
-          and video explainers — designed as a system, not a single article.
+          A hybrid launch campaign that combined a pre-launch H5 experience, short video messages from public figures,
+          and an on-site opening program — building attention online, then converting it into real-world participation.
         </p>
         <p class="deck" data-lang="zh" style="display:none">
-          一个跨媒体的编辑传播系统：从“解释稿”建立共识，到学者访谈提供框架，再到新媒体征集问题、视频答疑与知识点拆条，把热点转译成可理解、可参与、可传播的内容链路。
+          一个线上线下联动的发布传播：以 H5 预热与名人短视频建立议题热度，再通过开幕活动与教育论坛把关注带到现场，让“儿童、玩与教育”成为可参与的公共讨论。
         </p>
 
         <div class="meta">
-          <span class="badge" data-lang="en">Cross-media</span>
-          <span class="badge" data-lang="zh" style="display:none">跨媒体</span>
+          <span class="badge" data-lang="en">Campaign</span>
+          <span class="badge" data-lang="zh" style="display:none">传播项目</span>
 
-          <span class="badge" data-lang="en">Editorial system</span>
-          <span class="badge" data-lang="zh" style="display:none">编辑系统</span>
+          <span class="badge" data-lang="en">Cultural institution</span>
+          <span class="badge" data-lang="zh" style="display:none">文化机构</span>
+
+          <span class="badge" data-lang="en">Online → Offline</span>
+          <span class="badge" data-lang="zh" style="display:none">线上→线下</span>
 
           <span class="dot">·</span>
-          <span data-lang="en">Role: Editor / Producer (planning · writing · distribution)</span>
-          <span data-lang="zh" style="display:none">角色：策划编辑 / 统筹（选题 · 写作 · 分发联动）</span>
+          <span data-lang="en">Role: Project support (content planning · coordination · materials)</span>
+          <span data-lang="zh" style="display:none">角色：项目支持（内容策划协助 · 统筹协调 · 物料支持）</span>
         </div>
       </header>
 
@@ -423,11 +420,13 @@
         <h2 class="h2" data-lang="zh" style="display:none">背景</h2>
 
         <p class="p" data-lang="en">
-          When a public controversy accelerates online, audiences often lack shared vocabulary and interpretive frameworks.
-          The goal was to build a calm, research-based explanation layer — then convert it into participation and repeatable distribution units.
+          For a museum launch, the hardest part is not “making noise,” but making the mission legible:
+          what is being built, why it matters, and how the public can take part.
+          The campaign needed a clear narrative spine — then multiple formats to carry it across channels.
         </p>
         <p class="p" data-lang="zh" style="display:none">
-          热点加速时，公众往往缺少共同语言与解释框架。这个专题的目标是：先建立可理解的“解释层”，再把解释转化为参与与可复用的传播单元，让复杂议题变得可讨论、可延展。
+          博物馆项目的发布，难点不只是“做热闹”，而是让使命变得可理解：它要解决什么问题、为什么值得关注、公众如何参与。
+          因此我们需要先把叙事骨架立住，再用多种内容形态把它带到不同渠道。
         </p>
       </section>
 
@@ -442,64 +441,63 @@
           <div class="card">
             <div class="k">
               <span class="badge">01</span>
-              <h3 data-lang="en">Explainer</h3>
-              <h3 data-lang="zh" style="display:none">解释稿</h3>
+              <h3 data-lang="en">Narrative spine</h3>
+              <h3 data-lang="zh" style="display:none">叙事主线</h3>
             </div>
-            <p data-lang="en">Define vocabulary and baseline knowledge (e.g., what fan fiction / fandom culture is).</p>
-            <p data-lang="zh" style="display:none">先解释基本概念与语境（如“同人文化是什么”），建立共同语言。</p>
+            <p data-lang="en">Define one clear message: play is a serious part of learning, not a distraction.</p>
+            <p data-lang="zh" style="display:none">先确立一句话主张：玩不是分心，而是学习的一部分。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">02</span>
-              <h3 data-lang="en">Scholar interview</h3>
-              <h3 data-lang="zh" style="display:none">学者访谈</h3>
+              <h3 data-lang="en">Pre-launch H5</h3>
+              <h3 data-lang="zh" style="display:none">H5 预热</h3>
             </div>
-            <p data-lang="en">Add an interpretive framework: why fans mobilize, how communities form, and what “madness” means structurally.</p>
-            <p data-lang="zh" style="display:none">通过学者提供解释框架：粉丝为何会“疯狂”、社群机制如何运作。</p>
+            <p data-lang="en">Use a lightweight interactive page to make the idea easy to share and remember.</p>
+            <p data-lang="zh" style="display:none">用轻量互动页面把概念“变简单、可转发、可记住”。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">03</span>
-              <h3 data-lang="en">Question collecting</h3>
-              <h3 data-lang="zh" style="display:none">征集问题</h3>
+              <h3 data-lang="en">Short video messages</h3>
+              <h3 data-lang="zh" style="display:none">名人短视频</h3>
             </div>
-            <p data-lang="en">Co-design with the audience: collect questions on social channels and convert them into a structured FAQ.</p>
-            <p data-lang="zh" style="display:none">新媒体联动征集问题，把读者的困惑“结构化”，形成 Q&A 目录。</p>
+            <p data-lang="en">Invite public voices to speak in everyday language — shifting the tone from “institutional” to “human.”</p>
+            <p data-lang="zh" style="display:none">邀请公众人物用更生活化的语言发声，把“机构表达”转成“人的表达”。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">04</span>
-              <h3 data-lang="en">Video dialogue</h3>
-              <h3 data-lang="zh" style="display:none">视频对话</h3>
+              <h3 data-lang="en">Opening program</h3>
+              <h3 data-lang="zh" style="display:none">开幕活动</h3>
             </div>
-            <p data-lang="en">A second interview in video format to answer audience questions — increasing trust and retention.</p>
-            <p data-lang="zh" style="display:none">与学者二次视频对话，围绕征集问题答疑，增强参与感与留存。</p>
+            <p data-lang="en">Design an on-site experience that translates the narrative into real participation.</p>
+            <p data-lang="zh" style="display:none">把主张落到现场体验：让观众“看见、参与、被触发”。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">05</span>
-              <h3 data-lang="en">Modular explainers</h3>
-              <h3 data-lang="zh" style="display:none">知识点拆条</h3>
+              <h3 data-lang="en">Education forum</h3>
+              <h3 data-lang="zh" style="display:none">教育论坛</h3>
             </div>
-            <p data-lang="en">Translate key concepts into short video units for multi-platform distribution.</p>
-            <p data-lang="zh" style="display:none">把文章里的关键知识点拆成短视频/卡片式内容，用于多平台传播。</p>
+            <p data-lang="en">Connect practitioners across regions to extend the project from an event into a network.</p>
+            <p data-lang="zh" style="display:none">组织教育从业者交流，把项目从“一次发布”延展为“一个网络”。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">06</span>
-              <h3 data-lang="en">Distribution loop</h3>
-              <h3 data-lang="zh" style="display:none">分发闭环</h3>
+              <h3 data-lang="en">Cross-channel loop</h3>
+              <h3 data-lang="zh" style="display:none">跨渠道闭环</h3>
             </div>
-            <p data-lang="en">Articles → social posts → questions → video → short units → back-links — forming an editorial flywheel.</p>
-            <p data-lang="zh" style="display:none">文章→社媒→征集→视频→拆条→回流文章，形成编辑飞轮。</p>
+            <p data-lang="en">H5 → video → event → forum → recap materials, with back-links to reinforce the narrative.</p>
+            <p data-lang="zh" style="display:none">H5 → 视频 → 活动 → 论坛 → 复盘物料，形成可回流的叙事链路。</p>
           </div>
         </div>
-
       </section>
 
       <div class="rule"></div>
@@ -511,41 +509,15 @@
 
         <ul class="list">
           <li>
-            <div class="type" data-lang="en">Article</div>
-            <div class="type" data-lang="zh" style="display:none">文章</div>
+            <div class="type" data-lang="en">H5</div>
+            <div class="type" data-lang="zh" style="display:none">H5</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">Explainer: What is fan fiction / fandom culture?</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
-              </div>
-              <div class="d" data-lang="en">Baseline definitions and vocabulary to stabilize discussion.</div>
-              <div class="d" data-lang="zh" style="display:none">用解释稿建立共同语言，稳定讨论语境。</div>
-            </div>
-          </li>
-
-          <li>
-            <div class="type" data-lang="en">Interview</div>
-            <div class="type" data-lang="zh" style="display:none">访谈</div>
-            <div class="main">
-              <div class="t">
-                <a href="#" target="_blank" rel="noopener">Scholar interview: Why fans mobilize and amplify</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
-              </div>
-              <div class="d" data-lang="en">A research-based framework for understanding collective behavior.</div>
-              <div class="d" data-lang="zh" style="display:none">学者提供解释框架，帮助理解集体行为。</div>
-            </div>
-          </li>
-
-          <li>
-            <div class="type" data-lang="en">Social</div>
-            <div class="type" data-lang="zh" style="display:none">新媒体</div>
-            <div class="main">
-              <div class="t">
-                <a href="#" target="_blank" rel="noopener">Question collecting post</a>
+                <a href="#" target="_blank" rel="noopener">Pre-launch interactive page</a>
                 <span style="color:var(--muted);font-weight:400;">(TODO link / screenshot)</span>
               </div>
-              <div class="d" data-lang="en">Audience questions were structured into an editorial Q&A outline.</div>
-              <div class="d" data-lang="zh" style="display:none">征集问题并结构化成 Q&A 目录，为视频答疑做准备。</div>
+              <div class="d" data-lang="en">A shareable explainer that introduced the idea and guided audiences to the launch.</div>
+              <div class="d" data-lang="zh" style="display:none">一份可传播的“解释 + 引导”页面，把概念带到大众语境，并引导参与发布。</div>
             </div>
           </li>
 
@@ -554,51 +526,84 @@
             <div class="type" data-lang="zh" style="display:none">视频</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">Video dialogue with scholar (Q&A)</a>
+                <a href="#" target="_blank" rel="noopener">Public figure messages (short clips)</a>
                 <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
               </div>
-              <div class="d" data-lang="en">Second-round dialogue to answer the collected questions.</div>
-              <div class="d" data-lang="zh" style="display:none">围绕征集问题做二次视频对话答疑。</div>
+              <div class="d" data-lang="en">Short, human-centered statements that made the topic approachable and quotable.</div>
+              <div class="d" data-lang="zh" style="display:none">用更“人”的语言讲清楚议题，让它更容易被理解、被引用、被转发。</div>
             </div>
           </li>
 
           <li>
-            <div class="type" data-lang="en">Clips</div>
-            <div class="type" data-lang="zh" style="display:none">拆条</div>
+            <div class="type" data-lang="en">Event</div>
+            <div class="type" data-lang="zh" style="display:none">活动</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">Short explainers (series)</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO playlist)</span>
+                <a href="#" target="_blank" rel="noopener">Opening night program</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO agenda / photos)</span>
               </div>
-              <div class="d" data-lang="en">Key concepts were converted into modular units for multi-platform circulation.</div>
-              <div class="d" data-lang="zh" style="display:none">把知识点拆成可传播的短内容，用于多平台循环分发。</div>
+              <div class="d" data-lang="en">On-site experience design and coordination to convert attention into participation.</div>
+              <div class="d" data-lang="zh" style="display:none">现场体验与统筹，让线上关注转化为线下参与。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Forum</div>
+            <div class="type" data-lang="zh" style="display:none">论坛</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Museum education forum</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO notes)</span>
+              </div>
+              <div class="d" data-lang="en">A convening format that positioned the museum as part of a broader education ecosystem.</div>
+              <div class="d" data-lang="zh" style="display:none">以“召集”建立位置：把项目放进更大的博物馆教育生态中。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Recap</div>
+            <div class="type" data-lang="zh" style="display:none">复盘</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Post-launch recap materials</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO links)</span>
+              </div>
+              <div class="d" data-lang="en">Photos, key messages, and highlights packaged for continued circulation.</div>
+              <div class="d" data-lang="zh" style="display:none">把照片、金句与要点打包成可继续流通的物料。</div>
             </div>
           </li>
         </ul>
+
+        <p class="note" data-lang="en">
+          Note: Some links are placeholders — I can add screenshots or archived materials where available.
+        </p>
+        <p class="note" data-lang="zh" style="display:none">
+          注：部分链接暂为占位；如有存档或截图，可补充为可点击的材料。
+        </p>
       </section>
 
       <div class="rule"></div>
 
-      <!-- 4) Impact (keep it calm) -->
+      <!-- 4) Impact -->
       <section class="section" id="impact">
         <h2 class="h2" data-lang="en">Impact (selected)</h2>
         <h2 class="h2" data-lang="zh" style="display:none">传播结果（节选）</h2>
 
         <div class="impact">
           <div class="metric">
-            <p class="num">10M+</p>
-            <p class="lab" data-lang="en">Engagements (total)</p>
-            <p class="lab" data-lang="zh" style="display:none">总互动量（累计）</p>
+            <p class="num">Online → Offline</p>
+            <p class="lab" data-lang="en">Attention converted into on-site participation</p>
+            <p class="lab" data-lang="zh" style="display:none">把线上关注带到线下参与</p>
           </div>
           <div class="metric">
-            <p class="num">TODO</p>
-            <p class="lab" data-lang="en">Reads / views</p>
-            <p class="lab" data-lang="zh" style="display:none">阅读 / 播放</p>
+            <p class="num">Multi-format</p>
+            <p class="lab" data-lang="en">H5 + video + event + forum as a single narrative</p>
+            <p class="lab" data-lang="zh" style="display:none">H5 + 视频 + 活动 + 论坛：同一条叙事</p>
           </div>
           <div class="metric">
-            <p class="num">TODO</p>
-            <p class="lab" data-lang="en">Questions collected</p>
-            <p class="lab" data-lang="zh" style="display:none">征集问题数量</p>
+            <p class="num">Ecosystem</p>
+            <p class="lab" data-lang="en">Positioning within museum education networks</p>
+            <p class="lab" data-lang="zh" style="display:none">把项目放进博物馆教育网络</p>
           </div>
         </div>
       </section>
@@ -611,26 +616,26 @@
         <h2 class="h2" data-lang="zh" style="display:none">这个案例证明了什么</h2>
 
         <p class="p" data-lang="en">
-          I build editorial systems that convert complexity into shared language, then translate that language into participation and distribution:
-          writing → interaction → video → modular units → feedback loop.
+          I can translate abstract mission statements into a clear narrative spine, then ship that spine through multiple formats —
+          interactive, video, events, and convenings — to make cultural ideas accessible and actionable.
         </p>
         <p class="p" data-lang="zh" style="display:none">
-          我擅长把复杂议题转译成共同语言，并把“解释”进一步转化为“参与 + 分发”的系统：写作 → 互动 → 视频 → 拆条 → 回流闭环。
+          我能把抽象的“使命表达”翻译成清晰的叙事主线，再用多种内容形态把它落地——互动页面、短视频、活动与论坛——让文化理念变得可理解、可参与、可行动。
         </p>
       </section>
 
-        <nav class="case-nav" aria-label="Case navigation">
-        <a href="case1.html" data-lang="en">← Previous case</a>
-        <a href="case1.html" data-lang="zh" style="display:none">← 上一个案例</a>
+      <nav class="case-nav" aria-label="Case navigation">
+        <a href="case2.html" data-lang="en">← Previous case</a>
+        <a href="case2.html" data-lang="zh" style="display:none">← 上一个案例</a>
 
-        <a href="case.html" data-lang="en">Next case →</a>
-        <a href="case.html" data-lang="zh" style="display:none">下一个案例 →</a>
+        <a href="case.html" data-lang="en">Back to Cases →</a>
+        <a href="case.html" data-lang="zh" style="display:none">返回案例 →</a>
       </nav>
 
     </div>
 
     <footer>
-       <div>© Chen Lu</div>
+      <div>© Chen Lu</div>
       <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
     </footer>
   </div>
