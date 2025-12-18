@@ -276,8 +276,14 @@
       .item.is-featured .item-text strong{ font-size:24px; }
     }
     @media(max-width:520px){
-      .mast{ flex-direction:column; align-items:flex-start; }
-      .nav{ flex-wrap:wrap; }
+/* 让顶栏真正按手机一行一行排，不会横向溢出 */
+  .mast{ flex-direction:column; align-items:flex-start; padding:12px 16px; }
+  .right{ width:100%; justify-content:space-between; gap:10px; }
+
+  /* 导航在手机上更紧凑 */
+  .nav{ flex-wrap:wrap; gap:14px; }
+  .nav a{ padding:6px 0; }
+    
       .page-title{ font-size:32px; }
       .right{ gap:10px; }
     }
