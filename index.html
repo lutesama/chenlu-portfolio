@@ -401,7 +401,7 @@
           <span class="lang-en">Cases</span><span class="lang-cn">案例</span>
         </a>
 
-        <a href="writing.html" data-section="writing">
+        <a href="writing" data-section="writing">
           <span class="lang-en">Writing</span><span class="lang-cn">写作</span>
         </a>
 
@@ -679,8 +679,8 @@
 
     function setActive(id){
       ids.forEach(sid=>{
-        linksFor(sid).forEach(a => a.classList.toggle("is-active", sid === id));
-      });
+      linksFor(sid).forEach(a => a.classList.toggle("is-active", sid === id));
+     });
     }
 
     const sections = ids
@@ -688,15 +688,23 @@
       .filter(Boolean);
 
     function pickActive(){
-      // 规则：离顶部（扣掉 header）最近、且已经“到达”的 section 就算当前
-      let current = null;
-      for(const sec of sections){
-        const top = sec.getBoundingClientRect().top;
-        if(top - headerOffset <= 1) current = sec.id;
-      }
+     const viewportMid = window.innerHeight * 0.35; // 视口偏上更符合直觉（0.5 会更居中）
+     let current = null;
+
+     for(const sec of sections){
+       const r = sec.getBoundingClientRect();
+       // 只要“视口的那条线”落在这个 section 里，就认为它是当前
+       if(r.top <= viewportMid + headerOffset && r.bottom > viewportMid + headerOffset){
+         current = sec.id;
+         break;
+       }
+     }
+
+     setActive(current); // current 可能为 null：顶部区域就不高亮
+    }
       if(!current){
         // 还没到第一个 section：全部取消高亮（或你也可以默认高亮 writing）
-        setActive("writing");
+        setActive(null);
         return;
       }
       setActive(current);
@@ -735,7 +743,7 @@
       item.classList.toggle('is-hidden', !show);
     });
     if(!silent){
-      const y = document.getElementById('writing').getBoundingClientRect().top + window.scrollY - 88;
+      const y = document.getElementById('writing').getBoundingClientRect().top + window.scrollY - 92;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }
