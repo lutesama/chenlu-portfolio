@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Case · Chasing Butterflies — Chen Lu</title>
+  <title>Case · Xiao Zhan Incident — Chen Lu</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -129,8 +129,13 @@
 
     .section{
       margin-top:26px;
-      padding-top:0;
+      padding-top:18px;
       border-top:0;
+    }
+/* Only one divider between hero and first section */
+    .section:first-of-type{
+      border-top:0;
+      padding-top:0;
     }
     .h2{
       font-family:var(--serif);
@@ -147,13 +152,6 @@
       hyphens:auto;
     }
 
-    /* single divider */
-    .rule{
-      height:1px;
-      background:var(--line);
-      margin:26px 0;
-    }
-
     /* system grid */
     .system{
       display:grid;
@@ -161,24 +159,38 @@
       gap:14px;
       margin-top:10px;
     }
+    /* Flatten cards to match editorial list style */
+    .card,
+    .metric{
+      border:0;
+      border-radius:0;
+      background:transparent;
+      padding:0;
+    }
+
+/* System design: clearer structure, still editorial */
+    .system{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:10px;
+      border:0;               /* 去掉整块外边框 */
+    }
+
     .system .card{
       padding:18px 18px 16px;
       border:1px solid var(--line);
-      border-radius:8px;
-      background:rgba(251,250,247,.55);
+      border-radius:8px;      /* 很轻的圆角：比“卡片化”克制 */
+      background:rgba(251,250,247,.55); /* 非常淡：保持纸感 */
     }
-    .system .k{
+
+    .system .card .k{
       display:flex;
       align-items:baseline;
       gap:10px;
       margin-bottom:10px;
     }
-    .system h3{
-      margin:0;
-      font-size:15px;
-      font-weight:600;
-      letter-spacing:.1px;
-    }
+
     .system .card p{
       margin:0;
       color:var(--muted);
@@ -189,47 +201,48 @@
       hyphens:auto;
     }
 
-    /* aligned bullet list (your request) */
-    .bullets{
-      margin:0;
-      padding:0;
-      list-style:none;
+/* Impact: keep 3 columns, add vertical dividers, only ONE top rule (from .section) */
+    .impact{
       display:grid;
-      gap:8px;
-    }
-    .bullets li{
-      display:grid;
-      grid-template-columns: 170px 1fr;
-      gap:14px;
-      align-items:baseline;
-    }
-    .bullets .l{
-      color:var(--muted);
-      font-size:12.5px;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-    }
-    .bullets .r{
-      color:var(--muted);
-      font-size:14.5px;
-      line-height:1.7;
+      grid-template-columns: repeat(3, 1fr);
+      gap:0;                /* 关键：让分割线贴合 */
+      margin-top:10px;
     }
 
+   .impact .metric{
+      padding:14px 18px;
+    }
+
+    .impact .metric + .metric{
+      border-left:1px solid var(--line);   /* 中间细线 */
+    }
+
+/* Outputs：取消 section 自带的顶部分割线 */
+#outputs.section{
+  border-top:0;
+  padding-top:0;
+}
     /* outputs list */
-    .list{
-      margin:10px 0 0;
-      padding:0;
-      list-style:none;
-    }
-    .list li{
-      padding:14px 0;
-      border-bottom:1px solid var(--line);
-      display:grid;
-      grid-template-columns: 120px 1fr;
-      gap:16px;
-      align-items:baseline;
-    }
-    .list li:last-child{border-bottom:0;}
+  .list{
+    margin:10px 0 0;
+    padding:0;
+    list-style:none;
+    border-top:0;                /* ✅ 去掉：标题下面那条多余的线 */
+  }
+
+  .list li{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns: 120px 1fr;
+    gap:16px;
+    align-items:baseline;
+  }
+
+/* ✅ 去掉：Outputs 和 Impact 之间叠出来的那条线 */
+  .list li:last-child{
+    border-bottom:0;
+  }
     .list .type{
       color:var(--muted);
       font-size:12.5px;
@@ -254,31 +267,11 @@
       text-justify:inter-word;
     }
 
-    /* impact */
-    .impact{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:0;                /* 关键：让分割线贴合 */
-      margin-top:10px;
-    }
-    .impact .metric{
-      padding:14px 18px;
-    }
-    .impact .metric + .metric{
-      border-left:1px solid var(--line);
-    }
-    .num{
-      margin:0;
-      font-family:var(--serif);
-      font-weight:700;
-      font-size:22px;
-      line-height:1.2;
-    }
-    .lab{
-      margin:6px 0 0;
-      color:var(--muted);
+    .note{
+      margin-top:12px;
       font-size:12.5px;
-      line-height:1.4;
+      color:var(--muted);
+      line-height:1.6;
     }
 
     .case-nav{
@@ -311,10 +304,8 @@
 
     @media(max-width:860px){
       .title{font-size:36px;}
+      .impact{grid-template-columns: 1fr 1fr;}
       .system{grid-template-columns: 1fr;}
-      .impact{grid-template-columns: 1fr;}
-      .impact .metric + .metric{border-left:0;border-top:1px solid var(--line);}
-      .bullets li{grid-template-columns: 150px 1fr;}
     }
     @media(max-width:520px){
       .mast{flex-direction:column;align-items:flex-start;}
@@ -324,12 +315,37 @@
       .title{font-size:32px;}
       .list li{grid-template-columns: 1fr; gap:8px;}
       .list .type{text-transform:none; letter-spacing:0;}
-      .bullets li{grid-template-columns: 1fr; gap:4px;}
-      .bullets .l{text-transform:none; letter-spacing:0;}
+      .impact{grid-template-columns: 1fr;}
     }
+  @media (max-width: 860px) {
+  .impact {
+    grid-template-columns: 1fr 1fr;
+  }
+  .impact .metric:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+    @media (max-width: 520px) {
+     .impact {
+      grid-template-columns: 1fr;
+    }
+    .impact .metric + .metric {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+}
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto;}
     }
+/* === Single divider system === */
+    .rule{
+      height:1px;
+      background:var(--line);
+      margin:26px 0;
+    }
+
   </style>
 </head>
 
@@ -349,10 +365,11 @@
           <a href="writing.html" data-lang="zh" style="display:none">写作</a>
 
           <a href="visual.html" data-lang="en">Visual</a>
-          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>    
 
           <a href="about.html" data-lang="en">About</a>
           <a href="about.html" data-lang="zh" style="display:none">关于</a>
+        
         </nav>
 
         <div class="lang-toggle" aria-label="Language toggle">
@@ -376,31 +393,27 @@
           <span data-lang="zh" style="display:none">案例</span>
         </div>
 
-        <h1 class="title" data-lang="en">Chasing Butterflies: Building a Nature-Based Outdoor Content IP</h1>
-        <h1 class="title" data-lang="zh" style="display:none">追蝴蝶的文浩：一个基于自然观察的户外内容 IP</h1>
+        <h1 class="title" data-lang="en">Xiao Zhan Incident: Turning Explanation into Participation</h1>
+        <h1 class="title" data-lang="zh" style="display:none">肖战事件：把“解释”做成“参与”</h1>
 
         <p class="deck" data-lang="en">
-          A content project that reframes nature observation as a lifestyle narrative — combining field documentation,
-          science-informed storytelling, and platform-native distribution, with early-stage commercial validation.
+          A cross-media editorial package that moved from written explainers to scholar interviews, audience question-collecting,
+          and video explainers — designed as a system, not a single article.
         </p>
         <p class="deck" data-lang="zh" style="display:none">
-          一个把自然观察改写成生活方式叙事的内容项目：以实地记录为底、以科普为纹理，用平台原生表达完成传播，
-          并在早期阶段完成商业合作验证。
+          一个跨媒体的编辑传播系统：从“解释稿”建立共识，到学者访谈提供框架，再到新媒体征集问题、视频答疑与知识点拆条，把热点转译成可理解、可参与、可传播的内容链路。
         </p>
 
         <div class="meta">
-          <span data-lang="en">Outdoor · Travel</span>
-          <span data-lang="zh" style="display:none">户外 · 旅行</span>
+          <span class="badge" data-lang="en">Cross-media</span>
+          <span class="badge" data-lang="zh" style="display:none">跨媒体</span>
+
+          <span class="badge" data-lang="en">Editorial system</span>
+          <span class="badge" data-lang="zh" style="display:none">编辑系统</span>
 
           <span class="dot">·</span>
-
-          <span data-lang="en">Science-informed</span>
-          <span data-lang="zh" style="display:none">科普基因</span>
-
-          <span class="dot">·</span>
-
-          <span data-lang="en">Role: Co-founder / Editor / Producer (strategy · scripting · production · distribution)</span>
-          <span data-lang="zh" style="display:none">角色：共同主理 / 策划编辑 / 制片统筹（策略 · 脚本 · 拍摄 · 分发）</span>
+          <span data-lang="en">Role: Editor / Producer (planning · writing · distribution)</span>
+          <span data-lang="zh" style="display:none">角色：策划编辑 / 统筹（选题 · 写作 · 分发联动）</span>
         </div>
       </header>
 
@@ -410,15 +423,11 @@
         <h2 class="h2" data-lang="zh" style="display:none">背景</h2>
 
         <p class="p" data-lang="en">
-          Nature content on social platforms often gets boxed into a narrow “science education” lane, which limits both audience reach and
-          commercial imagination. This project started with a practical question:
-          can field observation be translated into a lifestyle-oriented content system — rigorous in substance, but accessible in form?
-          Instead of presenting butterflies as “knowledge objects,” we use them as an entry point into landscapes, seasons, movement, and travel.
+          When a public controversy accelerates online, audiences often lack shared vocabulary and interpretive frameworks.
+          The goal was to build a calm, research-based explanation layer — then convert it into participation and repeatable distribution units.
         </p>
         <p class="p" data-lang="zh" style="display:none">
-          社交平台上的自然内容常常被归进“科普”这一条窄路：受众相对固定、表达方式也更像课堂，商业想象空间有限。
-          这个项目的起点，是一个很现实的问题：自然观察能不能既保留严谨，又以更生活化的方式被更多人理解与喜爱？
-          我们没有把蝴蝶当作“知识对象”来讲，而是把它当作进入风景、季节与行走经验的一道入口——观察本身就是叙事。
+          热点加速时，公众往往缺少共同语言与解释框架。这个专题的目标是：先建立可理解的“解释层”，再把解释转化为参与与可复用的传播单元，让复杂议题变得可讨论、可延展。
         </p>
       </section>
 
@@ -433,76 +442,64 @@
           <div class="card">
             <div class="k">
               <span class="badge">01</span>
-              <h3 data-lang="en">Content positioning</h3>
-              <h3 data-lang="zh" style="display:none">内容定位</h3>
+              <h3 data-lang="en">Explainer</h3>
+              <h3 data-lang="zh" style="display:none">解释稿</h3>
             </div>
-         <p data-lang="en">
- • Core lens: Butterfly observation as a way of seeing landscapes<br>
- • Narrative shift: From “species knowledge” → experience, movement, place<br>
- • Tone: Calm, observational, non-instructional
-</p>
-
-              <p data-lang="zh" style="display:none">
-               • 核心视角：把“观蝶”作为看见风景的方式<br>
-               • 叙事转向：从“物种知识”转向“体验、行走与地点”<br>
-               • 语气气质：平静、观察型、不过度教学
-            </p>
+            <p data-lang="en">Define vocabulary and baseline knowledge (e.g., what fan fiction / fandom culture is).</p>
+            <p data-lang="zh" style="display:none">先解释基本概念与语境（如“同人文化是什么”），建立共同语言。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">02</span>
-              <h3 data-lang="en">Content structure</h3>
-              <h3 data-lang="zh" style="display:none">内容结构</h3>
+              <h3 data-lang="en">Scholar interview</h3>
+              <h3 data-lang="zh" style="display:none">学者访谈</h3>
             </div>
-            <p data-lang="en">
-              • Field diaries: on-site observation + travel notes<br>
-              • “Light explainers” embedded in journeys (avoid lecture mode)<br>
-              • Visual-first rhythm: environment before subject, then details
-            </p>
-            <p data-lang="zh" style="display:none">
-              • 野外日记：实地观察 + 行程记录<br>
-              • “轻科普”嵌入旅程（避免课堂化）<br>
-              • 视觉优先节奏：先给环境，再出主体，最后落细节
-            </p>
+            <p data-lang="en">Add an interpretive framework: why fans mobilize, how communities form, and what “madness” means structurally.</p>
+            <p data-lang="zh" style="display:none">通过学者提供解释框架：粉丝为何会“疯狂”、社群机制如何运作。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">03</span>
-              <h3 data-lang="en">Platform adaptation</h3>
-              <h3 data-lang="zh" style="display:none">平台适配</h3>
+              <h3 data-lang="en">Question collecting</h3>
+              <h3 data-lang="zh" style="display:none">征集问题</h3>
             </div>
-            <p data-lang="en">
-              • Xiaohongshu: lifestyle framing + narrative captions (readable, not textbook)<br>
-              • Video accounts: documentary-style shorts, strong sense of place<br>
-              • Distribution: not simple reposting — title and cover are rebuilt per platform
-            </p>
-            <p data-lang="zh" style="display:none">
-              • 小红书：生活方式框架 + 叙事型正文（可读、不过度科普）<br>
-              • 视频号/B站：偏纪录片的短片表达，强调“地点感”<br>
-              • 分发策略：不做简单搬运，每个平台重做标题与封面
-            </p>
+            <p data-lang="en">Co-design with the audience: collect questions on social channels and convert them into a structured FAQ.</p>
+            <p data-lang="zh" style="display:none">新媒体联动征集问题，把读者的困惑“结构化”，形成 Q&A 目录。</p>
           </div>
 
           <div class="card">
             <div class="k">
               <span class="badge">04</span>
-              <h3 data-lang="en">Audience expansion</h3>
-              <h3 data-lang="zh" style="display:none">受众扩展逻辑</h3>
+              <h3 data-lang="en">Video dialogue</h3>
+              <h3 data-lang="zh" style="display:none">视频对话</h3>
             </div>
-            <p data-lang="en">
-              • From butterfly enthusiasts → outdoor / travel / lifestyle audiences<br>
-              • Reduce jargon, increase spatial + emotional cues (wind, sweat, altitude, light)<br>
-              • Science becomes “texture,” not the headline
-            </p>
-            <p data-lang="zh" style="display:none">
-              • 从“蝴蝶爱好者”向“户外/旅行/生活方式”扩展<br>
-              • 降低术语密度，增加空间与感官线索（风、汗、海拔、光）<br>
-              • 科普是“纹理”，不是标题本身
-            </p>
+            <p data-lang="en">A second interview in video format to answer audience questions — increasing trust and retention.</p>
+            <p data-lang="zh" style="display:none">与学者二次视频对话，围绕征集问题答疑，增强参与感与留存。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">05</span>
+              <h3 data-lang="en">Modular explainers</h3>
+              <h3 data-lang="zh" style="display:none">知识点拆条</h3>
+            </div>
+            <p data-lang="en">Translate key concepts into short video units for multi-platform distribution.</p>
+            <p data-lang="zh" style="display:none">把文章里的关键知识点拆成短视频/卡片式内容，用于多平台传播。</p>
+          </div>
+
+          <div class="card">
+            <div class="k">
+              <span class="badge">06</span>
+              <h3 data-lang="en">Distribution loop</h3>
+              <h3 data-lang="zh" style="display:none">分发闭环</h3>
+            </div>
+            <p data-lang="en">Articles → social posts → questions → video → short units → back-links — forming an editorial flywheel.</p>
+            <p data-lang="zh" style="display:none">文章→社媒→征集→视频→拆条→回流文章，形成编辑飞轮。</p>
           </div>
         </div>
+
       </section>
 
       <div class="rule"></div>
@@ -514,54 +511,67 @@
 
         <ul class="list">
           <li>
-            <div class="type" data-lang="en">Series</div>
-            <div class="type" data-lang="zh" style="display:none">系列</div>
+            <div class="type" data-lang="en">Article</div>
+            <div class="type" data-lang="zh" style="display:none">文章</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">Field diary shorts (travel-based observation)</a>
+                <a href="#" target="_blank" rel="noopener">Explainer: What is fan fiction / fandom culture?</a>
                 <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
               </div>
-              <div class="d" data-lang="en">A repeatable format: place → search → encounter → micro-explainer → reflection.</div>
-              <div class="d" data-lang="zh" style="display:none">可复用结构：地点 → 寻找 → 相遇 → 轻解释 → 收束与回味。</div>
+              <div class="d" data-lang="en">Baseline definitions and vocabulary to stabilize discussion.</div>
+              <div class="d" data-lang="zh" style="display:none">用解释稿建立共同语言，稳定讨论语境。</div>
             </div>
           </li>
 
           <li>
-            <div class="type" data-lang="en">Campaign</div>
-            <div class="type" data-lang="zh" style="display:none">合作</div>
+            <div class="type" data-lang="en">Interview</div>
+            <div class="type" data-lang="zh" style="display:none">访谈</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">She’s collaboration (integrated storytelling)</a>
+                <a href="#" target="_blank" rel="noopener">Scholar interview: Why fans mobilize and amplify</a>
                 <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
               </div>
-              <div class="d" data-lang="en">Brand integration without breaking tone: product appears as part of an outdoor narrative.</div>
-              <div class="d" data-lang="zh" style="display:none">不破坏气质的植入：让品牌成为“旅程叙事”的一部分，而不是硬广。</div>
+              <div class="d" data-lang="en">A research-based framework for understanding collective behavior.</div>
+              <div class="d" data-lang="zh" style="display:none">学者提供解释框架，帮助理解集体行为。</div>
             </div>
           </li>
 
           <li>
-            <div class="type" data-lang="en">Partnership</div>
-            <div class="type" data-lang="zh" style="display:none">合作</div>
+            <div class="type" data-lang="en">Social</div>
+            <div class="type" data-lang="zh" style="display:none">新媒体</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">Douyin × National Park / nature program (field production)</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
+                <a href="#" target="_blank" rel="noopener">Question collecting post</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO link / screenshot)</span>
               </div>
-              <div class="d" data-lang="en">Field shooting + science-informed scripting; travel production under real constraints.</div>
-              <div class="d" data-lang="zh" style="display:none">野外拍摄 + 科普脚本，真实行程约束下完成内容生产。</div>
+              <div class="d" data-lang="en">Audience questions were structured into an editorial Q&A outline.</div>
+              <div class="d" data-lang="zh" style="display:none">征集问题并结构化成 Q&A 目录，为视频答疑做准备。</div>
             </div>
           </li>
 
           <li>
-            <div class="type" data-lang="en">Publishing</div>
-            <div class="type" data-lang="zh" style="display:none">出版</div>
+            <div class="type" data-lang="en">Video</div>
+            <div class="type" data-lang="zh" style="display:none">视频</div>
             <div class="main">
               <div class="t">
-                <a href="#" target="_blank" rel="noopener">Popular science book project (People’s Posts & Telecom Press)</a>
+                <a href="#" target="_blank" rel="noopener">Video dialogue with scholar (Q&A)</a>
                 <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
               </div>
-              <div class="d" data-lang="en">Commercial validation of expertise: translating field knowledge into scalable educational content.</div>
-              <div class="d" data-lang="zh" style="display:none">以出版验证专业度：把实地知识转译成可规模化的内容产品。</div>
+              <div class="d" data-lang="en">Second-round dialogue to answer the collected questions.</div>
+              <div class="d" data-lang="zh" style="display:none">围绕征集问题做二次视频对话答疑。</div>
+            </div>
+          </li>
+
+          <li>
+            <div class="type" data-lang="en">Clips</div>
+            <div class="type" data-lang="zh" style="display:none">拆条</div>
+            <div class="main">
+              <div class="t">
+                <a href="#" target="_blank" rel="noopener">Short explainers (series)</a>
+                <span style="color:var(--muted);font-weight:400;">(TODO playlist)</span>
+              </div>
+              <div class="d" data-lang="en">Key concepts were converted into modular units for multi-platform circulation.</div>
+              <div class="d" data-lang="zh" style="display:none">把知识点拆成可传播的短内容，用于多平台循环分发。</div>
             </div>
           </li>
         </ul>
@@ -569,37 +579,28 @@
 
       <div class="rule"></div>
 
-      <!-- 4) Impact -->
+      <!-- 4) Impact (keep it calm) -->
       <section class="section" id="impact">
         <h2 class="h2" data-lang="en">Impact (selected)</h2>
         <h2 class="h2" data-lang="zh" style="display:none">传播结果（节选）</h2>
 
         <div class="impact">
           <div class="metric">
-            <p class="num">#3</p>
-            <p class="lab" data-lang="en">Xiaohongshu trending (peak)</p>
-            <p class="lab" data-lang="zh" style="display:none">小红书热搜峰值</p>
+            <p class="num">10M+</p>
+            <p class="lab" data-lang="en">Engagements (total)</p>
+            <p class="lab" data-lang="zh" style="display:none">总互动量（累计）</p>
           </div>
           <div class="metric">
-            <p class="num">1.5M+</p>
-            <p class="lab" data-lang="en">Views on video accounts (single post)</p>
-            <p class="lab" data-lang="zh" style="display:none">小红书内容单条浏览</p>
+            <p class="num">TODO</p>
+            <p class="lab" data-lang="en">Reads / views</p>
+            <p class="lab" data-lang="zh" style="display:none">阅读 / 播放</p>
           </div>
           <div class="metric">
-            <p class="num">3+</p>
-            <p class="lab" data-lang="en">Commercial collaborations (early stage)</p>
-            <p class="lab" data-lang="zh" style="display:none">早期商业合作</p>
+            <p class="num">TODO</p>
+            <p class="lab" data-lang="en">Questions collected</p>
+            <p class="lab" data-lang="zh" style="display:none">征集问题数量</p>
           </div>
         </div>
-
-        <p class="p" data-lang="en" style="margin-top:16px;">
-          Early-stage metrics are modest by scale, but meaningful as validation: the account can shift from “science niche” to an outdoor/travel lane,
-          while keeping credibility and tone.
-        </p>
-        <p class="p" data-lang="zh" style="display:none; margin-top:16px;">
-          作为早期项目，这些数据不算“体量型爆款”，但它更像一种验证：账号可以从“纯科普小圈层”走向户外/旅行赛道，
-          同时保留专业可信与内容气质。
-        </p>
       </section>
 
       <div class="rule"></div>
@@ -610,24 +611,20 @@
         <h2 class="h2" data-lang="zh" style="display:none">这个案例证明了什么</h2>
 
         <p class="p" data-lang="en">
-          I build content systems that translate expertise into audience experience: a clear positioning,
-          repeatable formats, platform-native pacing, and a sustainable production workflow —
-          which makes the IP commercially legible without losing its editorial integrity.
+          I build editorial systems that convert complexity into shared language, then translate that language into participation and distribution:
+          writing → interaction → video → modular units → feedback loop.
         </p>
         <p class="p" data-lang="zh" style="display:none">
-          我擅长把“专业度”转译成“受众体验”的系统：清晰的定位、可复用的内容结构、平台原生的节奏，
-          加上可持续的生产流程——让 IP 在不牺牲编辑判断的前提下，具备商业可读性。
+          我擅长把复杂议题转译成共同语言，并把“解释”进一步转化为“参与 + 分发”的系统：写作 → 互动 → 视频 → 拆条 → 回流闭环。
         </p>
       </section>
 
-      <nav class="case-nav" aria-label="Case navigation">
+        <nav class="case-nav" aria-label="Case navigation">
+        <a href="case1.html" data-lang="en">← Previous case</a>
+        <a href="case1.html" data-lang="zh" style="display:none">← 上一个案例</a>
 
-        <a href="cases.html" data-lang="en">← Back to Cases</a>
-        <a href="cases.html" data-lang="zh" style="display:none">← 返回案例</a>
-
-        <a href="case2.html" data-lang="en">Previous case →</a>
-        <a href="case2.html" data-lang="zh" style="display:none">下一个案例 →</a>
-
+        <a href="case.html" data-lang="en">Back to Cases →</a>
+        <a href="case.html" data-lang="zh" style="display:none">返回案例 →</a>
       </nav>
 
     </div>

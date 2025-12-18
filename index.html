@@ -366,10 +366,10 @@
       .thumb{ height:220px; }
       .h-title{ font-size:40px; }
     }
-   @media(max-width:520px){
+    @media(max-width:520px){
       .mast{ flex-direction:column; align-items:flex-start; }
       .nav{ flex-wrap:wrap; }
-      .page-title{ font-size:32px; }
+      .h-title{ font-size:34px; }
       .right{ gap:10px; }
     }
     @media (prefers-reduced-motion: reduce){
@@ -397,6 +397,10 @@
 
     <div class="right">
       <nav class="nav" aria-label="Primary">
+        <a href="cases.html" data-section="cases">
+          <span class="lang-en">Cases</span><span class="lang-cn">案例</span>
+        </a>
+
         <a href="writing.html" data-section="writing">
           <span class="lang-en">Writing</span><span class="lang-cn">写作</span>
         </a>
@@ -405,16 +409,9 @@
           <span class="lang-en">Visual</span><span class="lang-cn">视觉</span>
         </a>
 
-        <a href="cases.html" data-section="cases">
-          <span class="lang-en">Cases</span><span class="lang-cn">案例</span>
-        </a>
-
         <a href="about.html" data-section="about">
           <span class="lang-en">About</span><span class="lang-cn">关于</span>
         </a>
-
-        <!-- 这里把 cv.pdf 换成你的真实文件名/路径 -->
-        <a href="cv.pdf" target="_blank" rel="noopener">CV ↗</a>
       </nav>
 
       <div class="lang-toggle" aria-label="Language toggle">
@@ -442,25 +439,48 @@
     <h1 class="h-title">Chen Lu</h1>
 
     <p class="h-deck" data-lang="en">
-      I work at the intersection of technology, art, and culture—translating complex systems into clear, usable narratives through writing and visual storytelling.
+      I work across technology, art, and culture, shaping complex ideas into clear, compelling stories through writing and visual thinking.
     </p>
     <p class="h-deck" data-lang="zh" style="display:none">
-      我在科技、艺术与文化的交叉地带工作，通过写作与视觉叙事，将复杂系统转化为清晰、可被使用的内容结构。
+      我的工作横跨科技、艺术与文化领域，通过写作与视觉思考，把复杂问题转化为清晰、有传播力的内容。
     </p>
 
     <div class="h-links">
+     
+      <a href="cases.html" data-lang="en">Go to Cases →</a>
+      <a href="cases.html" data-lang="zh" style="display:none">进入案例 →</a>
+
       <a href="writing.html" data-lang="en">Start with Writing →</a>
       <a href="writing.html" data-lang="zh" style="display:none">从写作开始 →</a>
 
       <a href="visual.html" data-lang="en">Go to Visual →</a>
       <a href="visual.html" data-lang="zh" style="display:none">进入视觉 →</a>
 
-      <a href="cases.html" data-lang="en">Go to Cases →</a>
-      <a href="cases.html" data-lang="zh" style="display:none">进入案例 →</a>
-
       <a href="mailto:lutesama@gmail.com">Email →</a>
     </div>
   </div>
+
+ <!-- Cases -->
+  <section id="cases">
+    <div class="sec-head">
+      <h2 class="sec-title" data-lang="en">Cases</h2>
+      <h2 class="sec-title" data-lang="zh" style="display:none">案例</h2>
+      <p class="sec-note" data-lang="en">Cross-media impact</p>
+      <p class="sec-note" data-lang="zh" style="display:none">跨媒介传播</p>
+    </div>
+
+    <div class="toc">
+      <a class="item" href="cases.html">
+        <div class="thumb"><img src="assets/img/cases.png" alt="Cases" /></div>
+        <div class="item-text">
+          <strong data-lang="en">Cross-media storytelling</strong>
+          <strong data-lang="zh" style="display:none">跨媒介叙事与传播</strong>
+          <span class="desc" data-lang="en">From explainers to writing, video and social engagement—turning topics into sustained public conversation.</span>
+          <span class="desc" data-lang="zh" style="display:none">从解释到写作、再到视频与社媒互动，把选题做成可持续的公共讨论。</span>
+        </div>
+      </a>
+    </div>
+  </section>
 
   <!-- Writing (index overview) -->
   <section id="writing">
@@ -602,28 +622,6 @@
     </div>
   </section>
 
-  <!-- Cases -->
-  <section id="cases">
-    <div class="sec-head">
-      <h2 class="sec-title" data-lang="en">Cases</h2>
-      <h2 class="sec-title" data-lang="zh" style="display:none">案例</h2>
-      <p class="sec-note" data-lang="en">Cross-media impact</p>
-      <p class="sec-note" data-lang="zh" style="display:none">跨媒介传播</p>
-    </div>
-
-    <div class="toc">
-      <a class="item" href="cases.html">
-        <div class="thumb"><img src="assets/img/cases.png" alt="Cases" /></div>
-        <div class="item-text">
-          <strong data-lang="en">Cross-media storytelling</strong>
-          <strong data-lang="zh" style="display:none">跨媒介叙事与传播</strong>
-          <span class="desc" data-lang="en">From explainers to writing, video and social engagement—turning topics into sustained public conversation.</span>
-          <span class="desc" data-lang="zh" style="display:none">从解释到写作、再到视频与社媒互动，把选题做成可持续的公共讨论。</span>
-        </div>
-      </a>
-    </div>
-  </section>
-
   <!-- About (index preview) -->
   <section id="about" class="about">
     <div class="sec-head">
@@ -635,10 +633,10 @@
     </div>
 
     <p data-lang="en">
-      I am a writer and content strategist with an editorial background, working across media, creative studios, cultural institutions, and brands.
+      I am a writer and content strategist with an editorial background. My work spans media, creative studios, cultural institutions, and brands, where I help teams shape narratives, build content frameworks, and make complex ideas accessible to wider audiences.
     </p>
     <p data-lang="zh" style="display:none">
-      我是一名具有编辑背景的写作者与内容策略者，曾与媒体、创意工作室、文化机构与品牌合作。
+      我是一名具有编辑背景的写作者与内容策略者。我的工作横跨媒体、创意工作室、文化机构与品牌，主要协助团队梳理叙事方向、搭建内容结构，将原本复杂的议题转化为更易被理解、也更愿意被阅读的表达。
     </p>
   </section>
 
