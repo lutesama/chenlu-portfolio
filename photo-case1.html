@@ -323,22 +323,48 @@
       .thumb{ width: 96px; }
     }
 
-/* 手机端：完整显示横图，不裁切 */
-@media(max-width:520px){
-  .hero{
-    aspect-ratio: auto;         /* 取消固定比例 */
-  }
-  .hero img{
-    height: auto;               /* 关键：让图片自己撑高 */
-    object-fit: contain;        /* 关键：完整显示 */
-  }
-}
+
+    @media(max-width:520px){
+      .hero{
+       aspect-ratio: auto;
+       height: auto;
+       display: block;
+    }
+      .hero img{
+       display: block;
+       width: 100% !important;
+       max-width: 100% !important;
+       height: auto !important;
+       object-fit: contain !important;
+    }
+      .mast{
+       flex-direction: column;
+       align-items: flex-start;
+       gap: 10px;
+       padding: 12px 16px;
+    }
+      .right{
+       width: 100%;
+       flex-direction: column;
+       align-items: flex-start;
+       gap: 10px;
+    }
+     .nav{
+       width: 100%;
+       flex-wrap: wrap;
+       gap: 14px;
+    }
+   }
+
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .navbtn, .thumb{ transition:none !important; }
       .thumb:hover{ transform:none; }
       .navbtn:hover{ transform: translateY(-50%); }
     }
+
+.mast, .right, .nav, .lang-toggle { align-items: baseline; }
+
   </style>
 </head>
 
@@ -431,7 +457,7 @@
           </svg>
         </button>
 
-        <div class="counter" id="counter">1 / 8</div>
+        <div class="counter" id="counter">1 / 9</div>
       </div>
 
       <!-- Caption（双语） -->
@@ -510,7 +536,7 @@ const slides = [
   { src: "assets/img/photocase1/6.jpg", alt: "Photo 06", capEN: "06", capZH: "06" },
   { src: "assets/img/photocase1/7.jpg", alt: "Photo 07", capEN: "07", capZH: "07" },
   { src: "assets/img/photocase1/8.jpg", alt: "Photo 08", capEN: "08", capZH: "08" },
-  { src: "assets/img/photocase1/9.jpg", alt: "Photo 09", capEN: "08", capZH: "08" }
+  { src: "assets/img/photocase1/9.jpg", alt: "Photo 09", capEN: "09", capZH: "09" }
 ];
 
 let idx = 0;
