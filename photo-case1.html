@@ -332,6 +332,13 @@
   .nav{ flex-wrap:wrap; gap:14px; }
   .nav a{ padding:6px 0; }
 
+  .hero{ aspect-ratio: auto; }        /* 取消固定裁切比例 */
+  .hero img{
+    height: auto;                      /* 让图片按宽度等比缩放 */
+    object-fit: contain;               /* 确保完整显示 */
+    background: var(--hair);
+  }
+
   /* 页面左右边距略收，避免小屏显得“挤” */
   .wrap{ padding:0 16px 70px; }
 
