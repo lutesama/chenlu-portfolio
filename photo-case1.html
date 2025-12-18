@@ -181,22 +181,23 @@
       background: transparent;
     }
 
-   /* ===== Hero (single source of truth) ===== */
-.hero{
-  width:100%;
-  aspect-ratio: 16 / 9;        /* 默认就是 16:9 */
-  background: var(--hair);
-  position: relative;
-}
-
-.hero img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit: cover;            /* 默认：铺满（桌面好看） */
-}
-
-
+    /* 主图区域：不用瀑布流，保持“杂志版心”感 */
+    .hero{
+      width:100%;
+      aspect-ratio: 16 / 9; /* 你可以改成 3/2 或 4/3 */
+      background: var(--hair);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .hero img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: translateZ(0);
+    }
 
     .navbtn{
       position:absolute;
@@ -322,49 +323,19 @@
       .page-title{ font-size:36px; }
       .thumb{ width: 96px; }
     }
-
-
     @media(max-width:520px){
-      .hero{
-       aspect-ratio: auto;
-       height: auto;
-       display: block;
+      .mast{ flex-direction:column; align-items:flex-start; }
+      .nav{ flex-wrap:wrap; }
+      .page-title{ font-size:32px; }
+      .navbtn{ width:40px; height:40px; }
+      .hero{ aspect-ratio: 4 / 3; }
     }
-      .hero img{
-       display: block;
-       width: 100% !important;
-       max-width: 100% !important;
-       height: auto !important;
-       object-fit: contain !important;
-    }
-      .mast{
-       flex-direction: column;
-       align-items: flex-start;
-       gap: 10px;
-       padding: 12px 16px;
-    }
-      .right{
-       width: 100%;
-       flex-direction: column;
-       align-items: flex-start;
-       gap: 10px;
-    }
-     .nav{
-       width: 100%;
-       flex-wrap: wrap;
-       gap: 14px;
-    }
-   }
-
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       .navbtn, .thumb{ transition:none !important; }
       .thumb:hover{ transform:none; }
       .navbtn:hover{ transform: translateY(-50%); }
     }
-
-.mast, .right, .nav, .lang-toggle { align-items: baseline; }
-
   </style>
 </head>
 
@@ -457,7 +428,7 @@
           </svg>
         </button>
 
-        <div class="counter" id="counter">1 / 9</div>
+        <div class="counter" id="counter">1 / 8</div>
       </div>
 
       <!-- Caption（双语） -->
@@ -536,7 +507,7 @@ const slides = [
   { src: "assets/img/photocase1/6.jpg", alt: "Photo 06", capEN: "06", capZH: "06" },
   { src: "assets/img/photocase1/7.jpg", alt: "Photo 07", capEN: "07", capZH: "07" },
   { src: "assets/img/photocase1/8.jpg", alt: "Photo 08", capEN: "08", capZH: "08" },
-  { src: "assets/img/photocase1/9.jpg", alt: "Photo 09", capEN: "09", capZH: "09" }
+  { src: "assets/img/photocase1/9.jpg", alt: "Photo 09", capEN: "08", capZH: "08" }
 ];
 
 let idx = 0;
