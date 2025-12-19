@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>iFLYTEK · Chen Lu</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+ <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+ footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+ 
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="tech.html" data-lang="en">Tech</a>
+          <a href="tech.html" data-lang="zh" style="display:none">科技</a>
+          <span class="sep">/</span>
+          <span data-lang="en">iFLYTEK</span>
+          <span data-lang="zh" style="display:none">科大讯飞</span>
+        </div>
+
+        <h1 class="article-title" data-lang="en">iFLYTEK: Practicing Voice AI for Everyday Life in China</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">科大讯飞，中国语音智能生活的实践者</h1>
+        <p class="article-deck" data-lang="en">
+        A reported feature from iFLYTEK’s Hefei headquarters—through products, platforms, and language constraints, tracing how “voice intelligence” tries to become infrastructure.
+      </p>
+      <p class="article-deck" data-lang="zh" style="display:none">
+        一次走访科大讯飞合肥总部的报道：从产品、平台到中文语音的技术难点，呈现“语音智能”如何试图成为日常基础设施。
+      </p>
+
+
+       <div class="article-meta">
+          <span>Tech</span>
+          <span class="dot">·</span>
+         <span data-lang="en">Applied technology feature / Interview</span>
+         <span data-lang="zh" style="display:none;">应用型特写 / 专访</span>
+         <span class="dot">·</span>
+         <span data-lang="en">Voice AI / smart devices / human–machine interaction</span>
+         <span data-lang="zh" style="display:none;">语音智能 / 智能硬件 / 人机交互</span>
+         <span class="dot">·</span>
+         <span data-lang="en">2018</span>
+         <span data-lang="zh" style="display:none;">2018</span>
+        </div>
+      </header>
+
+      <!-- ===== Hero visual ===== -->
+      <figure class="article-hero">
+        <img src="assets/img/tech-iflytek.png" alt="A man trying on a VR headset" />
+        <figcaption class="figure-caption" data-lang="en">Figure: Robot independently developed by iFLYTEK</figcaption>
+        <figcaption class="figure-caption" data-lang="zh" style="display:none;">图：科大讯飞自主研发的机器人</figcaption>
+      </figure>
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Modern Weekly</em> (June 16, 2018, Issue 24).
+      <a href="assets/pdf/iFLYTEK.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+     原文发表于《周末画报》2018 年 6 月 16 日第 24 期（总第 1017 期）。
+    <a href="assets/pdf/iFLYTEK.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+  </span>
+  
+</div>
+
+  <h2 data-lang="en">Editor’s note</h2>
+  <h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+  <p data-lang="en">
+This reported feature comes from my technology column for <em>Weekend Pictorial</em>.
+I visited iFLYTEK’s headquarters in Hefei to understand how speech AI moved from demos into daily products—what actually scales, what doesn’t, and why.
+</p>
+
+<p data-lang="zh" style="display:none;">
+本文出自我为《周末画报》撰写的科技专栏。我走访科大讯飞合肥总部，试图从真实产品与研发现场出发，理解语音 AI 如何从技术展示走向日常应用：哪些场景真正“跑得起来”，哪些环节仍受限，以及背后的原因。
+</p>
+
+  <h2 data-lang="en">Key questions</h2>
+  <h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+  <ul>
+  <li data-lang="en">Which “strong-need” scenarios make speech AI scale first?</li>
+  <li data-lang="zh" style="display:none;">语音 AI 最先在哪些“强刚需”场景规模化？</li>
+
+  <li data-lang="en">What are the technical bottlenecks unique to Chinese speech recognition?</li>
+  <li data-lang="zh" style="display:none;">中文语音识别有哪些独特难点与瓶颈？</li>
+
+  <li data-lang="en">How do latency, content ecosystems, and personalization shape home use?</li>
+  <li data-lang="zh" style="display:none;">响应速度、内容生态与个性化如何决定家庭场景体验？</li>
+</ul>
+
+  <!-- Selected excerpts -->
+ <h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+     <!-- Excerpt 1 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 1 · What “landing” looks like: products, demos, and an ecosystem on display.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选一 · “落地”长什么样：产品、演示与生态被陈列出来。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+         进入展厅，悬挂在大门一侧的两块显示屏上实时显示着当前AIUI 开放平台参与的开发者总人数、分布地区和产品数量等信息；它旁边的另一块荧幕上则正播放着一段特朗普的语音合成视频，在这个视频中，特朗普先用英文，再用中文说道，“科大讯飞真是太棒了”，但事实上，特朗普并不会讲中文，这是该公司利用其技术玩的一个宣传小花招；往前走，被放置在桌上的一个小小黑匣子，是刘庆峰曾在两会期间演示过的讯飞晓译翻译机，其准确率较高的实时双向翻译功能赢得了不少国外出行者的喜爱；两个造型十分可爱、颇为吸引眼球的阿尔法大蛋、小蛋是科大讯飞推出的儿童智能陪护型机器人，它们正闪烁着笑脸等待用户的唤醒；桌上最为人熟悉的另一款产品则是2015 年科大讯飞联合京东推出的叮咚智能音箱，这也是中国第一款自主研发的智能语音音箱；另外两个非常引人注目的是站立于展厅中的两个与人等高的机器人，其中一台名为“小途”的星途机器人能够为人们政务服务，而另一个机器人“晓医”则在不久前刚刚通过了国家医疗执照考试，取得了超出标准分数96 分的成绩，成为历史上第一个取得这种成就的机器人，可以作为“智医助理”帮助医生捕捉和分析患者信息，提供人工智能辅助诊疗；此外，一辆受到众多男性参观者喜爱的汽车驾驶舱则展示了科大讯飞语音技术在车载系统中的运用，智能车载是如今智能语音技术被广泛应用的一个领域，奥迪、宝马、奔驰、通用、上汽和奇瑞等国内外汽车制造厂商已经和科大讯飞进行合作，将为中国用户提供便捷的智能服务。
+        </p>
+
+        <p data-lang="en">
+Inside the showroom, two screens mounted by the entrance display real-time data from the AIUI open platform: the total number of participating developers, their geographic distribution, and the number of products built on the system. On a nearby screen, a voice-synthesis video plays on a loop. In it, Donald Trump speaks first in English and then, improbably, in Chinese: “iFLYTEK is amazing.” Trump, of course, does not speak Chinese. The clip is a small promotional trick, made possible by the company’s speech synthesis technology.
+
+Further inside, a small black box sits on a table: the iFLYTEK Translator, once demonstrated by founder Liu Qingfeng during China’s Two Sessions. Its relatively accurate real-time, two-way translation has made it popular among Chinese travelers abroad. Nearby are two child-oriented companion robots, Alpha Egg Big and Alpha Egg Small, both round, brightly colored, and designed to be immediately endearing. They blink cheerfully, waiting to be awakened by a voice command.
+
+Another familiar product on the table is the DingDong smart speaker, launched jointly by iFLYTEK and JD.com in 2015—the first domestically developed smart speaker in China. The most eye-catching objects in the room, however, are two human-height robots standing at the center of the exhibition space. One, named “Xiaotu,” is designed for government service scenarios; the other, “Xiaoyi,” has recently passed China’s national medical licensing examination with a score 96 points above the passing line, becoming the first robot to do so. As an “AI medical assistant,” it can help doctors capture and analyze patient information and support clinical decision-making.
+
+At the far end of the showroom, a car cockpit draws the attention of many visitors. It demonstrates how iFLYTEK’s voice technology is deployed in in-vehicle systems—a domain where voice AI has already found widespread application. Automakers including Audi, BMW, Mercedes-Benz, General Motors, SAIC, and Chery have partnered with iFLYTEK to bring voice-enabled services to Chinese drivers.
+</p>
+      </blockquote>
+
+      <!-- Excerpt 2 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 2 · The technical ceiling: accuracy, dialects, and why each extra “1%” is hard.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 2 · 技术天花板：识别率、方言，以及为何每多“1%”都很难。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+        赵艳军介绍道，到今年，科大讯飞普通话的识别率已经可以达到98％，而这个数值在2010 年刚发布讯飞开放平台时仅为60% 至70%，经过不断的迭代训练以及优化，去年达到97%。“越到后面要提高识别率就越困难，”赵艳军解释道，将识别率从70% 提高至98%，其相对错误率需要下降30%，但如果要从98% 提高到99%，它的相对错误率则要下降50% 以上。针对方言问题，AIUI 开放平台在3.0 新版本中为用户开放了23种方言的识别技术，其中超过一半的识别率可以达到90% 以上。训练机器进行语音识别时，某种语言覆盖的用户人群所产生数据样本越大，优化迭代速度就越快，这就是为什么拥有每天超过2 亿活跃用户的普通话，其识别率能够快速提高。方言中，像粤语和四川话这些人群覆盖度比较大，识别率也会相对较高。 
+        </p>
+
+        <p data-lang="en">
+According to Zhao, iFLYTEK’s Mandarin speech recognition accuracy has now reached 98 percent. When the company first launched its open platform in 2010, that figure hovered between 60 and 70 percent. Through years of iterative training and optimization, it reached 97 percent last year. “The closer you get to the ceiling, the harder every step becomes,” Zhao said. Raising accuracy from 70 to 98 percent requires reducing the relative error rate by about 30 percent; pushing it from 98 to 99 percent, however, demands a further reduction of more than 50 percent.
+
+Dialect recognition presents an even steeper challenge. In version 3.0 of the AIUI platform, iFLYTEK opened support for 23 Chinese dialects. More than half now achieve recognition rates above 90 percent. In speech recognition, Zhao explained, the size of the user base matters: the larger the population using a language, the faster the system can be optimized through data. This is why Mandarin—spoken daily by more than 200 million active users on the platform—has improved so rapidly. Dialects with larger speaker populations, such as Cantonese and Sichuanese, also tend to reach higher accuracy levels than those with fewer speakers.
+</p>
+      </blockquote>
+
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none;">它能证明什么</h2>
+
+  <ul>
+    <li data-lang="en">Reported, product-facing tech writing grounded in field observation</li>
+    <li data-lang="zh" style="display:none;">基于现场与产品细节的应用型科技写作</li>
+
+    <li data-lang="en">Explaining technical constraints (accuracy, dialects, latency) without losing readability</li>
+    <li data-lang="zh" style="display:none;">把识别率、方言与延迟等技术约束写得清楚且可读</li>
+
+    <li data-lang="en">Connecting platform ecosystems (developers, content partners) to real adoption paths</li>
+    <li data-lang="zh" style="display:none;">将平台生态（开发者与内容合作）与真实落地路径连接起来</li>
+  </ul>
+</div>
+
+</section>
+
+       <nav class="article-nav" aria-label="Article navigation">
+        <a href="tech.html">← Back to Tech</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

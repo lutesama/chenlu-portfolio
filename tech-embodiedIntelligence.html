@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Embodied Intelligence · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="tech.html" data-lang="en">Tech</a>
+          <a href="tech.html" data-lang="zh" style="display:none">科技</a>
+          <span class="sep">/</span>
+          <span data-lang="en">EmbodiedIntelligence</span>
+          <span data-lang="zh" style="display:none">具身智能</span>
+        </div>
+
+        <h1 class="article-title" data-lang="en">Embodied Intelligence Enters the Physical World: Are We Ready?</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">具身智能进入物理世界，我们准备好了吗？</h1>
+        <p class="article-deck" data-lang="en">
+        An interview-based explainer that uses Robotaxi and humanoid robots as the “first contact” moment—then pulls the discussion back to risk, traceability, and governance in real-world deployment.
+      </p>
+      <p class="article-deck" data-lang="zh" style="display:none">
+        一篇以采访为骨架的解释型报道：从 Robotaxi 与人形机器人的“落地时刻”切入，把讨论拉回到现实部署中的风险、可追溯性与治理问题。
+      </p>
+        </p>
+        
+        <div class="article-meta">
+          <span>Tech</span>
+          <span class="dot">·</span>
+         <span data-lang="en">Explainer / Reported feature</span>
+         <span data-lang="zh" style="display:none;">解释型 / 报道型特写</span>
+         <span class="dot">·</span>
+         <span data-lang="en">mbodied AI / deployment / safety / regulation</span>
+         <span data-lang="zh" style="display:none;">具身智能 / 落地部署 / 安全 / 监管</span>
+         <span class="dot">·</span>
+         <span data-lang="en">2024</span>
+         <span data-lang="zh" style="display:none;">2024</span>
+        </div>
+      </header>
+
+    <!-- ===== Hero visual (place BEFORE prose, so it doesn't interrupt reading) ===== -->
+<figure class="article-hero">
+  <img src="assets/img/tech-embodiedintelligence.png" alt="Film still from A.I. Artificial Intelligence" />
+  <figcaption class="figure-caption" data-lang="en">Figure: <em>On March 14, Apptronik’s humanoid robot Apollo performed with Czech dancer Yemi at the SXSW Conference and Festivals.</em></figcaption>
+  <figcaption class="figure-caption" data-lang="zh" style="display:none;">图：3月14日，Apptronik 的人形机器人 Apollo和捷克舞蹈家耶米在SXSW创新大会和艺术节上表演</figcaption>
+</figure>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 34, 2024).
+    <a href="assets/pdf/embodiedintelligence.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2024 年第 34 期。
+    <a href="assets/pdf/embodiedintelligence.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+  </span>
+  
+</div>
+
+  <!-- Editor's note -->
+  <h2 data-lang="en">Editor’s note</h2>
+  <h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+  <p data-lang="en">
+        This piece treats “embodied AI” less as a slogan and more as a governance problem that arrives the moment systems touch people, streets, factories, and homes. The reporting logic is simple: start with what the public can see (Robotaxi, humanoids), then trace what must be built behind the curtain—standards, traceability, and accountability.
+      </p>
+      <p data-lang="zh" style="display:none">
+        这篇报道并不把“具身智能”当作口号，而把它当作一类在进入街道、工厂与家庭时必然触发的治理问题。写作方法也很直接：从公众能看见的应用（Robotaxi、人形机器人）切入，再追问其背后的标准、可追溯机制与责任结构。
+      </p>
+
+  <!-- Key questions -->
+  <h2 data-lang="en">Key questions</h2>
+  <h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+  <ul>
+        <li data-lang="en">Why did autonomous driving become the first “mass-facing” embodied AI application?</li>
+        <li data-lang="zh" style="display:none">为什么自动驾驶会成为公众最先接触到的具身智能应用？</li>
+
+        <li data-lang="en">What exactly changes when AI moves from text to bodies, sensors, and actuators?</li>
+        <li data-lang="zh" style="display:none">当 AI 从文本走向身体、传感器与执行器，究竟改变了什么？</li>
+
+        <li data-lang="en">Where do the biggest risks live: in models, in systems, or in deployment contexts?</li>
+        <li data-lang="zh" style="display:none">最关键的风险究竟来自模型本身、系统结构，还是部署场景？</li>
+
+        <li data-lang="en">What kinds of traceability and standards are missing before “entering homes” becomes normal?</li>
+        <li data-lang="zh" style="display:none">在大规模进入家庭之前，哪些可追溯机制与标准仍是空白？</li>
+  </ul>
+
+  <!-- Selected excerpts -->
+ <h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+     <!-- Excerpt 1 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 1 · Why autonomous driving moved first: fewer degrees of freedom.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选一 · 为什么自动驾驶先于人形机器人落地。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          确实如此。自动驾驶技术之所以能快速推进，首先是因为它的操作相对简单，控制维度较低，比如方向盘、油门和刹车，加起来也只有三个自由度（统计学概念，指样本中独立或能自由变化的观测值个数）。而人形机器人复杂得多，一个灵巧的机械手就可能有20多个自由度，更别提腿、腰、头部、手臂等部位的关节了，总共可能有50多个自由度。这使得人形机器人在操作层面面临的挑战远大于自动驾驶。
+        </p>
+
+        <p data-lang="en">
+          That’s true. One reason autonomous driving has advanced so quickly is that its operation is relatively simple: the control dimensions are lower. A steering wheel, a throttle, and a brake add up to just three degrees of freedom. Humanoid robots are a different creature. A dexterous hand alone can involve more than twenty degrees of freedom, not to mention joints in the legs, waist, head, and arms—fifty or more in total. At the level of action, the difficulty curve steepens dramatically.
+        </p>
+      </blockquote>
+
+      <!-- Excerpt 2 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 2 · What makes “embodied intelligence” different: a language-model “brain” meets physical control.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 2 · “具身智能”与传统机器人差异：大模型式“大脑”与控制系统的组合。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          具身智能可以分为“大脑”和“小脑”两部分。大脑部分类似于大模型，如ChatGPT，能够实时判断并理解复杂任务，比如知道你饿了，就去冰箱拿三明治。这种常识性判断是传统控制论无法实现的。小脑则负责具体的操作和控制，如手脚的动作、拿起物品、开门等。
+        </p>
+
+        <p data-lang="en">
+          Embodied intelligence can be thought of as having two parts: a “brain” and a “cerebellum.” The brain is closer to a large model—something like ChatGPT—capable of making real-time judgments about complex tasks, the way a person would: you’re hungry, so you go to the fridge and take a sandwich. That kind of commonsense reasoning is not what traditional control theory was built to do. The cerebellum handles the concrete work—movement of hands and feet, picking things up, opening a door.
+        </p>
+      </blockquote>
+
+      <!-- Excerpt 3 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 3 · When machines inhabit the same space as humans, risk turns physical and emotional.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 3 · 当机器与人共享空间，风险会变得“身体化”，也会变得更情绪化。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          机器人在与人对话时，不仅可能因价值观问题引发情感伤害；在物理空间中，它们甚至可能对人身安全造成威胁，最简单的比如踩到人。这些风险在基于文本的人工智能应用中尤为明显。现有的聊天机器人可以模拟情侣或朋友的角色，这种个性化互动可能让用户产生情感依赖。一旦这些机器人变得具身化，风险就更大了。
+        </p>
+
+        <p data-lang="en">
+          When a robot talks with a person, it can cause emotional harm through value conflicts; once it operates in physical space, it can also threaten bodily safety—something as blunt as stepping on someone. These risks are already visible in text-based AI. Today’s chatbots can simulate the role of a partner or a friend; that kind of tailored intimacy can foster emotional dependence. Give the same system a body, and the stakes rise with it.
+        </p>
+      </blockquote>
+
+      <!-- Excerpt 4 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 4 · The missing infrastructure: definitions, sensors, and something like a black box.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 4 · 最缺的不是“概念”，而是基础设施：定义、传感、以及“黑匣子”式追溯。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          设想一下，一个人形机器人在家中正要迈步，这时有人突然摔倒。如果机器人能意识到不该踩下去，那接下来该怎么处理？它是应该回退到几秒前，还是继续前进但小心跨过障碍？这些细节都需要有明确的定义。为了确保安全，机器人可能需要在脚上安装摄像头，以检测周围环境。这种思路可能会彻底改变行业的安全标准和技术发展方向。此外，机器人是否还需要类似“黑匣子”的设备，记录所有操作数据，并将这些数据上传到云端，由政府进行监管，也是需要考虑的问题。
+        </p>
+
+        <p data-lang="en">
+          Imagine a humanoid robot taking a step at home when someone suddenly falls. If the robot “knows” it shouldn’t step down, what happens next? Does it roll back a few seconds, or does it move forward while carefully clearing the obstacle? The details need to be defined. For safety, the robot may need cameras on its feet to read its immediate surroundings—an idea that could rewrite industry safety standards and steer technical development. And there’s the question of whether robots will need something like a black box: a device that records every operation and uploads the data to the cloud for regulatory oversight.
+        </p>
+      </blockquote>
+
+      <div class="info-card">
+        <h2 data-lang="en">What this demonstrates</h2>
+        <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+        <ul>
+          <li data-lang="en">Turning emerging tech into a public-facing risk-and-governance framework</li>
+          <li data-lang="zh" style="display:none">把新兴技术转译为公众可理解的风险与治理框架</li>
+
+          <li data-lang="en">Interview-driven explainers with strong systems logic (deployment → standards → accountability)</li>
+          <li data-lang="zh" style="display:none">以采访驱动的解释型写作：从部署场景推导到标准与责任结构</li>
+
+          <li data-lang="en">Clear editorial structuring across industry context, technical constraints, and social impact</li>
+          <li data-lang="zh" style="display:none">在产业语境、技术约束与社会影响之间做清晰的编辑性组织</li>
+        </ul>
+      </div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="tech.html">← Back to Tech</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

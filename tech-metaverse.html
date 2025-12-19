@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Metaverse · Chen Lu</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+ <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+ footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+ 
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="tech.html" data-lang="en">Tech</a>
+          <a href="tech.html" data-lang="zh" style="display:none">科技</a>
+          <span class="sep">/</span>
+          <span data-lang="en">Metaverse</span>
+          <span data-lang="zh" style="display:none">元宇宙</span>
+        </div>
+
+        <h1 class="article-title" data-lang="en">The Metaverse, Like a Society, Is Always Evolving</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">元宇宙就像社会，处于不断演变之中</h1>
+        <p class="article-deck" data-lang="en">
+        An interview-led feature that brings “metaverse” discussions back to fundamentals:
+          how digital worlds are built—through 3D content production, infrastructure, and the early shape of governance.
+      </p>
+      <p class="article-deck" data-lang="zh" style="display:none">
+        一篇以访谈为主的解释型特写，把“元宇宙”从概念热潮拉回到底层条件：三维内容生产、基础设施，以及数字世界如何逐步获得规则与治理形态。
+      </p>
+        </p>
+
+
+       <div class="article-meta">
+          <span>Tech</span>
+          <span class="dot">·</span>
+         <span data-lang="en">Interview / Explainer</span>
+         <span data-lang="zh" style="display:none;">访谈 / 解释型</span>
+         <span class="dot">·</span>
+         <span data-lang="en">Metaverse / 3D production / infrastructure / governance</span>
+         <span data-lang="zh" style="display:none;">元宇宙 / 三维内容生产 / 基础设施 / 治理</span>
+         <span class="dot">·</span>
+         <span data-lang="en">2022</span>
+         <span data-lang="zh" style="display:none;">2022</span>
+        </div>
+      </header>
+
+      <!-- ===== Hero visual ===== -->
+      <figure class="article-hero">
+        <img src="assets/img/tech-metaverse.png" alt="A scene that suggests a built digital world (replace with your chosen image)" />
+        <figcaption class="figure-caption" data-lang="en">Figure: A man trying on a VR headset</figcaption>
+        <figcaption class="figure-caption" data-lang="zh" style="display:none;">图：一名男子正在试戴VR眼镜</figcaption>
+      </figure>
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 2, 2022).
+    <a href="assets/pdf/metaverse.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2022 年第 2 期。
+    <a href="assets/pdf/metaverse.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+  </span>
+  
+</div>
+
+  <!-- Editor's note -->
+  <h2 data-lang="en">Editor’s note</h2>
+  <h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+  <p data-lang="en">
+         This piece was reported when “metaverse” discourse was accelerating, while much of the public conversation stayed at the level of product imagination and market narrative.
+          I approached it from a more basic question: if a digital world is to become functionally comparable to the real world, what must exist beneath the hype—
+          in production pipelines, infrastructure, and governance?
+          Through an interview with Professor Chen Baoquan, the article pulls the metaverse back to the logic of building:
+          3D content as an industrial process, the constraints of making virtual environments scalable, and why “metaverse” is better understood as a social system in formation.
+      </p>
+      <p data-lang="zh" style="display:none">
+        这篇报道完成于“元宇宙”概念迅速升温的阶段，当时大量讨论仍停留在产品想象与市场叙事层面。
+          我更关心的是一个更基础的问题：如果一个与现实功能等同、甚至可能超越现实的数字世界真的出现，
+          它在生产方式、基础设施与治理层面需要哪些前提？
+          通过与陈宝权教授的对谈，文章试图把元宇宙从营销概念拉回到“数字世界如何被建造”的底层逻辑：
+          三维内容如何走向工业化生产、虚拟环境如何规模化，以及为何元宇宙更像一个正在成形的“社会系统”。
+      </p>
+
+  <!-- Key questions -->
+  <h2 data-lang="en">Key questions</h2>
+  <h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+  <ul>
+        <li data-lang="en">What does “metaverse” mean beyond branding—and what counts as a real digital world?</li>
+        <li data-lang="zh" style="display:none">抛开概念热潮，“元宇宙”作为数字世界到底意味着什么？？</li>
+
+        <li data-lang="en">Why is scalable 3D content production a bottleneck (and what does “industrialization” look like)?</li>
+        <li data-lang="zh" style="display:none">为什么三维数字内容的规模化生产会成为关键瓶颈？“工业化”具体指什么？</li>
+
+        <li data-lang="en">When digital worlds gain real functions, how do rules, property, and governance begin to appear?</li>
+        <li data-lang="zh" style="display:none">当数字世界获得真实功能，规则、产权与治理如何开始出现？</li>
+
+  </ul>
+
+  <!-- Selected excerpts -->
+ <h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+     <!-- Excerpt 1 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 1 · Defining the metaverse as functional equivalence
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选一 · “功能等同”的数字空间，定义元宇宙。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          如果让我来说，元宇宙应该是未来现实世界和虚拟世界的一个融合。大家可能都听过“增强现实” （AR），但这可能还不足以表达元宇宙的世界。“增强现实”是指在现实的世界里，通过比如手机设备之类，在现实空间里叠加数字的文字、图像、场景等信息。它的落点还是现实，是对现实的增强，具有很强的延续性。但元宇宙，它包含了现实世界但融合了功能非常等同的数字空间。</br>
+如何理解功能等同？我们可以想象一下现实空间是怎么回事。所谓的现实空间，不只是个空间，它有社区、产权、法律、金融等各个方面。那么我个人认为，元宇宙是一个把数字空间物化到了和现实空间几乎等同、甚至超越的一个发展阶段的体现。
+
+        </p>
+
+        <p data-lang="en">
+          If I had to put it plainly, the metaverse should be a future fusion of the physical world and the virtual one. People have heard of “augmented reality” (AR), but AR still lands in reality: it overlays text, images, and scenes onto the physical space, extending what is already there. The metaverse is different. It contains the physical world, but it also integrates a digital space whose functions are closely equivalent to reality.</br>
+
+What does “functionally equivalent” mean? Think about what “real space” actually includes. It is not merely a container—it comes with communities, property, laws, finance, and the entire infrastructure of social life. In that sense, I believe the metaverse is a stage in which digital space becomes “materialized” to be almost equivalent to reality, and perhaps even to exceed it.
+        </p>
+      </blockquote>
+
+      <!-- Excerpt 2 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 2 · Why it is an inevitable trend—and why it won’t arrive overnight.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 2 · 它像社会一样演变，因此“必然”但不会一蹴而就。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+         不是乐观，我认为这是一个必然的趋势。但元宇宙不是移动互联网这么一个单向技术的发展，它是很多技术的组合。</br>
+这也不奇怪。现代社会是怎么建设的？中国也是从农耕时代，经历上千年慢慢发展至今，并非一蹴而就，但不断地往这个方向发展，是不争的事实。像我刚刚提到的社区构建、金融体系、产权治理，早期社会可能也存在，只是在发展过程中不断地演变。那么元宇宙的原始时期，通讯可能没有那么快捷、安全性没那么高、治理没那么好，存在很多问题。
+
+        </p>
+
+        <p data-lang="en">
+          It’s not a matter of optimism. I see it as an inevitable trend. But the metaverse is not a single, linear evolution like the mobile internet; it is a composite of many technologies.</br>
+
+This is not unusual if you look at how modern society itself was built. China moved from an agrarian era into the present over thousands of years—it wasn’t achieved overnight. What matters is the direction of development. Communities, financial systems, and property governance existed early on, but they kept changing as society evolved. The metaverse will have its own “primitive period” too: communication may be less efficient, security less reliable, governance less mature—problems will be everywhere.
+        </p>
+      </blockquote>
+
+      <!-- Excerpt 3 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 3 · 3D content production as a pipeline problem.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 3 · 三维内容无法量产：像“造表”，缺的是流水线。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          市场上现在有很多虚拟偶像、虚拟主播之类，但每个虚拟人物背后都有一个团队在参与制作，才能把它做好。这有点像以前的手表生产，最开始是手工制作，很精致、很好，但也很昂贵，后来工业化量产后，才人人都可以戴得起手表。其实三维数字内容创作，有点像制造手表，也需要一个流程化的生产过程，从原来手工作坊式的生产进入大批量生产。
+        </p>
+
+        <p data-lang="en">
+         Today you see virtual idols and virtual streamers everywhere, but behind each one there is usually an entire team—otherwise you can’t make it work. It’s like watchmaking: at first everything is handmade—beautiful, precise, and expensive. Only after industrialized mass production did watches become something ordinary people could afford. In the same way, 3D digital content creation is a kind of manufacturing. It needs a process-driven pipeline, moving from workshop-style craft toward large-scale production.
+        </p>
+      </blockquote>
+
+      <!-- Excerpt 4 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 4 · When communities scale, governance becomes unavoidable.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 4 · 社区一旦聚集起人，规则就会出现。
+      </p>
+
+      <blockquote>
+        <p data-lang="zh" style="display:none">
+          虽然它只是一个非常虚的概念，但不论国家还是大众都需要予以重视。为什么？因为它涉及到一个游戏规则。元宇宙的社区一旦被建立，人被吸引过来，比方说拥有了100万1000万人甚至一个亿的人，这个社区就具备了权威性，可以制定规则。那么这个规则谁制定？如何制定？站在这个角度，我们一定要在非常早期就要进入。</br>
+
+国外的企业互相之间存在竞争，但合作性也特别强。所以尽管是Facebook提出了元宇宙的概念，但谷歌、微软以及其他机构都紧紧跟随，并可能会自发组建某个民间组织来谈论这个事情，逐渐出现对元宇宙发展的某些技术规范，比如该如何去表述这个世界，再通过长期互相协作后慢慢形成所谓的标准。
+        </p>
+
+        <p data-lang="en">
+         Even if it remains a highly abstract concept, both governments and the public should take it seriously. Why? Because it is ultimately about the rules of the game. Once a metaverse community is built and people are drawn in—one million, ten million, even a hundred million—the community acquires authority and begins to set rules. Then the real question appears: who writes those rules, and how? From that perspective, we have to enter early.</br>
+
+Overseas, companies compete, but their capacity to cooperate is also striking. Even though Facebook popularized the term, Google, Microsoft, and others quickly followed—and they may even form civil or industry organizations to discuss it. Over time, technical norms begin to emerge: how to describe the world, how to make systems interoperable. With long-term coordination, those norms gradually harden into what people call “standards.”
+
+        </p>
+      </blockquote>
+
+      <div class="info-card">
+        <h2 data-lang="en">What this demonstrates</h2>
+        <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+       <ul>
+  <li data-lang="en">Turning a noisy concept into a workable definition (“functional equivalence” between virtual and real worlds)</li>
+  <li data-lang="zh" style="display:none">把噪声很大的概念落到可操作的定义：虚拟与现实的“功能等同”</li>
+
+  <li data-lang="en">Mapping the metaverse as a system in formation: production pipelines, asset management, and the limits of today’s tooling</li>
+  <li data-lang="zh" style="display:none">把元宇宙写成一个“生成中的系统”：生产链路、资产管理与当下工具的边界</li>
+
+  <li data-lang="en">Making governance legible: how communities gain authority and why early participation shapes standards</li>
+  <li data-lang="zh" style="display:none">把治理讲清楚：社区如何获得权威，以及为何“早期参与”会影响标准走向</li>
+</ul>
+      </div>
+
+</section>
+
+       <nav class="article-nav" aria-label="Article navigation">
+        <a href="tech.html">← Back to Tech</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

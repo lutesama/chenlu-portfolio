@@ -158,6 +158,14 @@ a:focus-visible, button:focus-visible{
   border-radius: 6px;
 }
 
+.section-intro{
+  margin: 18px 0 8px;
+  font-size:14.5px;
+  color:var(--fg);
+  font-weight:500;
+  letter-spacing:.2px;
+}
+
 .page-title{
   font-family:"Libre Baskerville", serif;
   font-size:44px;
@@ -169,37 +177,6 @@ a:focus-visible, button:focus-visible{
   font-size:16px;
   color:var(--muted);
   margin:0 0 10px;
-}
-
-/* ===== Chips (optional but nice UI) ===== */
-.chips{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin: 12px 0 18px;
-}
-.chip{
-  appearance:none;
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--muted);
-  font: inherit;
-  font-size: 13px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background-color .16s ease, color .16s ease, transform .16s ease;
-}
-.chip:hover{
-  color: var(--fg);
-  background: var(--card);
-  transform: translateY(-1px);
-}
-.chip.is-active{
-  color: var(--fg);
-  background: var(--card);
-  border-color: var(--fg);
 }
 
 /* ===== Editorial list (NO thumbnails) ===== */
@@ -386,10 +363,13 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
     <h1 class="page-title" data-lang="zh" style="display:none">科技</h1>
 
     <p class="page-deck" data-lang="en">
-      Systems, AI, platforms, and infrastructures — translating complex mechanisms into usable narratives.
+      Writing on technology as a social system — translating complex technical debates into
+  public-facing frameworks, with particular attention to risk, governance, and how emerging
+  technologies move from laboratories into real-world contexts.
     </p>
     <p class="page-deck" data-lang="zh" style="display:none">
-      系统、AI、平台与基础设施：把复杂机制写成可理解、可使用的叙事。
+     我将技术视为一种社会系统来书写，关注如何把复杂的技术争议转译为公众可以理解的解释框架，
+  尤其聚焦风险、治理问题，以及新技术如何从实验室走向现实世界。
     </p>
 
     <div class="section-cover">
@@ -398,24 +378,23 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
   </div>
 
   <!-- chips (optional). You can delete both chips blocks if you don't want filters -->
-  <div class="chips" data-lang="en" aria-label="Filter tech writing">
-    <button class="chip is-active" type="button" data-filter="all">All</button>
-    <button class="chip" type="button" data-filter="ai">AI</button>
-    <button class="chip" type="button" data-filter="platforms">Platforms</button>
-    <button class="chip" type="button" data-filter="systems">Systems</button>
-  </div>
-  <div class="chips" data-lang="zh" style="display:none" aria-label="筛选科技写作">
-    <button class="chip is-active" type="button" data-filter="all">全部</button>
-    <button class="chip" type="button" data-filter="ai">AI</button>
-    <button class="chip" type="button" data-filter="platforms">平台</button>
-    <button class="chip" type="button" data-filter="systems">系统</button>
-  </div>
+
+
+<p class="section-intro" data-lang="en">
+  <span style="color:var(--muted); letter-spacing:.08em; margin-right:6px;">EDITOR’S SELECTION</span>
+  Selected tech writing — explainers, interviews, and applied features.
+</p> 
+<p class="section-intro" data-lang="zh" style="display:none">
+  <span style="color:var(--muted); letter-spacing:.08em; margin-right:6px;">EDITOR’S SELECTION</span>
+  科技写作精选：解释型文章、访谈与应用型特写。
+</p>
+
 
   <!-- Article list -->
   <div class="toc" id="techList">
 
     <!-- FEATURED (Option C) -->
-    <a class="item is-featured" href="#" data-topic="ai">
+    <a class="item is-featured" href="tech-superalignment.html" data-topic="ai">
       <div class="marker" aria-hidden="true">
         <span class="line"></span>
         <span class="index" data-lang="en">FEATURED</span>
@@ -423,104 +402,221 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
       </div>
 
       <div class="item-text">
-        <strong data-lang="en">Editing as a way of seeing — on AI, systems, and what gets excluded</strong>
-        <strong data-lang="zh" style="display:none">以编辑作为一种观看方式：关于 AI、系统，以及被排除的部分</strong>
-
+        <strong data-lang="en">Superalignment: Translating AI Safety into a Public Framework</strong>
+        <strong data-lang="zh" style="display:none">超级对齐：将 AI 安全转译为公共议题的解释框架</strong>
+        <span class="note" data-lang="en">
+  Originally published under the title “Superalignment and AI Ethics: Beyond a Technical Question.”
+</span>
+        <span class="note" data-lang="zh" style="display:none">
+  原文发表于《三联生活周刊》，原标题为《超级对齐与AI伦理道德：不仅是个科学和技术问题》
+</span>
         <div class="meta" data-lang="en">
-          <span>2025</span><span class="dot">·</span><span>Explainer</span><span class="dot">·</span><span>AI / Systems</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2025</span><span class="dot">·</span><span>解释型</span><span class="dot">·</span><span>AI / 系统</span>
-        </div>
+  <span>2024</span><span class="dot">·</span><span>Explainer</span><span class="dot">·</span>
+  <span>AI · Systems · Risk · Public Understanding</span>
+</div>
+
+<div class="meta" data-lang="zh" style="display:none">
+  <span>2024</span><span class="dot">·</span><span>解释型</span><span class="dot">·</span>
+  <span>AI · 系统 · 风险 · 公共理解</span>
+</div>
 
         <span class="desc" data-lang="en">
-          One–two sentences. What mechanism does this piece make legible? What changes for the reader after reading?
+          An explanatory essay that frames AI alignment as a systemic and societal question,
+  translating technical safety debates into a public-facing understanding of risk and responsibility.
         </span>
         <span class="desc" data-lang="zh" style="display:none">
-          1–2 句话：这篇文章要让读者看清什么机制？读完会对什么产生新的理解？
+         一篇系统性解释文章，将人工智能对齐问题视为一种社会性议题，并把技术层面的安全讨论转译为公众可理解的风险与责任框架。
         </span>
       </div>
     </a>
 
     <!-- 02 -->
-    <a class="item" href="#" data-topic="platforms">
+    <a class="item" href="tech-embodiedIntelligence.html" data-topic="platforms">
       <div class="marker" aria-hidden="true">
         <span class="line"></span>
         <span class="index">02</span>
       </div>
 
-      <div class="item-text">
-        <strong data-lang="en">Platforms are not neutral: incentives, defaults, and invisible infrastructure</strong>
-        <strong data-lang="zh" style="display:none">平台并不中立：激励、默认值与不可见的基础设施</strong>
+     <div class="item-text">
+  <strong data-lang="en">From Digital AI to Physical Risk: Are We Ready for Embodied Intelligence?</strong>
+  <strong data-lang="zh" style="display:none">从数字智能到物理风险：具身智能是否已经准备好进入现实世界？</strong>
 
-        <div class="meta" data-lang="en">
-          <span>2024</span><span class="dot">·</span><span>Analysis</span><span class="dot">·</span><span>Platforms</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2024</span><span class="dot">·</span><span>分析</span><span class="dot">·</span><span>平台</span>
-        </div>
+  <span class="note" data-lang="en">
+    Originally published under the title “Embodied Intelligence Enters the Physical World: Are We Ready?”
+  </span>
+ <span class="note" data-lang="zh" style="display:none">
+    原文发表于《三联生活周刊》，原标题为《具身智能进入物理世界，我们准备好了吗？》
+  </span>
 
-        <span class="desc" data-lang="en">
-          A calm, specific deck. Name the system boundary or the lever you investigated.
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          克制且具体的一句话简介：你讨论的系统边界是什么？关键杠杆在哪里？
-        </span>
-      </div>
+  <div class="meta" data-lang="en">
+    <span>2024</span><span class="dot">·</span><span>Explainer</span><span class="dot">·</span>
+    <span>AI · Embodied Intelligence · Governance · Public Risk</span>
+  </div>
+
+  <div class="meta" data-lang="zh" style="display:none">
+    <span>2024</span><span class="dot">·</span><span>解释型</span><span class="dot">·</span>
+    <span>AI · 具身智能 · 治理 · 公共风险</span>
+  </div>
+
+  <span class="desc" data-lang="en">
+    Examining how AI systems move from digital environments into physical space through autonomous driving and robotics,
+    and what this shift reveals about risk, accountability, and regulatory readiness.
+  </span>
+  <span class="desc" data-lang="zh" style="display:none">
+    通过自动驾驶与具身智能的现实案例，探讨人工智能进入物理世界后暴露出的风险、责任界定与监管准备问题。
+  </span>
+</div>
     </a>
 
     <!-- 03 -->
-    <a class="item" href="#" data-topic="systems">
+    <a class="item" href="tech-metaverse.html" data-topic="systems">
       <div class="marker" aria-hidden="true">
         <span class="line"></span>
         <span class="index">03</span>
       </div>
 
       <div class="item-text">
-        <strong data-lang="en">Inside a system: risk, governance, and the cost of “optimizing” everything</strong>
-        <strong data-lang="zh" style="display:none">系统内部：风险、治理，以及“优化一切”的代价</strong>
+  <strong data-lang="en">Explaining the Metaverse Through Graphics Systems</strong>
+  <strong data-lang="zh" style="display:none">通过图形学系统理解元宇宙</strong>
 
-        <div class="meta" data-lang="en">
-          <span>2023</span><span class="dot">·</span><span>Feature</span><span class="dot">·</span><span>Systems</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2023</span><span class="dot">·</span><span>特写</span><span class="dot">·</span><span>系统</span>
-        </div>
+  <span class="note" data-lang="en">
+    Originally published as a long-form interview with computer graphics researcher Baoquan Chen.
+  </span>
+ <span class="note" data-lang="zh" style="display:none">
+    原文发表于《三联生活周刊》，为对计算机图形学家陈宝权的深度访谈。
+  </span>
 
-        <span class="desc" data-lang="en">
-          One line that reads like editorial judgment, not marketing: what is the core insight?
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          一句话更像编辑判断而非营销：这篇的核心洞见是什么？
-        </span>
-      </div>
+  <div class="meta" data-lang="en">
+    <span>2022</span><span class="dot">·</span><span>Structured Dialogue</span><span class="dot">·</span>
+    <span>Graphics · Systems · Metaverse · Production</span>
+  </div>
+
+  <div class="meta" data-lang="zh" style="display:none">
+    <span>2022</span><span class="dot">·</span><span>结构化对话</span><span class="dot">·</span>
+    <span>图形学 · 系统 · 元宇宙 · 内容生产</span>
+  </div>
+
+  <span class="desc" data-lang="en">
+    A structured dialogue that uses graphics pipelines and production systems to explain
+    how the metaverse shifts from abstract concept to a scalable technical infrastructure.
+  </span>
+  <span class="desc" data-lang="zh" style="display:none">
+    通过对图形学与内容生产体系的结构化对话，解释“元宇宙”如何从概念转化为可规模化运行的技术系统。
+  </span>
+</div>
     </a>
 
     <!-- 04 -->
-    <a class="item" href="#" data-topic="ai">
+    <a class="item" href="tech-chaos.html" data-topic="ai">
       <div class="marker" aria-hidden="true">
         <span class="line"></span>
         <span class="index">04</span>
       </div>
 
       <div class="item-text">
-        <strong data-lang="en">Embodied intelligence: why capability needs a body</strong>
-        <strong data-lang="zh" style="display:none">具身智能：为什么能力需要身体</strong>
+  <strong data-lang="en">Understanding Chaos Through Dialogue</strong>
+  <strong data-lang="zh" style="display:none">通过对话理解混沌与复杂系统</strong>
 
-        <div class="meta" data-lang="en">
-          <span>2023</span><span class="dot">·</span><span>Explainer</span><span class="dot">·</span><span>AI</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2023</span><span class="dot">·</span><span>解释型</span><span class="dot">·</span><span>AI</span>
-        </div>
+  <span class="note" data-lang="en">
+    Originally published as an interview on chaos theory and complex systems.
+  </span>
+ <span class="note" data-lang="zh" style="display:none">
+    原文发表于《三联生活周刊》，为对数学家丁玖的访谈。
+  </span>
 
-        <span class="desc" data-lang="en">
-          Replace with your real excerpt. Keep it 1 sentence if possible.
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          替换成真实简介；尽量控制在 1 句话。
-        </span>
+  <div class="meta" data-lang="en">
+    <span>2022</span><span class="dot">·</span><span>Structured Dialogue</span><span class="dot">·</span>
+    <span>Complex Systems · Chaos Theory · Science · Uncertainty</span>
+  </div>
+
+  <div class="meta" data-lang="zh" style="display:none">
+    <span>2022</span><span class="dot">·</span><span>结构化对话</span><span class="dot">·</span>
+    <span>复杂系统 · 混沌理论 · 科学 · 不确定性</span>
+  </div>
+
+  <span class="desc" data-lang="en">
+    An expert-led dialogue introducing chaos theory as a framework for thinking about uncertainty,
+    nonlinearity, and the limits of prediction in scientific and technological systems.
+  </span>
+  <span class="desc" data-lang="zh" style="display:none">
+    通过专家对话，引入混沌理论这一理解不确定性、非线性与预测边界的思维框架。
+  </span>
+</div>
+    </a>
+
+ <!-- 05 -->
+    <a class="item" href="tech-chang'e5.html" data-topic="ai">
+      <div class="marker" aria-hidden="true">
+        <span class="line"></span>
+        <span class="index">05</span>
       </div>
+
+      <div class="item-text">
+  <strong data-lang="en">Chang’e-5: Inside a National Space Mission</strong>
+  <strong data-lang="zh" style="display:none">嫦娥五号：一次国家级航天任务的内部视角</strong>
+
+  <span class="note" data-lang="en">
+    Originally published as a narrative science feature on China’s lunar exploration program.
+  </span>
+ <span class="note" data-lang="zh" style="display:none">
+    原文发表于《三联生活周刊》，为嫦娥五号任务相关人物专访与现场报道。
+  </span>
+
+  <div class="meta" data-lang="en">
+    <span>2021</span><span class="dot">·</span><span>Narrative</span><span class="dot">·</span>
+    <span>Space Science · Research · China · Storytelling</span>
+  </div>
+
+  <div class="meta" data-lang="zh" style="display:none">
+    <span>2021</span><span class="dot">·</span><span>叙事型</span><span class="dot">·</span>
+    <span>航天科学 · 科研 · 中国 · 科技叙事</span>
+  </div>
+
+  <span class="desc" data-lang="en">
+    A narrative science feature that brings a national space mission down to human scale,
+    using scenes, objects, and personal experience to make complex research accessible.
+  </span>
+  <span class="desc" data-lang="zh" style="display:none">
+    通过人物、场景与细节，将国家级航天工程转化为可感知、可理解的科技叙事。
+  </span>
+</div>
+
+ <!-- 06 -->
+    <a class="item" href="tech-iFLYTEK.html" data-topic="ai">
+      <div class="marker" aria-hidden="true">
+        <span class="line"></span>
+        <span class="index">06</span>
+      </div>
+
+      <div class="item-text">
+  <strong data-lang="en">iFLYTEK: How Voice AI Entered Everyday Life</strong>
+  <strong data-lang="zh" style="display:none">科大讯飞：语音 AI 如何走入日常生活</strong>
+
+ <span class="note" data-lang="en">
+  Originally published as part of my regular technology column for <em>Modern Weekly</em> . </span>
+<span class="note" data-lang="zh" style="display:none">
+  原文发表于《周末画报》，为本人在该刊长期撰写的科技专栏中的一篇。
+</span>
+
+  <div class="meta" data-lang="en">
+    <span>2018</span><span class="dot">·</span><span>Applied Technology</span><span class="dot">·</span>
+    <span>Voice AI · Product · Ecosystem · China</span>
+  </div>
+
+  <div class="meta" data-lang="zh" style="display:none">
+    <span>2018</span><span class="dot">·</span><span>应用型</span><span class="dot">·</span>
+    <span>语音 AI · 产品 · 技术生态 · 中国</span>
+  </div>
+
+  <span class="desc" data-lang="en">
+    An applied technology feature examining how voice recognition moved from laboratory research
+    into consumer products and public infrastructure through platform design and ecosystem building.
+  </span>
+  <span class="desc" data-lang="zh" style="display:none">
+    从技术生态层面观察语音识别如何通过平台设计与产业协作，
+    从实验室研究走向消费级产品与公共基础设施。
+  </span>
+</div>
     </a>
 
   </div>
@@ -550,34 +646,6 @@ function updateProgress(){
   const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
   document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
 }
-
-/* filter */
-const techItems = Array.from(document.querySelectorAll('#techList .item'));
-const chipGroups = Array.from(document.querySelectorAll('.chips'));
-
-function setTechFilter(topic, silent){
-  chipGroups.forEach(group=>{
-    group.querySelectorAll('.chip').forEach(btn=>{
-      btn.classList.toggle('is-active', btn.getAttribute('data-filter') === topic);
-    });
-  });
-  techItems.forEach(item=>{
-    const t = item.getAttribute('data-topic');
-    const show = (topic === 'all') || (t === topic);
-    item.classList.toggle('is-hidden', !show);
-  });
-  if(!silent){
-    const y = document.querySelector('.toc').getBoundingClientRect().top + window.scrollY - 88;
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  }
-}
-
-chipGroups.forEach(group=>{
-  group.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.chip'); if(!btn) return;
-    setTechFilter(btn.getAttribute('data-filter'));
-  });
-});
 
 /* init */
 updateProgress();
