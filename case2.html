@@ -217,6 +217,30 @@
       border-left:1px solid var(--line);   /* 中间细线 */
     }
 
+/* type scale (case1 has num/lab; case2 needs them too) */
+.num{
+  margin:0;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:22px;
+  line-height:1.2;
+}
+.lab{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.4;
+}
+/* NEW: sub line for case2 */
+.sub{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+
+/* Mobile: stack + horizontal dividers (same logic as case1) */
+
 /* Outputs：取消 section 自带的顶部分割线 */
 #outputs.section{
   border-top:0;
@@ -389,8 +413,8 @@
           <a href="index.html" data-lang="en">Home</a>
           <a href="index.html" data-lang="zh" style="display:none">首页</a>
           <span class="sep">/</span>
-          <span data-lang="en">Case</span>
-          <span data-lang="zh" style="display:none">案例</span>
+          <a href="cases.html" data-lang="en">Case</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
         </div>
 
         <h1 class="title" data-lang="en">Xiao Zhan Incident: Turning Explanation into Participation</h1>
@@ -413,9 +437,8 @@
           <span class="badge" data-lang="zh" style="display:none">编辑系统</span>
 
           <span class="dot">·</span>
-          <span data-lang="en">Editorial system designer / Editor / Producer
-(planning · writing · cross-platform coordination)</span>
-          <span data-lang="zh" style="display:none">角色：编辑系统设计 / 策划编辑 / 统筹（选题 · 写作 · 跨平台联动）</span>
+          <span data-lang="en">Role: Editorial planning · cross-platform content coordination · content & video production</span>
+          <span data-lang="zh" style="display:none">角色：编辑策划 · 跨平台内容协同 · 内容与视频制作</span>
         </div>
       </header>
 
@@ -439,6 +462,13 @@
         <h2 class="h2" data-lang="en">System design</h2>
         <h2 class="h2" data-lang="zh" style="display:none">系统设计</h2>
 
+        <p class="p" data-lang="en">
+          The system was built in response to a fast-escalating controversy, where explanation had to be deployed quickly and then iteratively expanded as public attention shifted.
+       </p>
+       <p class="p" data-lang="zh" style="display:none">
+          这个系统是在高度不确定、快速升级的公共争议中逐步搭建的：先用解释稳定讨论，再随着关注点变化不断扩展内容层级。
+       </p>
+
         <div class="system">
           <div class="card">
             <div class="k">
@@ -446,8 +476,8 @@
               <h3 data-lang="en">Explainer</h3>
               <h3 data-lang="zh" style="display:none">解释稿</h3>
             </div>
-            <p data-lang="en">Define baseline concepts — what fan fiction is, how it differs from piracy, and where legal and moral boundaries are debated.</p>
-            <p data-lang="zh" style="display:none">先解释基本概念与语境（如“同人文化是什么”），建立共同语言。</p>
+            <p data-lang="en">Define baseline concepts — what fan fiction is, and where legal and moral boundaries are debated.</p>
+            <p data-lang="zh" style="display:none">建立基础解释层：同人创作是什么，以及它的法律/道德边界为何会被争论。</p>
           </div>
 
           <div class="card">
@@ -456,8 +486,8 @@
               <h3 data-lang="en">Scholar interview</h3>
               <h3 data-lang="zh" style="display:none">学者访谈</h3>
             </div>
-            <p data-lang="en">Introduce an academic framework through Henry Jenkins, connecting the incident to participatory culture, fan labor, and platform power.</p>
-            <p data-lang="zh" style="display:none">通过学者提供解释框架：粉丝为何会“疯狂”、社群机制如何运作。</p>
+            <p data-lang="en">Provide an explanatory framework for the phenomenon through a dialogue with renowned fan culture scholar Henry Jenkins, addressing why fandoms can become “intense” and how community mechanisms operate.</p>
+            <p data-lang="zh" style="display:none">通过与著名粉丝文化学者亨利詹金斯的对话提供解释框架：粉丝为何会“疯狂”、社群机制如何运作。</p>
           </div>
 
           <div class="card">
@@ -466,8 +496,8 @@
               <h3 data-lang="en">Question collecting</h3>
               <h3 data-lang="zh" style="display:none">征集问题</h3>
             </div>
-            <p data-lang="en">Co-design with the audience: collect questions on social channels and convert them into a structured FAQ.</p>
-            <p data-lang="zh" style="display:none">新媒体联动征集问题，把读者的困惑“结构化”，形成 Q&A 目录。</p>
+            <p data-lang="en">Shift from one-way explanation to participation by collecting audience questions and reorganizing them into a public-facing Q&A structure.</p>
+            <p data-lang="zh" style="display:none">把单向解释转为互动参与：征集读者问题，并将其重组为公开的Q&A结构。</p>
           </div>
 
           <div class="card">
@@ -476,8 +506,8 @@
               <h3 data-lang="en">Video dialogue</h3>
               <h3 data-lang="zh" style="display:none">视频对话</h3>
             </div>
-            <p data-lang="en">A second interview in video format to answer audience questions — increasing trust and retention.</p>
-            <p data-lang="zh" style="display:none">与学者二次视频对话，围绕征集问题答疑，增强参与感与留存。</p>
+            <p data-lang="en">A second interview with Jenkins in video format to answer audience questions — increasing trust and retention.</p>
+            <p data-lang="zh" style="display:none">与学者詹金斯进行二次视频对话，围绕征集问题答疑，增强参与感与留存。</p>
           </div>
 
           <div class="card">
@@ -496,8 +526,8 @@
               <h3 data-lang="en">Distribution loop</h3>
               <h3 data-lang="zh" style="display:none">分发闭环</h3>
             </div>
-            <p data-lang="en">Articles → social posts → questions → video → short units → back-links — forming an editorial flywheel.</p>
-            <p data-lang="zh" style="display:none">文章→社媒→征集→视频→拆条→回流文章，形成编辑飞轮。</p>
+            <p data-lang="en">Articles → social posts → questions → video → short units → back-links — extending the discussion beyond the initial news cycle.</p>
+            <p data-lang="zh" style="display:none">文章 → 社媒 → 征集 → 视频 → 拆条 → 回流文章，把讨论延伸出新闻周期。</p>
           </div>
         </div>
 
@@ -515,12 +545,17 @@
             <div class="type" data-lang="en">Article</div>
             <div class="type" data-lang="zh" style="display:none">文章</div>
             <div class="main">
-              <div class="t">
-                <a href="#" target="_blank" rel="noopener">Explainer: What is fan fiction / fandom culture?</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
+              <div class="t" data-lang="en">
+                <a href="https://mp.weixin.qq.com/s/fsH7hGG6_YeULT64CS22lw" target="_blank" rel="noopener">Explainer: What is fan fiction / fandom culture?</a>
+                <span style="color:var(--muted);font-weight:400;"></span>
               </div>
+            <div class="t" data-lang="zh" style="display:none">
+                <a href="https://mp.weixin.qq.com/s/fsH7hGG6_YeULT64CS22lw" target="_blank" rel="noopener">
+    解释稿：什么是同人创作与粉圈文化？
+                </a>
+           </div>
               <div class="d" data-lang="en">Baseline definitions and vocabulary to stabilize discussion.</div>
-              <div class="d" data-lang="zh" style="display:none">用解释稿建立共同语言，稳定讨论语境。</div>
+              <div class="d" data-lang="zh" style="display:none">用解释性稿件建立共同语言，稳定讨论语境。</div>
             </div>
           </li>
 
@@ -528,10 +563,18 @@
             <div class="type" data-lang="en">Interview</div>
             <div class="type" data-lang="zh" style="display:none">访谈</div>
             <div class="main">
-              <div class="t">
-                <a href="#">Scholar interview: Henry Jenkins on fan rights, creativity, and boundaries</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
+              <div class="t" data-lang="en">
+                <a href="https://weibo.com/ttarticle/p/show?id=2309404484639690457588"
+   target="_blank" rel="noopener noreferrer">Scholar interview: Henry Jenkins on participatory culture and fan rights</a>
+                <span style="color:var(--muted);font-weight:400;"></span>
               </div>
+             <div class="t" data-lang="zh" style="display:none">
+                <a href="https://weibo.com/ttarticle/p/show?id=2309404484639690457588"
+     target="_blank"
+     rel="noopener noreferrer">
+    学者访谈：亨利·詹金斯谈粉丝文化、创作权利与边界
+               </a>
+             </div>
               <div class="d" data-lang="en">A research-based framework for understanding collective behavior.</div>
               <div class="d" data-lang="zh" style="display:none">学者提供解释框架，帮助理解集体行为。</div>
             </div>
@@ -541,10 +584,17 @@
             <div class="type" data-lang="en">Social</div>
             <div class="type" data-lang="zh" style="display:none">新媒体</div>
             <div class="main">
-              <div class="t">
-                <a href="#" target="_blank" rel="noopener">Question collecting post</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link / screenshot)</span>
+              <div class="t" data-lang="en">
+                <a href="https://weibo.com/1191965271/IAcXk4sLO" target="_blank" rel="noopener">Question collecting post</a>
+                <span style="color:var(--muted);font-weight:400;"></span>
               </div>
+<div class="t" data-lang="zh" style="display:none">
+  <a href="https://weibo.com/1191965271/IAcXk4sLO"
+     target="_blank"
+     rel="noopener noreferrer">
+    读者问题征集帖
+  </a>
+</div>
               <div class="d" data-lang="en">Audience questions were structured into an editorial Q&A outline.</div>
               <div class="d" data-lang="zh" style="display:none">征集问题并结构化成 Q&A 目录，为视频答疑做准备。</div>
             </div>
@@ -554,10 +604,23 @@
             <div class="type" data-lang="en">Video</div>
             <div class="type" data-lang="zh" style="display:none">视频</div>
             <div class="main">
-              <div class="t">
-                <a href="#" target="_blank" rel="noopener">Video dialogue with scholar (Q&A)</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO link)</span>
-              </div>
+             <div class="t" data-lang="en">
+                <a href="https://www.bilibili.com/video/BV1BK411L7EX"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Video dialogue with scholar (Q&A)
+               </a>
+            <span style="color:var(--muted);font-weight:400;"></span>
+            </div>
+
+            <div class="t" data-lang="zh" style="display:none">
+               <a href="https://www.bilibili.com/video/BV1BK411L7EX"
+               target="_blank"
+               rel="noopener noreferrer">
+               学者对话视频（Q&A）
+               </a>
+           <span style="color:var(--muted);font-weight:400;"></span>
+           </div>
               <div class="d" data-lang="en">Second-round dialogue to answer the collected questions.</div>
               <div class="d" data-lang="zh" style="display:none">围绕征集问题做二次视频对话答疑。</div>
             </div>
@@ -567,10 +630,23 @@
             <div class="type" data-lang="en">Clips</div>
             <div class="type" data-lang="zh" style="display:none">拆条</div>
             <div class="main">
-              <div class="t">
-                <a href="#" target="_blank" rel="noopener">Short explainers (series)</a>
-                <span style="color:var(--muted);font-weight:400;">(TODO playlist)</span>
-              </div>
+             <div class="t" data-lang="en">
+                <a href="https://www.bilibili.com/video/BV1t7411m7Tx"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Short explainers(series)
+               </a>
+            <span style="color:var(--muted);font-weight:400;"></span>
+            </div>
+
+            <div class="t" data-lang="zh" style="display:none">
+               <a href="https://www.bilibili.com/video/BV1t7411m7Tx"
+               target="_blank"
+               rel="noopener noreferrer">
+               轻科普短系列
+               </a>
+           <span style="color:var(--muted);font-weight:400;"></span>
+           </div>
               <div class="d" data-lang="en">Key concepts were converted into modular units for multi-platform circulation.</div>
               <div class="d" data-lang="zh" style="display:none">把知识点拆成可传播的短内容，用于多平台循环分发。</div>
             </div>
@@ -585,24 +661,104 @@
         <h2 class="h2" data-lang="en">Impact (selected)</h2>
         <h2 class="h2" data-lang="zh" style="display:none">传播结果（节选）</h2>
 
-        <div class="impact">
-          <div class="metric">
-            <p class="num">10M+</p>
-            <p class="lab" data-lang="en">Engagements (total)</p>
-            <p class="lab" data-lang="zh" style="display:none">总互动量（累计）</p>
-          </div>
-          <div class="metric">
-            <p class="num">TODO</p>
-            <p class="lab" data-lang="en">Reads / views</p>
-            <p class="lab" data-lang="zh" style="display:none">阅读 / 播放</p>
-          </div>
-          <div class="metric">
-            <p class="num">TODO</p>
-            <p class="lab" data-lang="en">Questions collected</p>
-            <p class="lab" data-lang="zh" style="display:none">征集问题数量</p>
-          </div>
+      <div class="impact">
+        <div class="metric">
+          <p class="num" data-lang="en">10M+</p>
+          <p class="num" data-lang="zh" style="display:none">1000万+</p>
+          <p class="lab" data-lang="en">Total views across platforms</p>
+          <p class="lab" data-lang="zh" style="display:none">多平台阅读与播放量</p>
+          <p class="sub" data-lang="en">Large-scale public attention during a fast-moving controversy</p>
+          <p class="sub" data-lang="zh" style="display:none">在高度发酵的公共争议中获得大规模关注</p>
         </div>
+
+       <div class="metric">
+          <p class="num" data-lang="en">1M+</p>
+          <p class="num" data-lang="zh" style="display:none">100万+</p>
+          <p class="lab" data-lang="en">Total interactions (likes, comments, shares)</p>
+          <p class="lab" data-lang="zh" style="display:none">总互动量（点赞、评论、转发）</p>
+          <p class="sub" data-lang="en">Sustained engagement beyond passive reading</p>
+          <p class="sub" data-lang="zh" style="display:none">从围观式阅读转向持续互动</p>
+        </div>
+
+      <div class="metric">
+          <p class="num" data-lang="en">1,000+</p>
+          <p class="num" data-lang="zh" style="display:none">1000+</p>
+          <p class="lab" data-lang="en">Audience questions submitted</p>
+          <p class="lab" data-lang="zh" style="display:none">读者提问</p>
+          <p class="sub" data-lang="en">Questions reorganized into a second-round public Q&A</p>
+          <p class="sub" data-lang="zh" style="display:none">被整理为第二轮公开视频答疑</p>
+        </div>
+   </div>     
+        <p class="note" data-lang="en" style="margin-top:14px;">
+          Referenced in university communication courses as a teaching case.
+       </p>
+       <p class="note" data-lang="zh" style="display:none; margin-top:14px;">
+          被高校传播学课程作为教学案例引用。
+       </p>
       </section>
+
+ <div class="rule"></div>
+
+<section class="section" id="related">
+  <h2 class="h2" data-lang="en">Thematic extension & editorial research</h2>
+  <h2 class="h2" data-lang="zh" style="display:none">议题延展与编辑研究</h2>
+
+  <p class="p" data-lang="en">
+    Beyond the incident-driven workflow above, I continued to examine the structural mechanisms behind fandom culture —
+    from CP-driven celebrity production to platform algorithms and attention dynamics. These pieces were part of a later cover package on “attention economy” rather than direct follow-ups to the Xiao Zhan incident.
+  </p>
+  <p class="p" data-lang="zh" style="display:none">
+    在上述事件型工作流之外，我也持续分析粉丝文化背后的结构性机制——从耽美 CP 如何参与明星“顶流化”，到平台算法与注意力机制如何助长中国特色的粉丝文化。这两篇文章是后来“流量经济”封面的一部分，并不是对肖战事件的直接续写。
+  </p>
+
+  <ul class="list" style="margin-top:10px;">
+    <li>
+      <div class="type" data-lang="en">Article</div>
+      <div class="type" data-lang="zh" style="display:none">文章</div>
+
+      <div class="main">
+        <div class="t" data-lang="en">
+          <a href="https://mp.weixin.qq.com/s/mglNMO68G008Mju53_Yfkg" target="_blank" rel="noopener noreferrer">How CP economies help push male celebrities to the top</a>
+          <span style="color:var(--muted);font-weight:400;"></span>
+        </div>
+        <div class="t" data-lang="zh" style="display:none">
+          <a href="https://mp.weixin.qq.com/s/mglNMO68G008Mju53_Yfkg" target="_blank" rel="noopener noreferrer">耽美CP如何助推男明星成为“顶流”</a>
+          <span style="color:var(--muted);font-weight:400;"></span>
+        </div>
+
+        <div class="d" data-lang="en">
+          A structural analysis of CP-driven fan participation and celebrity-making.
+        </div>
+        <div class="d" data-lang="zh" style="display:none">
+          从结构层面分析CP驱动的粉丝参与与“造星”机制。
+        </div>
+      </div>
+    </li>
+
+    <li>
+      <div class="type" data-lang="en">Article</div>
+      <div class="type" data-lang="zh" style="display:none">文章</div>
+
+      <div class="main">
+        <div class="t" data-lang="en">
+          <a href="https://mp.weixin.qq.com/s/bjib4ufXG0zhIX9he5rCtw" target="_blank" rel="noopener noreferrer">How platform algorithms amplify Chinese fandom culture</a>
+          <span style="color:var(--muted);font-weight:400;"></span>
+        </div>
+        <div class="t" data-lang="zh" style="display:none">
+          <a href="https://mp.weixin.qq.com/s/bjib4ufXG0zhIX9he5rCtw" target="_blank" rel="noopener noreferrer">平台算法机制如何助长中国特色的粉丝文化</a>
+          <span style="color:var(--muted);font-weight:400;"></span>
+        </div>
+
+        <div class="d" data-lang="en">
+          A mechanism-focused piece on recommendation systems, incentives, and collective behavior.
+        </div>
+        <div class="d" data-lang="zh" style="display:none">
+          从推荐系统、激励结构与集体行为出发，讨论粉圈机制被“算法化放大”的路径。
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>
 
       <div class="rule"></div>
 
@@ -612,12 +768,17 @@
         <h2 class="h2" data-lang="zh" style="display:none">这个案例证明了什么</h2>
 
         <p class="p" data-lang="en">
-          This structure later became a reusable template for handling fast-moving public controversies. I build editorial systems that convert complexity into shared language, then translate that language into participation and distribution:
-          writing → interaction → video → modular units → feedback loop. The case was later referenced in university communication courses as a teaching example, showing how media explanation can extend beyond news cycles into academic and educational contexts.
-        </p>
-        <p class="p" data-lang="zh" style="display:none">
-          我擅长把复杂议题转译成共同语言，并把“解释”进一步转化为“参与 + 分发”的系统：写作 → 互动 → 视频 → 拆条 → 回流闭环。该案例后来被高校传播学课程作为教学案例引用，展示了媒体解释如何超出新闻周期，进入学术与教育语境。
-        </p>
+I design editorial systems for moments of high complexity and public confusion. 
+Rather than treating content as isolated outputs, I structure explanation, interaction, and distribution as a connected workflow:
+shared language → participation → circulation → feedback.
+This approach allows media coverage to move beyond reactive reporting and build sustained understanding across platforms.
+       </p>
+       <p class="p" data-lang="zh" style="display:none">
+我擅长在高度复杂、情绪密集的公共事件中搭建编辑系统，而不是只产出单篇内容。
+通过把解释、互动与分发设计为一个连续的工作流——
+共同语言 → 参与机制 → 内容循环 → 反馈回路，
+让报道从即时反应走向可持续理解，并能够在不同平台与议题中复用。
+      </p>
       </section>
 
         <nav class="case-nav" aria-label="Case navigation">
