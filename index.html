@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chen Lu</title>
-  <meta name="description" content="Chen Lu — Writing & Visual at the intersection of technology, art, and culture." />
+  <meta name="description" content="Chen Lu — Designing editorial systems across media, platforms, and public engagement." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -401,7 +401,7 @@
           <span class="lang-en">Cases</span><span class="lang-cn">案例</span>
         </a>
 
-        <a href="writing" data-section="writing">
+        <a href="writing.html" data-section="writing">
           <span class="lang-en">Writing</span><span class="lang-cn">写作</span>
         </a>
 
@@ -439,10 +439,10 @@
     <h1 class="h-title">Chen Lu</h1>
 
     <p class="h-deck" data-lang="en">
-      I work across technology, art, and culture, shaping complex ideas into clear, compelling stories through writing and visual thinking.
+      I design editorial systems that turn complex ideas into public-facing narratives — across writing, video, platforms, and on-the-ground engagement.
     </p>
     <p class="h-deck" data-lang="zh" style="display:none">
-      我的工作横跨科技、艺术与文化领域，通过写作与视觉思考，把复杂问题转化为清晰、有传播力的内容。
+      我通过编辑系统设计，把复杂议题转化为可传播、可参与、可落地的公共叙事，涵盖写作、视频、多平台传播与线下实践。
     </p>
 
     <div class="h-links">
@@ -465,18 +465,18 @@
     <div class="sec-head">
       <h2 class="sec-title" data-lang="en">Cases</h2>
       <h2 class="sec-title" data-lang="zh" style="display:none">案例</h2>
-      <p class="sec-note" data-lang="en">Cross-media impact</p>
-      <p class="sec-note" data-lang="zh" style="display:none">跨媒介传播</p>
+      <p class="sec-note" data-lang="en">Editorial systems & public engagement</p>
+      <p class="sec-note" data-lang="zh" style="display:none">编辑系统与公共参与</p>
     </div>
 
     <div class="toc">
       <a class="item" href="cases.html">
         <div class="thumb"><img src="assets/img/cases.png" alt="Cases" /></div>
         <div class="item-text">
-          <strong data-lang="en">Cross-media storytelling</strong>
-          <strong data-lang="zh" style="display:none">跨媒介叙事与传播</strong>
-          <span class="desc" data-lang="en">From explainers to writing, video and social engagement—turning topics into sustained public conversation.</span>
-          <span class="desc" data-lang="zh" style="display:none">从解释到写作、再到视频与社媒互动，把选题做成可持续的公共讨论。</span>
+          <strong data-lang="en">Editorial systems in practice</strong>
+          <strong data-lang="zh" style="display:none">编辑系统的实践</strong>
+          <span class="desc" data-lang="en">Designing editorial systems across media, platforms, and real-world engagement.</span>
+          <span class="desc" data-lang="zh" style="display:none">在媒体、平台与现实空间中，构建并运作完整的编辑与传播系统。</span>
         </div>
       </a>
     </div>
@@ -648,66 +648,73 @@
 </div>
 
 <script>
+  /* ---------- Language ---------- */
   function setLang(lang){
     document.documentElement.lang = lang;
+
+    // A) data-lang system
     document.querySelectorAll('[data-lang]').forEach(el=>{
       el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
     });
-    document.getElementById('btnEN').classList.toggle('active', lang === 'en');
-    document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
 
-    // reset filters to All/全部 on language switch
-    setWritingFilter('all', true);
-    setVisualFilter('all', true);
+    // B) legacy class system (兼容 .lang-en / .lang-cn)
+    document.querySelectorAll('.lang-en').forEach(el=>{
+      el.style.display = (lang === 'en') ? '' : 'none';
+    });
+    document.querySelectorAll('.lang-cn').forEach(el=>{
+      el.style.display = (lang === 'zh') ? '' : 'none';
+    });
+
+    // button active state
+    const enBtn = document.getElementById('btnEN');
+    const cnBtn = document.getElementById('btnCN');
+    if(enBtn) enBtn.classList.toggle('active', lang === 'en');
+    if(cnBtn) cnBtn.classList.toggle('active', lang === 'zh');
+
+    // reset filters on language switch（防止函数未定义时报错）
+    if(typeof setWritingFilter === 'function') setWritingFilter('all', true);
+    if(typeof setVisualFilter === 'function') setVisualFilter('all', true);
   }
 
-  /* progress */
+  /* ---------- Progress ---------- */
   function updateProgress(){
     const doc = document.documentElement;
     const scrollTop = doc.scrollTop || document.body.scrollTop;
     const scrollHeight = doc.scrollHeight - doc.clientHeight;
     const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-    document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    const bar = document.getElementById('progressBar');
+    if(bar) bar.style.width = p.toFixed(2) + '%';
   }
 
-  /* nav highlight (robust) */
+  /* ---------- Nav highlight ---------- */
   (function(){
     const ids = ["writing","visual","cases","about"];
     const headerOffset = 92;
 
-    const linksFor = (id) => Array.from(document.querySelectorAll(`.nav a[data-section="${id}"]`));
+    const linksFor = (id) =>
+      Array.from(document.querySelectorAll(`.nav a[data-section="${id}"]`));
 
     function setActive(id){
       ids.forEach(sid=>{
-      linksFor(sid).forEach(a => a.classList.toggle("is-active", sid === id));
-     });
+        linksFor(sid).forEach(a => a.classList.toggle("is-active", sid === id));
+      });
     }
 
-    const sections = ids
-      .map(id => document.getElementById(id))
-      .filter(Boolean);
+    const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
 
     function pickActive(){
-     const viewportMid = window.innerHeight * 0.35; // 视口偏上更符合直觉（0.5 会更居中）
-     let current = null;
+      const viewportLine = window.innerHeight * 0.35 + headerOffset;
+      let current = null;
 
-     for(const sec of sections){
-       const r = sec.getBoundingClientRect();
-       // 只要“视口的那条线”落在这个 section 里，就认为它是当前
-       if(r.top <= viewportMid + headerOffset && r.bottom > viewportMid + headerOffset){
-         current = sec.id;
-         break;
-       }
-     }
-
-     setActive(current); // current 可能为 null：顶部区域就不高亮
-    }
-      if(!current){
-        // 还没到第一个 section：全部取消高亮（或你也可以默认高亮 writing）
-        setActive(null);
-        return;
+      for(const sec of sections){
+        const r = sec.getBoundingClientRect();
+        if(r.top <= viewportLine && r.bottom > viewportLine){
+          current = sec.id;
+          break;
+        }
       }
-      setActive(current);
+
+      setActive(current); // current 为 null 时：不高亮
     }
 
     let ticking = false;
@@ -727,7 +734,7 @@
     pickActive();
   })();
 
-  /* Writing filter */
+  /* ---------- Writing filter ---------- */
   const writingItems = Array.from(document.querySelectorAll('#writingList .item'));
   const writingChipGroups = Array.from(document.querySelectorAll('#writing .chips'));
 
@@ -747,6 +754,7 @@
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }
+
   writingChipGroups.forEach(group=>{
     group.addEventListener('click', (e)=>{
       const btn = e.target.closest('.chip'); if(!btn) return;
@@ -754,7 +762,7 @@
     });
   });
 
-  /* Visual filter */
+  /* ---------- Visual filter ---------- */
   const visualItems = Array.from(document.querySelectorAll('#visualList .item'));
   const visualChipGroups = Array.from(document.querySelectorAll('#visual .chips'));
 
@@ -774,6 +782,7 @@
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   }
+
   visualChipGroups.forEach(group=>{
     group.addEventListener('click', (e)=>{
       const btn = e.target.closest('.chip'); if(!btn) return;
@@ -781,10 +790,12 @@
     });
   });
 
-  /* init */
+  /* ---------- Init ---------- */
   updateProgress();
   window.addEventListener('scroll', updateProgress, {passive:true});
   window.addEventListener('resize', updateProgress);
+
+  setLang('en'); // 放最后，保证上面函数都已定义
 </script>
 
 </body>
