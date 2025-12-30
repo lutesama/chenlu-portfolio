@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>MetaverseRealEstate · Chen Lu</title>
+
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+ <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+ footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+ 
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="tech.html" data-lang="en">Tech</a>
+          <a href="tech.html" data-lang="zh" style="display:none">科技</a>
+          <span class="sep">/</span>
+          <span data-lang="en">MetaverseRealEstate</span>
+          <span data-lang="zh" style="display:none">元宇宙房地产</span>
+        </div>
+
+        <h1 class="article-title" data-lang="en">Buying Land in the Metaverse</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">在元宇宙里买地</h1>
+        <p class="article-deck" data-lang="en">
+A reported feature on virtual land speculation in the metaverse—following creators, investors, and platforms such as The Sandbox and Decentraland to examine how blockchain-based worlds turn land, creativity, and governance into tradable assets.
+</p>
+      <p class="article-deck" data-lang="zh" style="display:none">
+一篇关于“元宇宙买地”热潮的报道型特写，通过 The Sandbox、Decentraland 等平台中的创作者、投资者与玩家，观察区块链世界如何将土地、创作与治理机制转化为可交易的资产。
+</p>
+
+
+       <div class="article-meta">
+          <span>Tech</span>
+          <span class="dot">·</span>
+         <span data-lang="en">Reported feature</span>
+         <span data-lang="zh" style="display:none;">报道型特写</span>
+         <span class="dot">·</span>
+         <span data-lang="en"> Metaverse / virtual land / NFT</span>
+         <span data-lang="zh" style="display:none;">元宇宙 / 虚拟土地 / NFT</span>
+         <span class="dot">·</span>
+         <span data-lang="en">2022</span>
+         <span data-lang="zh" style="display:none;">2022</span>
+        </div>
+      </header>
+
+      <!-- ===== Hero visual ===== -->
+      <figure class="article-hero">
+        <img src="assets/img/tech-MetaverseRealEstate.png" alt="sandland" />
+        <figcaption class="figure-caption" data-lang="en">Figure: For a moment, emerging visions of digital life begin to take tangible form.</figcaption>
+        <figcaption class="figure-caption" data-lang="zh" style="display:none;">图：一时间，新兴的数字生活想象正在被迅速具象化。</figcaption>
+      </figure>
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 2, 2022).
+      <a href="assets/pdf/MetaverseRealEstate.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+     原文发表于《三联生活周刊》2022 年第 2 期。
+    <a href="assets/pdf/MetaverseRealEstate.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+  </span>
+  
+</div>
+
+  <h2 data-lang="en">Editor’s note</h2>
+  <h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+  <p data-lang="en">
+This piece examines the early-stage social life of emerging technologies—before standards, regulation, or stable use cases are in place—through the phenomenon of virtual land speculation in the metaverse.
+</p>
+
+<p data-lang="zh" style="display:none;">
+这篇文章关注新兴技术在制度、标准和监管尚未成形之前的社会形态，通过“元宇宙买地”这一现象，观察技术如何被过早地想象为基础设施并进入投机市场。
+</p>
+
+  <h2 data-lang="en">Key questions</h2>
+  <h2 data-lang="zh" style="display:none">核心问题框架</h2>
+ 
+  <ul>
+  <li data-lang="en">Why can virtual land in the metaverse reach prices comparable to real-world real estate?</li>
+  <li data-lang="zh" style="display:none">为什么元宇宙中的虚拟土地可以卖出接近现实房地产的价格？</li>
+  <li data-lang="en">How do creators, platforms, and speculators assign value to digital land and NFTs?</li>
+  <li data-lang="zh" style="display:none">创作者、平台与投机者如何共同塑造虚拟土地与 NFT 的价值？</li>
+  <li data-lang="en">What kinds of governance, risk, and inequality emerge when virtual worlds adopt real-world property logic?</li>
+  <li data-lang="zh" style="display:none">当虚拟世界引入现实世界的产权逻辑，会产生哪些治理风险与结构性不平等？</li>
+</ul>
+
+  <!-- Selected excerpts -->
+ <h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+     <!-- Excerpt 1 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 1 · The price shock: when virtual land enters the speculative spotlight.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选一 · 价格冲击：虚拟土地如何进入投机视野
+      </p>
+
+      <blockquote>
+       <p data-lang="zh" style="display:none">
+2021 年11月23日，Decentraland中的一块数字土地被卖出243万美元（约合人民币1552万元）的高价。11月30日，Sandbox又以430万美元（约2739万人民币）的新出售价格刷新了这一交易记录。不久后，歌手林俊杰也在Twitter上宣布自己在Decentraland上购买了三块虚拟土地，根据外媒估算，这三块地大约花了12.3万美元（约合人民币78.4万元）。<br/>
+
+为什么虚拟土地可以卖出堪比现实的价格？这些“元宇宙”游戏的吸引力究竟在哪？
+</p>
+        <p data-lang="en">
+  On November 23, 2021, a parcel of digital land in Decentraland sold for $2.43 million (about RMB 15.52 million). On November 30, The Sandbox set a new record with a $4.3 million sale (about RMB 27.39 million). Soon after, the singer JJ Lin announced on Twitter that he had bought three plots in Decentraland; according to estimates in overseas media, the three plots cost roughly $123,000 (about RMB 784,000).<br/>
+Why can virtual land reach prices comparable to real-world property—and what exactly are people buying?
+</p>
+      </blockquote>
+
+      <!-- Excerpt 2 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 2 · Creative labor before speculation: why artists enter the metaverse.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 2 · 创作先于投机：艺术家为何进入元宇宙
+      </p>
+
+      <blockquote>
+       <p data-lang="zh" style="display:none">
+生活在佛山的辣椒油，去年还是位普通的平面设计师，大学专业学的传统绘画，这件事情引起了他对NFT和区块链的兴趣。一件传统的艺术品从艺术家手中进入市场后，与艺术家本人再无瓜葛，但NFT可以为艺术家提供永久的持续收益，除一次性的销售收入外，艺术家还能够获得二级市场中每一次转售的特定比例分成。这对于从事创作的辣椒油来说别具吸引力，在对这个领域进行一番调研后，他最终选择Sandbox这款游戏进入这个领域。
+</p>
+        </p>
+
+        <p data-lang="en">
+  For Chili Oil, a designer based in Foshan, NFTs offered something traditional art markets rarely provide: continuous income. Unlike physical artworks, which are detached from artists once sold, NFTs allow creators to receive a share of every resale on the secondary market. After researching the field, he chose The Sandbox as his entry point into the metaverse.
+</p>
+      </blockquote>
+
+ <!-- Excerpt 3 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 3 · Coding scarcity: how virtual land mimics real estate.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 3 · 被编码的稀缺性：虚拟土地如何复制房地产逻辑
+      </p>
+
+      <blockquote>
+      <p data-lang="zh" style="display:none">
+这些虚拟土地与现实世界中的房地产运作别无二致。Sandbox中的可用Land总共只有166464块，永不增减，并且每块地都被上传到区块链后出售，保证了其唯一性。当几块1*1的Land被合并成一块更大的地块时，就变成了ESTATE（土地群）。通常，ESTATE 的大小为 3*3、6*6、12*12和24*24。这些地将通过分批预售和公开销售的方式出售，并且允许玩家在Opensea等第三方 NFT交易所上进行转售。辣椒油向我形容道，“一块1*1的Land相当于现实生活中一个NBA篮球场的大小。”
+</p>
+        </p>
+
+        <p data-lang="en">
+  These virtual plots operate almost exactly like real-world real estate. The Sandbox has only 166,464 usable Land parcels—fixed forever—and each parcel is sold after being uploaded to the blockchain, which is meant to guarantee uniqueness. When several 1×1 parcels are merged into a larger plot, it becomes an ESTATE. Typical ESTATE sizes include 3×3, 6×6, 12×12, and 24×24. These parcels are sold through staged presales and public sales, and can be resold on third-party NFT marketplaces such as OpenSea. Chili Oil described it to me this way: “A 1×1 Land is about the size of an NBA basketball court in real life.”
+</p>
+      </blockquote>
+
+<!-- Excerpt 4 lead -->
+      <p class="excerpt-lead" data-lang="en">
+        Excerpt 4 · Ownership without protection: risk, theft, and governance limits.
+      </p>
+      <p class="excerpt-lead" data-lang="zh" style="display:none">
+        节选 4 · 没有保护的“所有权”：风险、盗窃与治理边界
+      </p>
+
+      <blockquote>
+      <p data-lang="zh" style="display:none">
+强调唯一性和不可复制性、似乎颇具安全性的NFT也有缺陷。辣椒油此前并未接触过区块链、比特币、NFT之类的事物，所以当一个看起来跟官方并无二致的链接发到他的Discord，告诉他可以领取游戏奖励时，他竟没有多想，将自己一块Land的密匙输入进去，所以这块Land便被盗了。“还好我也怕丢，所以分开了几个钱包用来放土地。”辣椒油感慨道，“只要密码泄露了，其实还是很容易被盗，而且因为NFT强调匿名性，也很难追回。”
+</p>
+        </p>
+
+        <p data-lang="en">
+  Despite its promise of uniqueness and security, NFT-based ownership remains fragile. After entering his private key into a phishing link that appeared official, Chili Oil lost one of his Land parcels. Because NFTs emphasize anonymity, recovery is often impossible once assets are stolen.
+  </p>
+
+      </blockquote>
+
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none;">它能证明什么</h2>
+
+  <ul>
+    <li data-lang="en">Field reporting that turns a hyped concept into concrete actors, incentives, and risks</li>
+    <li data-lang="zh" style="display:none">把“热概念”落到具体的人、动机与风险结构上</li>
+
+    <li data-lang="en">Explaining Web3 mechanics (NFTs, on-chain scarcity, governance) through lived scenes</li>
+    <li data-lang="zh" style="display:none">用现场与人物经历解释 Web3 机制：NFT、上链稀缺性与治理</li>
+
+    <li data-lang="en">A clear split between creative labor and speculative finance—without moral panic</li>
+    <li data-lang="zh" style="display:none">区分“创作劳动”与“资产炒作”，不靠情绪化定性</li>
+  </ul>
+</div>
+
+</section>
+
+       <nav class="article-nav" aria-label="Article navigation">
+        <a href="tech.html">← Back to Tech</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>46° N · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="culture.html" data-lang="en">Culture</a>
+          <a href="culture.html" data-lang="zh" style="display:none">文化</a>
+          <span class="sep">/</span>
+          <span data-lang="en">46° N</span>
+          <span data-lang="zh" style="display:none">46° N</span>
+        </div>
+
+        <h1 class="article-title" data-lang="en">At 46° N, rediscovering the joy of contemplation</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">在北纬46度，重新寻回思想的兴趣</h1>
+       <p class="article-deck" data-lang="en">
+         In Harbin, a group of scholars and readers are moving academic talks out of universities and into bookstores, cafés, and hostels. The events are ticketed, seats are limited, and no one is “assigned” to attend—yet the rooms are packed, questions are sharp, and attention is hard-won. What’s being tested here is not a trend, but a practice: how to recover the pleasure of thinking when knowledge has long been reduced to performance, credits, and efficiency.
+        </p>
+        <p class="article-deck" data-lang="zh" style="display:none;">
+         在哈尔滨，一群不太安分的学术分子把讲座从大学搬进书店、咖啡馆和青年旅舍。收费、限座、没有“拉人头”，听众却更专注，提问也更尖锐。对他们来说，校外不是“更热闹的场地”，而是一种重新夺回注意力、重建思想兴趣的练习：当知识不再是任务，而是你愿意为之出门、为之付费、为之争论的生活。
+        </p>
+
+ 
+<div class="article-meta">
+  <span data-lang="en">Culture</span>
+  <span data-lang="zh" style="display:none;">文化</span>
+  <span class="dot">·</span>
+  <span data-lang="en">Feature</span>
+  <span data-lang="zh" style="display:none;">特写</span>
+  <span class="dot">·</span>
+  <span data-lang="en">Public Intellectual Life / Youth Culture / Institutions / Learning</span>
+  <span data-lang="zh" style="display:none;">公共思想生活 / 青年文化 / 机构之外 / 学习</span>
+  <span class="dot">·</span>
+  <span data-lang="en">2024</span>
+  <span data-lang="zh" style="display:none;">2024</span>
+</div>
+      </header>
+
+<figure class="article-hero">
+  <img src="assets/img/culture-acedemicbar.png" alt="acedemicbar" />
+ <figcaption class="figure-caption" data-lang="en">
+  Figure: A ticketed off-campus talk in Harbin—bookstores, cafés, and hostels becoming new classrooms.
+</figcaption>
+<figcaption class="figure-caption" data-lang="zh" style="display:none;">
+  图：哈尔滨的校外谈书会现场——书店、咖啡馆与青年旅舍成为新的课堂。
+</figcaption>
+</figure>
+
+<section class="prose">
+
+<div class="publine">
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none;">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em>.
+    <a href="assets/pdf/academicbar.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+    <a href="https://mp.weixin.qq.com/s/o83JBj_qE4N6A1k5x6vPFg" target="_blank" rel="noopener">WeChat Read ↗</a>
+  </span>
+
+  <span class="pub-text" data-lang="zh" style="display:none;">
+    原文发表于《三联生活周刊》。
+    <a href="assets/pdf/academicbar.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+    <a href="https://mp.weixin.qq.com/s/o83JBj_qE4N6A1k5x6vPFg" target="_blank" rel="noopener">微信阅读连接 ↗</a>
+  </span>
+</div>
+
+  <!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+This piece examines off-campus intellectual life as a lived practice rather than a cultural “trend.”
+Through long-form reporting in Harbin, it follows how scholars, students, and readers rebuild
+conditions for attention, discussion, and disagreement outside institutional classrooms—
+not to romanticize “grassroots culture,” but to ask what it takes for thinking to feel necessary again.
+</p>
+
+<p data-lang="zh" style="display:none">
+这篇报道并不把校外学术活动当作一种“文化现象”或新潮流，而是将其视为一种正在发生的实践。
+通过在哈尔滨的长期观察与采访，我关注的是：当课堂中的注意力、讨论与兴趣逐渐枯竭，
+人们如何在制度之外重新搭建思考、阅读与争论得以发生的条件。
+</p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+<ul data-lang="en">
+  <li>Why does academic discussion lose its vitality inside universities?</li>
+  <li>What changes when lectures move from classrooms to cafés and bookstores?</li>
+  <li>How do payment, choice, and scale reshape attention and participation?</li>
+  <li>Can intellectual pleasure survive outside institutional incentives?</li>
+</ul>
+
+<ul data-lang="zh" style="display:none">
+  <li>为什么学术讨论在大学课堂内逐渐失去活力？</li>
+  <li>当讲座从校园搬进书店、咖啡馆，会发生什么变化？</li>
+  <li>收费、限额与自愿参与，如何重塑注意力与讨论质量？</li>
+  <li>当知识不再绑定绩效与学分，思想的兴趣是否可能重新出现？</li>
+</ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none;">节选</h2>
+
+<section class="excerpts">
+
+  <!-- Excerpt 1 -->
+  <div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">
+    Excerpt 1: Moving lectures off campus
+  </p>
+  <p class="excerpt-lead" data-lang="zh"  style="display:none">
+    节选一：把讲座搬到校外
+  </p>
+
+  <blockquote data-lang="en">
+    <p>
+      The day before I arrived in Harbin, a piece of news drew widespread attention.
+      Photographer Stephen Shore gave a lecture at the CAFA Art Museum,
+      titled “Five Experiences That Changed My Life and How They Made Me an Artist.”
+    </p>
+    <p>
+      What was expected to be a routine celebrity lecture took an unexpected turn.
+      Shore suddenly paused his talk through the interpreter and calmly addressed the audience:
+      “Many of you have been on your phones from beginning to end.
+      You came here to listen, yet you cannot concentrate.
+      If you cannot pay attention here,
+      can you still notice the food you eat,
+      or the feeling of sunlight on your skin?
+      Let’s stop here today. That’s fine.”
+    </p>
+    <p>
+      With that, he stepped down from the stage and returned to the audience.
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>
+      我去哈尔滨采访的前一天，网上有条新闻引起了不小的关注度。
+      著名摄影家斯蒂芬·肖尔在中央美术学院美术馆举行了一场讲座，
+      题目叫“改变我人生的五次经历以及它们如何促使我成为一名艺术家”。
+    </p>
+    <p>
+      本来大家以为这又是一次常见的名人讲座，
+      没想到，肖尔突然通过翻译停下了演讲，
+      对着在场的观众平静说道：
+      “今天在座的各位，很多人从头到尾都在看手机。
+      你们特意来听这个讲座，却不能集中注意力。
+      那么你平时能在意自己吃的东西，
+      或者阳光照在皮肤上的感觉吗？
+      我们今天就到此为止吧，也挺好的。”
+    </p>
+    <p>
+      说完，他便走下讲台，径直回到了观众席中。
+    </p>
+  </blockquote>
+</div>
+
+ <!-- Excerpt 02 -->
+<div class="excerpt">
+ <p class="excerpt-lead" data-lang="en">
+    Excerpt 2: Why campus lectures have grown hollow
+  </p>
+  <p class="excerpt-lead" data-lang="zh"  style="display:none">
+    节选二：在校园里，讲座为何变得索然无味
+  </p>
+ 
+<blockquote data-lang="en">
+    <p>
+      Wu Suran understands this clearly.
+      Today’s university students are overwhelmed—
+      coursework, clubs, and a constant stream of institutional obligations.
+      Where is the energy left for the enjoyment of knowledge?
+    </p>
+    <p>
+      “Even if I tell students this lecture is genuinely good,
+      they don’t believe it anymore,” Wu said helplessly.
+      “They’re exhausted.
+      Even when a nationally renowned scholar comes,
+      the lecture still ends up feeling dull.”
+    </p>
+    <p>
+      Once, during a lecture, he happened to sit next to a female student.
+      She spent the entire session knitting,
+      leaving him both amused and dismayed.
+    </p>
+    <p>
+      Ironically, it is often only after graduation
+      that students suddenly grasp the theories once taught in class.
+      One former student, now working at a major tech company,
+      returned six months later and told him:
+      “Professor, I finally understand what ‘alienated labor’ means.”
+    </p>
+    <p>
+      Faced with real struggles in the workplace,
+      textbook concepts suddenly aligned with lived experience.
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh"  style="display:none">
+    <p>
+      吴肃然心里明白，现在的大学生事情多得很，
+      学业、社团，加上学校组织的一大堆事情压在身上，
+      哪里还有精力主动去追求“知识享受”？
+    </p>
+    <p>
+      “就算我跟学生说，这次讲座真不错，讲得有意思，
+      学生们也不信了，他们疲了，
+      哪怕来的是全国知名学者，结果照样无聊。”
+      吴肃然很无奈。
+    </p>
+    <p>
+      有次听课，他正好坐在一个女生旁边，
+      结果女生一整节课都在织毛衣，
+      让他哭笑不得。
+    </p>
+    <p>
+      反而是那些毕业了的学生，
+      到了社会上才突然领会到当年课堂上讲的那些理论。
+      吴肃然有个学生，毕业后在大厂工作，
+      半年后回来跟他说：
+      “老师，我终于明白什么叫‘劳动异化’了！”
+    </p>
+    <p>
+      他在职场上经历了真实的困境，
+      发现课本上的概念和自己的人生经验对上了号。
+    </p>
+  </blockquote>
+
+</div>
+
+ <!-- Excerpt 03 -->
+
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">
+    Excerpt 3: When reading becomes serious again—off campus
+  </p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">
+    节选三：在校外，阅读如何重新变成一件严肃的事
+  </p>
+
+  <blockquote data-lang="en">
+    <p>Anyroom is tucked inside a quiet residential compound—without Jiudan, I wouldn’t have found it. In September, Harbin already carries an early-winter chill, yet the afternoon sun still feels warm on the street.</p>
+    <p>The room is small; a wall has been removed, a long table sits in the center, and smaller round tables scatter around. Books and coffee cups lie casually—no sense of formality. On the table are printouts from Marguerite Yourcenar’s <em>Oriental Tales</em>.</p>
+    <p>Once everyone settled, Yi Han began immediately. The group took turns reading “How Wang-Fô Was Saved.” When my turn came, I meant to observe, but Yi Han gestured—and I continued the passage. I was nervous at first, afraid of stumbling, yet my attention slowly locked onto the words in front of me.</p>
+    <p>After the final lines, Yi Han commented that although the story is set in China, Yourcenar’s understanding of Chinese culture “clearly carries a foreigner’s bias.” The discussion moved from Wang-Fô’s coldness toward his apprentice’s death to aesthetics and cultural collision, and finally to the anxiety of Western modernity facing the collapse of traditional order.</p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>Anyroom藏在一个安静的居民小区里，要不是有玖丹带路，我自己还真不一定能找到。9月的哈尔滨，初冬的凉意已经开始在空气里游荡，但午后的阳光照在街道上，依旧温暖柔和。</p>
+    <p>屋子不大，原本的隔墙被拆掉了，一张大桌子横在中间，几张小圆桌散落在周围，书本、咖啡杯随意摆放，丝毫没有拘束感。桌上摆放着的是今天的主角——几份打印好的，法国小说家尤瑟纳尔的《东方故事集》选篇。</p>
+    <p>大家刚坐稳，易寒就直接开场，轮流朗读第一篇小说《王佛脱险记》。轮到我时，原本只想旁观，但易寒转头朝我示意，我也接着前面人的话头往下念。刚开始我还有些紧张，生怕舌头打结，但逐渐地，注意力便慢慢集中到了眼前的文字里。</p>
+    <p>读完后，易寒说，尤瑟纳尔这篇写的虽然是中国的故事，但她对中国文化的理解，显然带着外国人的偏见。讨论从王佛对徒弟死亡的冷漠，转到美学、文化碰撞，以及工业时代的西方人面对传统秩序崩塌时的焦虑。</p>
+  </blockquote>
+</div>
+
+  <!-- Excerpt 04 -->
+<div class="excerpt">
+ <p class="excerpt-lead" data-lang="en">
+    Excerpt 4: When classrooms no longer offer reasons to read
+  </p>
+  <p class="excerpt-lead" data-lang="zh"  style="display:none">
+    节选四：当课堂不再提供“阅读的理由”
+  </p>
+  
+ <blockquote data-lang="en">
+    <p>
+      Wang Liqiu noticed it immediately.
+      The students were simply completing tasks,
+      not truly engaging in discussion.
+      He reflected that many classes today
+      are forced into becoming compressed explanations
+      of key points—
+      and behind this lies a deeper issue:
+      students simply do not read enough.
+    </p>
+    <p>
+      “What is ideal teaching?”
+      Wang asked.
+      “It would mean reading one or two texts per class,
+      with everyone having actually read them,
+      and then discussing them together.
+      But when students don’t read,
+      we retreat to presentations.
+      In the end, only the presenters read;
+      everyone else still hasn’t.”
+    </p>
+    <p>
+      As a result,
+      teachers repeat dry summaries:
+      “You condense a few points for them—
+      reading becomes optional,
+      as long as they memorize enough to pass exams.”
+    </p>
+    <p>
+      As education grows increasingly utilitarian,
+      students’ goals narrow:
+      passing exams, completing degrees.
+      Some learn how to respond “efficiently”—
+      reading abstracts and conclusions,
+      relying on summaries instead of full texts.
+      Efficiency improves,
+      but as Wang put it,
+      “the invisible learning process disappears,
+      and with it, interest.”
+    </p>
+    <p>
+      He joked that academia now produces
+      many “academic civil servants”—
+      people with little interest in scholarship itself,
+      treating research as routine labor.
+      Students adopt similar tactics;
+      some even train others
+      in how to perform academically.
+    </p>
+    <p>
+      “They teach you how to look like a good student.
+      What should be pursued is the pleasure of learning itself,
+      but now all that matters
+      is how well one performs the role.
+      Academic content becomes irrelevant.”
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh"  style="display:none">
+    <p>
+      王立秋观察到了这一点，
+      学生们只是为了完成任务，
+      没有投入到讨论中。
+      他跟我感慨，
+      现在的课堂很多时候
+      被迫变成了知识点的“浓缩讲解”，
+      而这背后最大的问题是
+      学生的阅读量不足。
+    </p>
+    <p>
+      “理想的教学是什么呢？”
+      王立秋说，
+      “是一堂课就读一两篇文章，
+      大家都读了，
+      然后在这基础上讨论。
+      但学生不读书，
+      只能退而求其次，
+      让他们做报告。
+      可到头来，
+      做报告的读了，
+      其他人还是没看书。”
+    </p>
+    <p>
+      结果老师在课堂上
+      只能重复枯燥的知识点，
+      “你浓缩出一些要点给他们，
+      不读也无所谓，
+      反正记住这些就能考试过关”。
+    </p>
+    <p>
+      随着教学越来越功利，
+      学生们的目标也变得简单直接：
+      通过考试、完成学业。
+      一些学生知道
+      如何“高效”应对任务，
+      他们读论文只看摘要、结论，
+      找缩写本和要点笔记
+      代替完整的阅读，
+      虽然效率是提高了，
+      但就像王立秋说的，
+      “隐性的学习过程没了，
+      兴趣也就消失了”。
+    </p>
+    <p>
+      他打趣道，
+      现在学术圈里
+      有很多“学术公务员”，
+      他们对学术本身没兴趣，
+      做学问变成了
+      例行公事的任务。
+      学生也学会了类似的套路，
+      甚至出现了
+      “职业学生培训者”，
+      专门教人
+      如何高效完成学业。
+    </p>
+    <p>
+      “这些人教你
+      怎么表现得像个好学生……
+      原本该追求的是
+      学术本身的乐趣，
+      现在关心的却只是
+      怎么把这件事‘表现’好，
+      至于学术内容，
+      反倒变得无关紧要了。”
+    </p>
+  </blockquote>
+</div>
+
+<!-- Excerpt 05 -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">
+    Excerpt 5: Does what they do really matter?
+  </p>
+  <p class="excerpt-lead" data-lang="zh"  style="display:none">
+    节选五：做事是否“有意义”
+  </p>
+
+  <blockquote data-lang="en">
+    <p>
+      That evening,
+      Jiudan invited me to
+      “Wanderer’s Living Room,”
+      a small offline space newly opened
+      by Zhijian on Qiaodong Street.
+      The modest room was created
+      by her and her friends
+      as a shared salon.
+      She gathered old friends,
+      and we sat together,
+      talking freely about
+      ideals and reality.
+    </p>
+    <p>
+      It was then that I learned
+      the area where Wenxin Café once stood
+      had been sealed off again
+      by university walls.
+      Foot traffic declined,
+      and Jiang Chao decided
+      to leave the place
+      that once held his ideals,
+      returning south.
+    </p>
+    <p>
+      We talked about a newly opened
+      “academic bar” in the city—
+      seemingly a trend shaped
+      by market demand.
+      But Jiudan and Jiang Chao believed
+      that anything with real vitality
+      must emerge spontaneously.
+      Jiang Chao said,
+      “What comforts me
+      is that after I leave,
+      there are still friends here,
+      still doing things.”
+    </p>
+    <p>
+      That night,
+      Wang Liqiu shared a novel
+      he had been reading,
+      *Tenpyō no Iraka*.
+      It tells the story of
+      a Japanese monk
+      who traveled to China
+      to transmit Buddhist teachings,
+      spending decades copying scriptures,
+      only for his ship to capsize
+      on the return journey—
+      the man gone,
+      the scriptures lost.
+    </p>
+    <p>
+      “Do you think
+      what they did mattered?”
+      Wang asked,
+      then answered:
+      “Sometimes,
+      when you do something,
+      you don’t need to calculate the outcome.
+      You simply keep doing it.
+      It may not become meaningful right away,
+      but you know—
+      you did it.
+      And that is enough.”
+    </p>
+    <p>
+      It was late.
+      We dispersed.
+    </p>
+  </blockquote>
+
+<blockquote data-lang="zh"  style="display:none">
+    <p>
+      当天晚上，
+      玖丹邀请我去知见
+      在桥东街新开的线下空间
+      “浪游者客厅”坐坐。
+      这个小小的会客厅，
+      是她和朋友们
+      共同打造的会客空间。
+      她喊来了一群老朋友，
+      大家围坐在一起，
+      天南海北地聊起
+      理想和现实。
+    </p>
+    <p>
+      这时我才知道，
+      文心咖啡所在的片区
+      因为大学围墙再次封闭，
+      客流减少，
+      蒋超因此决定
+      离开这个
+      曾寄放他理想的地方，
+      回到南方生活。
+    </p>
+    <p>
+      大家聊起了
+      市里最近新开的一家
+      “学术酒吧”，
+      看上去是
+      市场需求下的潮流场所。
+      但玖丹和蒋超认为，
+      真正有生命力的东西
+      必须是自发形成的。
+      蒋超说：
+      “其实我很欣慰，
+      我走了之后，
+      哈尔滨还留下
+      这么一帮朋友，
+      还在做些事情。”
+    </p>
+    <p>
+      王立秋这天晚上
+      分享了他最近读的小说
+      《天平之甍》，
+      讲的是一位
+      来中国传法的
+      日本和尚，
+      辛辛苦苦
+      抄了几十年经书，
+      返程时船翻了，
+      人没了，
+      经也没了。
+    </p>
+    <p>
+      “你说他们
+      做的事有意义吗？”
+      王立秋问道，
+      又回答：
+      “有时，
+      做事情
+      不必太计较结果。
+      做的时候，
+      你不会想那么多，
+      只是一直做着。
+      做出来
+      不一定马上有意义，
+      但你知道，
+      你做了，
+      就够了。”
+    </p>
+    <p>
+      夜深了，
+      众人散去。
+    </p>
+  </blockquote>
+</div>
+
+
+</section>
+
+
+ <!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+  <ul>
+    <li data-lang="en">
+      Scene-based cultural reporting: turning abstract questions about “intellectual decline” into concrete moments, spaces, and conversations.
+    </li>
+    <li data-lang="zh" style="display:none">
+      场景化文化报道：将“思想兴趣的衰退”这一抽象议题，落到具体的人、空间与对话之中。
+    </li>
+
+    <li data-lang="en">
+      Reporting beyond institutions: observing how knowledge production shifts from universities to informal, self-organised civic spaces.
+    </li>
+    <li data-lang="zh" style="display:none">
+      脱离制度内部的观察视角：记录知识生产如何从校园转移到自发形成的校外公共空间。
+    </li>
+
+    <li data-lang="en">
+      Analytical narrative writing: weaving interviews, classroom observation, and social context into a coherent cultural diagnosis.
+    </li>
+    <li data-lang="zh" style="display:none">
+      分析型叙事写作：将访谈、课堂观察与社会背景编织为一个完整的文化判断。
+    </li>
+  </ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="culture.html">← Back to Culture</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paul Salopek · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="culture.html" data-lang="en">Culture</a>
+          <a href="culture.html" data-lang="zh" style="display:none">文化</a>
+          <span class="sep">/</span>
+          <span data-lang="en">Paul Salopek</span>
+          <span data-lang="zh" style="display:none">保罗·萨洛佩克</span>
+        </div>
+
+       <h1 class="article-title" data-lang="en">Walking with Paul Salopek: The Last 70 Kilometers Across China</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">与保罗·萨洛佩克穿越中国的最后70公里</h1>
+
+        <p class="article-deck" data-lang="en">
+          On May 28, we met Paul Salopek at a hotel in Dalian’s Jinshitan—where his China walk had paused before his visa expired,
+          and where he now resumed the journey. Breakfast talk drifted from coastal weather to Georgia’s unrest, as if global fracture
+          were the most natural small talk. A two-time Pulitzer Prize winner, Salopek is undertaking a long-form “slow journalism”
+          experiment: the Out of Eden Walk, tracing ancient human migration routes on foot—and using encounters, not headlines, to read the world.
+        </p>
+        <p class="article-deck" data-lang="zh" style="display:none;">
+          5月28日，我们与保罗·萨洛佩克在大连金石滩的硬石酒店碰头，这是他去年12月31日签证到期前徒步的终点，也是他这次重新出发的起点。
+          当保罗终于坐定后，早餐桌上的讨论迅速从当地的气候转向了近期格鲁吉亚频繁骚乱的混乱政局。或许没有人比他更适合谈论自己对这个世界的独特理解。
+          这位头发花白的美国人，曾两度获得普利策奖，有着丰富且精彩的人生阅历，如今正独自进行一场堪称宏大的人类徒步旅程。
+        </p>    
+
+ <div class="article-meta">
+          <span data-lang="en">Culture</span>
+          <span data-lang="zh" style="display:none;">文化</span>
+          <span class="dot">·</span>
+          <span data-lang="en">Reported Feature</span>
+          <span data-lang="zh" style="display:none;">报道型特写</span>
+          <span class="dot">·</span>
+          <span data-lang="en">Slow Journalism / Mobility / Globalization / Everyday Encounters</span>
+          <span data-lang="zh" style="display:none;">慢新闻 / 行走 / 全球化裂变 / 普通人的相遇</span>
+          <span class="dot">·</span>
+          <span data-lang="en">2024</span>
+          <span data-lang="zh" style="display:none;">2024</span>
+        </div>
+      </header>
+
+ <figure class="article-hero">
+        <img src="assets/img/culture-paulsalopek.jpg" alt="Walking with Paul Salopek along the Dalian coastline" />
+        <figcaption class="figure-caption" data-lang="en">Figure: Joining Paul Salopek for the final stretch before his departure from China, walking along Dalian’s coastline.</figcaption>
+        <figcaption class="figure-caption" data-lang="zh" style="display:none;">图：在大连海岸线加入保罗·萨洛佩克，完成他离开中国前的最后一段同行路程。</figcaption>
+      </figure>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 27, 2024).
+    <a href="assets/pdf/paulsalopek.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+    <a href="https://mp.weixin.qq.com/s/sxYOIfahLPt0UwbYb-kj4Q" target="_blank" rel="noopener">WeChat Read ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2024 年第 27 期。
+    <a href="assets/pdf/paulsalopek.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+   <a href="https://mp.weixin.qq.com/s/sxYOIfahLPt0UwbYb-kj4Q" target="_blank" rel="noopener">微信公号阅读 ↗</a>
+  </span>
+  
+</div>
+
+  <!-- Editor's note -->
+  <h2 data-lang="en">Editor’s note</h2>
+  <h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+ <p data-lang="en">
+          This feature follows Paul Salopek’s Out of Eden Walk at a small but telling hinge: the final 70 kilometers before he left China by sea.
+          The story stays on the ground—coastline detours, industrial edges, small refusals at hotel front desks—and uses those frictions to ask bigger questions:
+          what happens to “openness” when borders harden; what kind of global understanding is still possible; and why the most durable reporting unit may be a simple encounter.
+        </p>
+        <p data-lang="zh" style="display:none">
+          这篇特写把镜头放在一个并不宏大、却足够关键的节点：保罗离开中国前最后70公里的同行。
+          我尽量把叙事压在地面上——海岸线绕行、工地与厂区的边界、酒店前台的一次次拒绝——让这些摩擦自然长出更大的问题：
+          当围墙重新竖起，“开放”意味着什么？全球理解还可能以何种方式发生？以及，为什么最坚固的报道单位，往往就是一次相遇。
+        </p>
+
+  <!-- Key questions -->
+  <h2 data-lang="en">Key questions</h2>
+  <h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+  <ul data-lang="en">
+          <li>What does “slow journalism” look like when the world is accelerating toward division?</li>
+          <li>How can a walk—detours, dead ends, small negotiations—become a method for reading geopolitics?</li>
+          <li>Why do ordinary encounters, not big events, form the backbone of Salopek’s project?</li>
+          <li>What does it mean to keep moving when walls rise—cross, bypass, or cut through?</li>
+        </ul>
+
+        <ul data-lang="zh" style="display:none">
+          <li>当世界加速走向分裂，“慢新闻”还能如何成立？</li>
+          <li>一段段绕行、误会与交涉，如何成为理解地缘政治的方式？</li>
+          <li>为什么在保罗的项目里，“相遇”而非“大事件”构成叙事骨架？</li>
+          <li>当围墙竖起，继续行走意味着什么：越过、绕过，还是穿过？</li>
+        </ul>
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+<!-- Excerpt 1: into the scene -->
+<p class="excerpt-lead" data-lang="en">Entering the walk — a “city walk” with a mischievous route</p>
+<p class="excerpt-lead" data-lang="zh" style="display:none">进入同行——“city walk”，但他偏要走野路</p>
+<blockquote>
+  <p data-lang="zh" style="display:none">
+    在加入旅程前，我其实完全不知道这段行程的路线是怎么回事。提前查阅的资料里，保罗的徒步看起来像是风餐露宿的山野穿越，有时甚至需要露营设备，在荒野中过夜。负责沟通联络的王胜伊打听了一番后告诉我，这次行走都在市里，沿途有酒店入住，轻装上阵即可。保罗笑着说：“你加入的这段刚好基本是个city walk，但我尽量给你们设计些野外路线吧。”
+  </p>
+  <p data-lang="en">
+    Before joining the walk, I had no real idea what the route would be. From what I’d read, Salopek’s walk sounded like wild backcountry travel—sometimes even requiring camping gear. After checking, our coordinator told me this stretch was in the city, with hotels along the way—lightweight, easy. Paul laughed: “This part you joined is basically a city walk—but I’ll try to design some wilder routes for you.”
+  </p>
+</blockquote>
+
+<!-- Excerpt 2: conflict / power -->
+<p class="excerpt-lead" data-lang="en">Blocked route — “always power versus reality”</p>
+<p class="excerpt-lead" data-lang="zh" style="display:none">被拦下的路——“永远都是权力和现实的较量”</p>
+<blockquote>
+  <p data-lang="zh" style="display:none">
+    这令我们有些懵。毕竟我们徒步了一两小时才翻过那座山头，如果回去，不知道今天还得走多少公里。在我们的轮番恳求下，保安终于松了口，示意我们虽然不能走马路，但可以从前面的工地穿过，他们不管。可当我们踏上工地时，又被建筑工人拦住，表示这里禁止闲杂人等穿越。几番争执下来，我们终于得以沿着工地中间的一条布满车辙的道路出去。工地的尽头其实没有路，只有一排铁栅栏，铁栅栏外就是城市建筑。当我们一行人利索地翻越铁栅栏后，发现那辆巡逻车正停在外面，估计是在观察我们是否真的出来了。我将全部交涉的过程告诉了保罗，他迅速表示理解：“永远都是权力和现实的较量。”
+  </p>
+  <p data-lang="en">
+    We were stunned. We’d already walked for an hour or two to cross that hill—turning back could add unknown kilometers. After rounds of pleading, the guards relented: we couldn’t use the road, but we could cut through the construction site—they wouldn’t interfere. Then the construction workers stopped us: no passers-by allowed. After more argument, we finally followed a tire-tracked path through the site. At the end there was no road—only a metal fence. Beyond it stood the city. We climbed over quickly, and saw the patrol car waiting outside, likely watching whether we really got out. I told Paul the whole exchange. He nodded immediately: “It’s always power versus reality.”
+  </p>
+</blockquote>
+
+<!-- Excerpt 3: doors closed / fear -->
+<p class="excerpt-lead" data-lang="en">Closed doors — fear that cannot explain itself</p>
+<p class="excerpt-lead" data-lang="zh" style="display:none">关上的门——最可怕的是“不知道为什么要说不”</p>
+<blockquote>
+  <p data-lang="zh" style="display:none">
+    对于老板娘毫无道理的冷漠，潘潘感到无比沮丧。她只好告诉了保罗。保罗表示理解，“没关系，我们就打车吧”。两人拦了辆出租车。车上，潘潘心情异常低落，感到了一种强烈的挫败感。这种挫败感不仅来自未能给保罗找到一个住处，更因为她发现自己的同胞可以如此不近人情。保罗安慰她，这样的情况他遇到过很多次。善意在未知的恐惧面前，常常显得无能为力。他说，其实最让人恐惧的是他们也不知道自己为什么要说“不”。
+  </p>
+  <p data-lang="en">
+    The innkeeper’s groundless coldness crushed Panpan. She told Paul; he simply said, “It’s okay—we’ll take a taxi.” In the cab, Panpan felt a sharp sense of failure—not only because she couldn’t find him a place to stay, but because she saw how indifferent her compatriots could be. Paul comforted her: he’d seen this many times. Kindness often becomes powerless in front of fear of the unknown. The most frightening thing, he said, is that people often don’t even know why they are saying “no.”
+  </p>
+</blockquote>
+
+<!-- Excerpt 4: milestone as an action -->
+<p class="excerpt-lead" data-lang="en">Milestone — three questions as a method</p>
+<p class="excerpt-lead" data-lang="zh" style="display:none">里程碑——三个问题作为方法</p>
+<blockquote>
+  <p data-lang="zh" style="display:none">
+    从那时起，每走100英里，他都会停下来，拍一张全景照片，记录下天空和地面，录制视频和音频，并寻找在这个地点第一个遇到的人，向他提出三个问题：“你是谁？你从哪里来？你将要去向何方？”
+  </p>
+  <p data-lang="en">
+    Ever since his first steps in Africa, every 100 miles Paul stops: he takes a panorama—sky and ground—records video and ambient sound, and finds the first person he meets at that spot to ask three questions: “Who are you? Where do you come from? Where are you going?”
+  </p>
+</blockquote>
+
+<!-- Excerpt 5: goodbye / emotional landing -->
+<p class="excerpt-lead" data-lang="en">The goodbye — cars arriving, cars leaving</p>
+<p class="excerpt-lead" data-lang="zh" style="display:none">告别——车来了又去，带走三波朋友</p>
+<blockquote>
+  <p data-lang="zh" style="display:none">
+    当这天临近终点时，黄宇、Frank的妻子和儿子先后告别，另一位伙伴王雁也赶去机场。保罗站在路边，目送他们的车离去：“今天车来了又去，带走了三波我的朋友，我确实开始感到了悲伤。”那天，为Milestone记录环境音时，保罗听到一个老年人团体在唱歌，那是首上世纪80年代的老歌，名叫《驼铃》，里面唱道：“亲爱的弟兄/待到春风传佳讯/我们再相逢。”这或许是与保罗一起行走最好的结尾。■
+  </p>
+  <p data-lang="en">
+    As the day neared its end, Huang Yu said goodbye; then Frank’s wife and son; then another companion, Wang Yan, rushed to the airport. Paul stood by the roadside watching their cars leave: “Today cars came and went, taking away three waves of my friends. I really began to feel sad.” That day, while recording ambient sound for the Milestone, Paul heard an elderly choir singing an old 1980s song, “Camel Bell”: “My dear brothers / When spring brings good news / We shall meet again.” It felt like the best ending to this walk with Paul. ■
+  </p>
+</blockquote>
+
+
+  <!-- Demonstrates -->
+  <div class="info-card">
+    <h2 data-lang="en">What this demonstrates</h2>
+    <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+   <ul>
+            <li data-lang="en">Narrative field reporting: building a long arc out of ground-level frictions (routes, boundaries, logistics) without losing readability.</li>
+            <li data-lang="zh" style="display:none">叙事型田野报道：用“路线/边界/后勤”等地面摩擦搭起长叙事弧线，同时保持可读性。</li>
+
+            <li data-lang="en">Interview craft inside motion: turning a walking companion’s dialogue into scenes, pacing, and a coherent argument about the present.</li>
+            <li data-lang="zh" style="display:none">行走中的采访写作：把同行对话写成可见的场景与节奏，并抽出一条关于当下的论证线。</li>
+
+            <li data-lang="en">Global issues through small encounters: translating geopolitics (borders, walls, globalization backlash) into specific people and moments.</li>
+            <li data-lang="zh" style="display:none">以小见大的全球议题表达：把“边境/围墙/全球化反噬”等抽象议题落到具体的人与瞬间。</li>
+
+            <li data-lang="en">Cross-cultural translation: rendering Chinese on-the-ground details (worksites, hotel refusals, local talk) for an international reading logic.</li>
+            <li data-lang="zh" style="display:none">跨文化转译能力：把工地、厂区、旅馆拒住等本土细节写成可被国际读者理解的叙事逻辑。</li>
+
+            <li data-lang="en">Concept-to-scene execution: anchoring “slow journalism” and “milestone” methods in concrete actions, objects, and dialogue.</li>
+            <li data-lang="zh" style="display:none">概念到场景的落地：把“慢新闻”“里程碑计划”等方法论写成可触摸的行动、物件与对话。</li>
+          </ul>
+  </div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="culture.html">← Back to Culture</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

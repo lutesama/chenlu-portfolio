@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mola · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+      <header class="article-top">
+        <div class="breadcrumbs">
+          <a href="index.html" data-lang="en">Home</a>
+          <a href="index.html" data-lang="zh" style="display:none">首页</a>
+          <span class="sep">/</span>
+          <a href="writing.html" data-lang="en">Writing</a>
+          <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+          <span class="sep">/</span>
+          <a href="culture.html" data-lang="en">Culture</a>
+          <a href="culture.html" data-lang="zh" style="display:none">文化</a>
+          <span class="sep">/</span>
+          <span data-lang="en">MOLA</span>
+          <span data-lang="zh" style="display:none">MOLA</span>
+        </div>
+
+        <h1 class="article-title" data-lang="en">MOLA: How Do You Track Stolen Antiquities Online?</h1>
+        <h1 class="article-title" data-lang="zh" style="display:none;">MOLA：如何在线上追踪被盗文物?</h1>
+       <p class="article-deck" data-lang="en">
+          Restitution stories are often told as isolated events: how many objects, how much value, which country. The harder problem is structural—data is scarce, records vanish, and provenance remains opaque. MOLA (Museum of Looted Antiquities) proposes a public, peer-reviewed database built on open sources, designed to preserve restitution histories and reveal recurring trafficking patterns. This piece interviews its founder Jason Felch on what transparency can—and still cannot—change in museums and the market.
+        </p>
+        <p class="article-deck" data-lang="zh" style="display:none;">
+          文物归还常被当作“新闻事件”报道：归还了多少件、价值多少、在哪个国家发生。但对研究者而言，更困难的问题是——缺乏数据。MOLA（被盗文物博物馆）试图用公开记录与同行评审，搭建一张全球被盗文物信息网：保存归还案例、追溯来源、比较不同地区的走私模式，并逼迫博物馆与市场面对“透明度”的缺口。本刊专访 MOLA 创始人詹森·费尔奇，讨论这场以数据为武器的文物追踪行动。
+        </p>
+        
+
+  <!-- article-meta：把 Tech 改为 Culture，并统一年份 -->
+<div class="article-meta">
+  <span data-lang="en">Culture</span>
+  <span data-lang="zh" style="display:none;">文化</span>
+  <span class="dot">·</span>
+  <span data-lang="en">Explainer / Reported Feature</span>
+  <span data-lang="zh" style="display:none;">解释型 / 报道</span>
+  <span class="dot">·</span>
+  <span data-lang="en">Looted Heritage / Provenance / Platforms / Accountability</span>
+  <span data-lang="zh" style="display:none;">被盗文物 / 来源追溯 / 平台机制 / 问责</span>
+  <span class="dot">·</span>
+  <span data-lang="en">2024</span>
+  <span data-lang="zh" style="display:none;">2024</span>
+</div>
+      </header>
+
+    <!-- ===== Hero visual (place BEFORE prose, so it doesn't interrupt reading) ===== -->
+<!-- hero：改成 816 对应图与说明 -->
+<figure class="article-hero">
+  <img src="assets/img/culture-mola.png" alt="mola" />
+  <figcaption class="figure-caption" data-lang="en">Figure: An increasing number of ordinary viewers are beginning to pay attention to the issue of the provenance of cultural relics.</figcaption>
+  <figcaption class="figure-caption" data-lang="zh" style="display:none;">图：越来越多普通观众开始关注文物源流的问题</figcaption>
+</figure>
+
+<section class="prose">
+
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 52, 2024).
+    <a href="assets/pdf/mola.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2024 年第 52 期。
+    <a href="assets/pdf/mola.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+  </span>
+  
+</div>
+
+  <!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+This piece follows a simple question: when looted antiquities circulate through museums, auctions, and private hands,
+what does it take to “see” the network behind them? By speaking with journalist Jason Felch and tracing the logic of MOLA,
+I treat metadata not as a technical footnote but as an investigative method—one that turns scattered restitution news into a readable map of trafficking.
+</p>
+
+<p data-lang="zh" style="display:none">
+这篇报道想回答一个朴素的问题：当被盗文物在博物馆、拍卖行与收藏界之间流转，我们究竟怎样才能“看见”它背后的网络？
+我以记者詹森·费尔奇与他发起的 MOLA 为线索，把元数据当作一种调查方法：它让零散的归还新闻不再只是个案，而逐渐显露出走私链条可被追踪的轮廓。
+</p>
+
+  <!-- Key questions -->
+ <h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+<ul data-lang="en">
+  <li>Why are “middlemen” the weakest—and most revealing—link in the antiquities market?</li>
+  <li>How did the Getty scandal reshape museum ethics, and what loopholes still remain after 1970 standards?</li>
+  <li>What changes when looting targets “living” religious sites in South and Southeast Asia?</li>
+  <li>Can a public, peer-reviewed database turn restitution stories into evidence—and patterns?</li>
+</ul>
+
+<ul data-lang="zh" style="display:none">
+  <li>为什么古董市场里“中间商”既脆弱、又最能暴露走私网络？</li>
+  <li>“盖蒂事件”如何改写美国博物馆伦理？1970 年标准又留下了怎样的漏洞？</li>
+  <li>当被盗对象来自仍在被崇拜的宗教场所（南亚/东南亚），“归还”意味着什么？</li>
+  <li>一个公开、可追溯、同行评审的数据库，能否把归还新闻变成证据与模式？</li>
+</ul>
+
+<!-- Excerpts (replace your whole excerpts section with this) -->
+<section class="excerpts" id="excerpts">
+  <h2 class="section-title">Excerpts</h2>
+
+  <!-- Excerpt 01 -->
+  <div class="excerpt">
+    <p class="excerpt-lead" data-lang="zh">节选一：从“最脆弱的中间商”切入黑市</p>
+    <p class="excerpt-lead" data-lang="en" style="display:none">Excerpt 1: Targeting the market’s weakest link</p>
+
+    <blockquote data-lang="zh">
+      <p>“古董市场中，这些中间商是最脆弱的环节。”</p>
+      <p>根据他的介绍，文物非法交易背后，实际涉及一个庞大的盗墓贼网络，遍布全球的各个角落。这些盗墓贼在世界各地偷偷挖掘、抢夺文化遗产。要监管全球每一个考古遗址显然是难以实现的，但所有这些被盗文物最终都会汇聚到一个极小的群体中，经过这些中间商之手才会流向全球的艺术市场。正是他们，将黑市与那些富有的买家紧密联系起来。如果从这些中间环节入手，就能揭露出更多关于走私网络的线索，甚至可以追溯到更上游的收藏界信息。</p>
+    </blockquote>
+
+    <blockquote data-lang="en" style="display:none">
+      <p>“In the antiquities market, the middlemen are the most vulnerable link.”</p>
+      <p>Behind illicit antiquities is a vast network of looters spread across the world. Policing every archaeological site is nearly impossible, but stolen objects ultimately converge in a very small group—dealers and intermediaries—before entering the global art market. These middle layers connect the black market to wealthy buyers. Go after them, Felch argues, and you begin to expose the logistics of trafficking networks—and sometimes trace the chain further upstream into the world of collecting.</p>
+    </blockquote>
+  </div>
+
+  <!-- Excerpt 02 -->
+  <div class="excerpt">
+    <p class="excerpt-lead" data-lang="zh">节选二：当“文物”仍然被当作神来供奉</p>
+    <p class="excerpt-lead" data-lang="en" style="display:none">Excerpt 2: When “antiquities” are living gods</p>
+
+    <blockquote data-lang="zh">
+      <p>费尔奇指出，古希腊和罗马的文物多被视为属于“已死”的文化遗址，而在南亚和东南亚，被盗文物的原属地往往是活跃的宗教场所。</p>
+      <p>“当一尊跳舞的湿婆神像被归还到一个依然崇拜它的社区，它就是神，是活着的神。这种归还带来的情感与意义，与归还其他文物是不同的。”费尔奇强调说。</p>
+      <p>“这改变了抢劫文物的后果。破坏和扰乱这些地方并破坏其崇拜功能，造成的伤害并非抽象的，而是对当下活生生社区的直接打击。”</p>
+    </blockquote>
+
+    <blockquote data-lang="en" style="display:none">
+      <p>Felch notes that Greco-Roman antiquities are often treated as relics of a “dead” civilization. In South and Southeast Asia, however, many stolen objects come from active religious sites.</p>
+      <p>“When a dancing Shiva is returned to a community that still worships it, it is not just art—it is a god, a living god. The emotional stakes are fundamentally different,” Felch says.</p>
+      <p>That difference changes what looting means: the damage is not abstract. It disrupts living rituals and harms communities in the present tense.</p>
+    </blockquote>
+  </div>
+
+  <!-- Excerpt 03 -->
+  <div class="excerpt">
+    <p class="excerpt-lead" data-lang="zh">节选三：MOLA 为什么要把零散故事变成数据集</p>
+    <p class="excerpt-lead" data-lang="en" style="display:none">Excerpt 3: Turning scattered stories into a dataset</p>
+
+    <blockquote data-lang="zh">
+      <p>多年来，费尔奇在调查中还发现了一个核心问题：尽管文物掠夺已经成为全球性问题，但即便是业内的权威专家，也难以找到可靠的数据来衡量这一问题的严重性、持续性和频率，以及被掠夺文物的经济价值。</p>
+      <p>正是为了弥补这一空白，费尔奇创建了线上被盗文物数据库MOLA。这个平台旨在记录被归还文物的历史，不仅保存宝贵的资料，也希望通过积累足够的案例，揭示全球文物黑市的规模和模式。</p>
+      <p>MOLA的运行依赖一套严格的同行评审机制，由志愿者通过在线平台提交新案例，经专业团队审核后录入数据库。费尔奇强调，所有信息必须追溯到明确的公开记录来源，确保透明性和可信度。</p>
+    </blockquote>
+
+    <blockquote data-lang="en" style="display:none">
+      <p>Felch identifies a structural problem: despite the global scale of looting, even leading experts struggle to find reliable data to measure its severity, persistence, frequency, or economic value.</p>
+      <p>MOLA was created to fill that gap—an online database that documents restitution histories and preserves records that often vanish after an object is returned. By accumulating enough cases, the project aims to reveal the scale and patterns of the illicit market.</p>
+      <p>MOLA operates through a rigorous peer-review workflow: volunteers submit cases online, a professional team verifies them, and every entry must be traceable to clear public sources—prioritizing transparency and credibility.</p>
+    </blockquote>
+  </div>
+</section>
+
+
+  <!-- Demonstrates -->
+  <div class="info-card">
+    <h2 data-lang="en">What this demonstrates</h2>
+    <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+    <ul>
+       <li data-lang="en">Investigative framing: turning restitution headlines into a traceable trafficking chain (actors, routes, incentives).</li>
+       <li data-lang="zh" style="display:none">调查型框架：把“归还新闻”写成可追溯的走私链条（角色/路径/利益）。</li>
+
+       <li data-lang="en">Interview-driven analysis: extracting methodology (metadata, peer review, evidence standards) from a founder conversation.</li>
+       <li data-lang="zh" style="display:none">访谈提炼能力：从创始人叙述中提取方法论（元数据、同行评审、证据标准）。</li>
+
+       <li data-lang="en">Systems thinking: comparing regions (Mediterranean vs. South/Southeast Asia) and how “living sites” change ethical stakes.</li>
+       <li data-lang="zh" style="display:none">系统比较：对照地中海与南亚/东南亚语境，解释“活的宗教场所”如何改变伦理重量。</li>
+
+       <li data-lang="en">Research synthesis: connecting museum policy shifts (post-Getty, 1970 standard) with ongoing market loopholes.</li>
+       <li data-lang="zh" style="display:none">资料整合：把博物馆政策变化与市场漏洞放在同一张因果图里讲清楚。</li>
+    </ul>
+  </div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="culture.html">← Back to Culture</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

@@ -158,6 +158,14 @@ a:focus-visible, button:focus-visible{
   border-radius: 6px;
 }
 
+.section-intro{
+  margin: 18px 0 8px;
+  font-size:14.5px;
+  color:var(--fg);
+  font-weight:500;
+  letter-spacing:.2px;
+}
+
 .page-title{
   font-family:"Libre Baskerville", serif;
   font-size:44px;
@@ -169,37 +177,6 @@ a:focus-visible, button:focus-visible{
   font-size:16px;
   color:var(--muted);
   margin:0 0 10px;
-}
-
-/* ===== Chips (optional but nice UI) ===== */
-.chips{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin: 12px 0 18px;
-}
-.chip{
-  appearance:none;
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--muted);
-  font: inherit;
-  font-size: 13px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background-color .16s ease, color .16s ease, transform .16s ease;
-}
-.chip:hover{
-  color: var(--fg);
-  background: var(--card);
-  transform: translateY(-1px);
-}
-.chip.is-active{
-  color: var(--fg);
-  background: var(--card);
-  border-color: var(--fg);
 }
 
 /* ===== Editorial list (NO thumbnails) ===== */
@@ -230,7 +207,7 @@ a:focus-visible, button:focus-visible{
 .marker{
   display:flex;
   flex-direction:column;
-  align-items:flex-stCulture;
+  align-items:flex-start;
   gap:10px;
   padding-top:6px;
 }
@@ -321,7 +298,7 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
   .item.is-featured .item-text strong{ font-size:22px; }
 }
 @media(max-width:520px){
-  .mast{ flex-direction:column; align-items:flex-stCulture; }
+  .mast{ flex-direction:column; align-items:flex-start; }
   .nav{ flex-wrap:wrap; }
   .page-title{ font-size:32px; }
   .right{ gap:10px; }
@@ -356,7 +333,7 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
 
         <a href="about.html" data-lang="en">About</a>
         <a href="about.html" data-lang="zh" style="display:none">关于</a>
-      
+
       </nav>
 
       <div class="lang-toggle" aria-label="Language toggle">
@@ -373,10 +350,10 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
   <div class="page-head">
     <div class="breadcrumb" aria-label="Breadcrumb">
       <a href="index.html" data-lang="en">Home</a>
-      <a href文化="index.html" data-lang="zh" style="display:none">首页</a>
+      <a href="index.html" data-lang="zh" style="display:none">首页</a>
       <span class="sep">/</span>
-      <a href="index.html#writing" data-lang="en">Writing</a>
-      <a href="index.html#writing" data-lang="zh" style="display:none">写作</a>
+      <a href="writing.html" data-lang="en">Writing</a>
+      <a href="writing.html" data-lang="zh" style="display:none">写作</a>
       <span class="sep">/</span>
       <span data-lang="en">Culture</span>
       <span data-lang="zh" style="display:none">文化</span>
@@ -386,10 +363,11 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
     <h1 class="page-title" data-lang="zh" style="display:none">文化</h1>
 
     <p class="page-deck" data-lang="en">
-      Books, heritage, cities, and objects — tracing how stories become public knowledge.
+      Long-form reporting and essays on history, institutions, and the production of knowledge.
+I write about how places, technologies, and systems shape human experience—through archaeology, industrial heritage, museums, global history, and field-based observation.
     </p>
     <p class="page-deck" data-lang="zh" style="display:none">
-      书籍、遗产、城市与器物：追踪故事如何成为公共知识。
+     关于历史、制度与知识生产的深度报道与写作。我关注地点、技术与制度如何塑造人的经验，通过考古、工业遗产、博物馆、全球史以及田野式写作，理解世界如何被建构。
     </p>
 
     <div class="section-cover">
@@ -398,24 +376,23 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
   </div>
 
   <!-- chips (optional). You can delete both chips blocks if you don't want filters -->
-   <div class="chips" data-lang="en" aria-label="Filter Culture writing">
-      <button class="chip is-active" type="button" data-filter="all">All</button>
-      <button class="chip" type="button" data-filter="books">Books</button>
-      <button class="chip" type="button" data-filter="heritage">Heritage</button>
-      <button class="chip" type="button" data-filter="cities">Cities</button>
-    </div>
-    <div class="chips" data-lang="zh" style="display:none" aria-label="筛选文化写作">
-      <button class="chip is-active" type="button" data-filter="all">全部</button>
-      <button class="chip" type="button" data-filter="books">书</button>
-      <button class="chip" type="button" data-filter="heritage">遗产</button>
-      <button class="chip" type="button" data-filter="cities">城市</button>
-    </div>
 
-  <!-- Cultureicle list -->
-  <div class="toc" id="CultureList">
+
+<p class="section-intro" data-lang="en">
+  <span style="color:var(--muted); letter-spacing:.08em; margin-right:6px;">EDITOR’S SELECTION</span>
+  Selected cultural writing — long-form reporting, fieldwork, and narrative essays.
+</p> 
+<p class="section-intro" data-lang="zh" style="display:none">
+  <span style="color:var(--muted); letter-spacing:.08em; margin-right:6px;">EDITOR’S SELECTION</span>
+  文化写作精选：深度报道、田野写作与叙事型文章。
+</p>
+
+
+  <!-- Article list -->
+  <div class="toc" id="techList">
 
     <!-- FEATURED (Option C) -->
-    <a class="item is-featured" href="#" data-topic="books">
+    <a class="item is-featured" href="culture-816.html" data-topic="ai">
       <div class="marker" aria-hidden="true">
         <span class="line"></span>
         <span class="index" data-lang="en">FEATURED</span>
@@ -423,105 +400,258 @@ footer a:hover{ color:var(--fg); text-decoration:none; }
       </div>
 
       <div class="item-text">
-        <strong data-lang="en">Editing as a way of seeing — on AI, systems, and what gets excluded</strong>
-        <strong data-lang="zh" style="display:none">以编辑作为一种观看方式：关于 AI、系统，以及被排除的部分</strong>
-
+        <strong data-lang="en">Vanished Coordinates: The 816 Nuclear Factory and Hidden Lives</strong>
+        <strong data-lang="zh" style="display:none">消失的坐标：816核工厂与隐秘人生</strong>
+        <span class="note" data-lang="en">
+Originally published as a long-form reported feature on China’s nuclear industrial heritage.
+</span>
+       <span class="note" data-lang="zh" style="display:none">
+原文发表于《三联生活周刊》，为关于三线建设与核工业遗产的深度报道。
+</span>
         <div class="meta" data-lang="en">
-          <span>2025</span><span class="dot">·</span><span>Explainer</span><span class="dot">·</span><span>AI / Systems</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2025</span><span class="dot">·</span><span>解释型</span><span class="dot">·</span><span>AI / 系统</span>
-        </div>
+  <span>2023</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+  <span>Industrial Heritage · Cold War Legacy · Memory · Place</span>
+</div>
+
+<div class="meta" data-lang="zh" style="display:none">
+  <span>2025</span><span class="dot">·</span><span>报道型特写</span><span class="dot">·</span>
+  <span>工业遗产 · 冷战记忆 · 地方史 · 人物命运</span>
+</div>
 
         <span class="desc" data-lang="en">
-          One–two sentences. What mechanism does this piece make legible? What changes for the reader after reading?
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          1–2 句话：这篇文章要让读者看清什么机制？读完会对什么产生新的理解？
-        </span>
+A field-based investigation into China’s largest underground nuclear project, tracing how
+state ambition, secrecy, and individual lives were folded into a single unfinished structure.
+</span>
+       <span class="desc" data-lang="zh" style="display:none">
+通过实地走访与口述历史，回到中国最大地下核工程的内部，追问国家工程、个体命运与历史记忆如何在同一空间中交织。
+</span>
       </div>
     </a>
 
-    <!-- 02 -->
-    <a class="item" href="#" data-topic="books">
-      <div class="marker" aria-hidden="true">
-        <span class="line"></span>
-        <span class="index">02</span>
-      </div>
+<!-- 02 -->
+<a class="item" href="culture-paulsalopek.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">02</span>
+  </div>
 
-      <div class="item-text">
-        <strong data-lang="en">Platforms are not neutral: incentives, defaults, and invisible infrastructure</strong>
-        <strong data-lang="zh" style="display:none">平台并不中立：激励、默认值与不可见的基础设施</strong>
+  <div class="item-text">
+    <strong data-lang="en">The Last 70 Kilometers Across China with Paul Salopek</strong>
+    <strong data-lang="zh" style="display:none">与保罗·萨洛佩科穿越中国的最后70公里</strong>
 
-        <div class="meta" data-lang="en">
-          <span>2024</span><span class="dot">·</span><span>Analysis</span><span class="dot">·</span><span>Platforms</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2024</span><span class="dot">·</span><span>分析</span><span class="dot">·</span><span>平台</span>
-        </div>
+    <span class="note" data-lang="en">Originally published in <em>Sanlian Lifeweek</em> as a reported narrative.</span>
+    <span class="note" data-lang="zh" style="display:none">原文发表于《三联生活周刊》，报道叙事。</span>
 
-        <span class="desc" data-lang="en">
-          A calm, specific deck. Name the system boundary or the lever you investigated.
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          克制且具体的一句话简介：你讨论的系统边界是什么？关键杠杆在哪里？
-        </span>
-      </div>
-    </a>
+    <div class="meta" data-lang="en">
+      <span>2024</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+      <span>Fieldwork · Global History · Borders · Walking</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>2024</span><span class="dot">·</span><span>深度报道</span><span class="dot">·</span>
+      <span>田野写作 · 全球史 · 边界 · 行走</span>
+    </div>
 
-    <!-- 03 -->
-    <a class="item" href="#" data-topic="heritage">
-      <div class="marker" aria-hidden="true">
-        <span class="line"></span>
-        <span class="index">03</span>
-      </div>
+    <span class="desc" data-lang="en">
+      Through Paul Salopek’s Out of Eden Walk, this piece reflects on walking as a method for
+reconnecting geography, history, and human experience across continents.
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      以 Paul Salopek 的“伊甸园行走计划”为线索，重新理解行走如何成为连接地理、历史与人类经验的一种方法。
+    </span>
+  </div>
+</a>
 
-      <div class="item-text">
-        <strong data-lang="en">Inside a system: risk, governance, and the cost of “optimizing” everything</strong>
-        <strong data-lang="zh" style="display:none">系统内部：风险、治理，以及“优化一切”的代价</strong>
+<!-- 03 -->
+<a class="item" href="culture-mola.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">03</span>
+  </div>
 
-        <div class="meta" data-lang="en">
-          <span>2023</span><span class="dot">·</span><span>Feature</span><span class="dot">·</span><span>Systems</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2023</span><span class="dot">·</span><span>特写</span><span class="dot">·</span><span>系统</span>
-        </div>
+  <div class="item-text">
+    <strong data-lang="en">MOLA: How Do You Track Stolen Antiquities Online?</strong>
+    <strong data-lang="zh" style="display:none">MOLA：如何在线上追踪被盗文物?</strong>
 
-        <span class="desc" data-lang="en">
-          One line that reads like editorial judgment, not marketing: what is the core insight?
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          一句话更像编辑判断而非营销：这篇的核心洞见是什么？
-        </span>
-      </div>
-    </a>
+    <span class="note" data-lang="en">Originally published in <em>Sanlian Lifeweek</em> as an investigative-facing explainer.</span>
+    <span class="note" data-lang="zh" style="display:none">原文发表于《三联生活周刊》。</span>
 
-    <!-- 04 -->
-    <a class="item" href="#" data-topic="cities">
-      <div class="marker" aria-hidden="true">
-        <span class="line"></span>
-        <span class="index">04</span>
-      </div>
+    <div class="meta" data-lang="en">
+      <span>2024</span><span class="dot">·</span><span>Explainer / Reported Feature</span><span class="dot">·</span>
+      <span>Looted Heritage · Provenance · Platforms · Accountability</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>2024</span><span class="dot">·</span><span>解释型 / 报道</span><span class="dot">·</span>
+      <span>被盗文物 · 来源追溯 · 平台机制 · 问责</span>
+    </div>
 
-      <div class="item-text">
-        <strong data-lang="en">Embodied intelligence: why capability needs a body</strong>
-        <strong data-lang="zh" style="display:none">具身智能：为什么能力需要身体</strong>
+    <span class="desc" data-lang="en">
+      Following the digital trails—lists, databases, and platform records—to show how provenance work becomes possible (and where it breaks).
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      追踪清单、数据库与平台记录等“数字痕迹”，呈现文物溯源如何被实现，以及它在现实中卡住的环节。
+    </span>
+  </div>
+</a>
 
-        <div class="meta" data-lang="en">
-          <span>2023</span><span class="dot">·</span><span>Explainer</span><span class="dot">·</span><span>AI</span>
-        </div>
-        <div class="meta" data-lang="zh" style="display:none">
-          <span>2023</span><span class="dot">·</span><span>解释型</span><span class="dot">·</span><span>AI</span>
-        </div>
+ <!-- 04 -->
+<a class="item" href="culture-academicbar.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">04</span>
+  </div>
 
-        <span class="desc" data-lang="en">
-          Replace with your real excerpt. Keep it 1 sentence if possible.
-        </span>
-        <span class="desc" data-lang="zh" style="display:none">
-          替换成真实简介；尽量控制在 1 句话。
-        </span>
-      </div>
-    </a>
+  <div class="item-text">
+    <strong data-lang="en">At 46° N, rediscovering the joy of contemplation</strong>
+    <strong data-lang="zh" style="display:none">在北纬46度，重新寻回思想的兴趣</strong>
+
+    <span class="note" data-lang="en">Originally published in <em>Sanlian Lifeweek</em> as a cultural observation.</span>
+    <span class="note" data-lang="zh" style="display:none">原文发表于《三联生活周刊》，文化观察。</span>
+
+    <div class="meta" data-lang="en">
+      <span>2024</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+      <span>Public Intellectual Life · Youth Culture · Institutions · Learning</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>2024</span><span class="dot">·</span><span>特写</span><span class="dot">·</span>
+      <span>公共思想生活 · 青年文化 · 机构之外 · 学习</span>
+    </div>
+
+    <span class="desc" data-lang="en">
+      A portrait of “knowledge nights” outside the academy—how a city re-invents the social form of learning.
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      记录校园之外的“知识之夜”，看一座城市如何重新发明学习的社会形式。
+    </span>
+  </div>
+</a>
+
+ <!-- 05 -->
+<a class="item" href="culture-yuegang.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">05</span>
+  </div>
+
+  <div class="item-text">
+    <strong data-lang="en">Zhangzhou’s Yuegang: China’s Golden Port in the 16th Century?</strong>
+    <strong data-lang="zh" style="display:none">漳州月港：16世纪中国商贸的黄金港口?</strong>
+
+    <span class="note" data-lang="en">Reported travel writing with archival texture and local history.</span>
+    <span class="note" data-lang="zh" style="display:none">带有文献纹理的行走写作，切入地方史与海洋贸易网络。</span>
+
+    <div class="meta" data-lang="en">
+      <span>—</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+      <span>Maritime History · Trade Networks · Local Memory · Ports</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>—</span><span class="dot">·</span><span>特写</span><span class="dot">·</span>
+      <span>海洋史 · 贸易网络 · 地方记忆 · 港口</span>
+    </div>
+
+    <span class="desc" data-lang="en">
+      A walk into a port’s afterlife—how a coastline once linked to the world is read through ruins, routes, and names.
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      走进一个港口的“余生”：从遗址、路径与地名中，读出它曾如何与世界相连。
+    </span>
+  </div>
+</a>
+
+ <!-- 06 -->
+<a class="item" href="culture-chinesetypewriter.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">06</span>
+  </div>
+
+  <div class="item-text">
+    <strong data-lang="en">The Chinese Typewriter: Characters’ Breakthrough in the Age of Information Technology</strong>
+    <strong data-lang="zh" style="display:none">中文打字机：信息技术下的汉字突围史</strong>
+
+    <span class="note" data-lang="en">Originally published in <em>Sanlian Lifeweek</em> as a tech-history feature.</span>
+    <span class="note" data-lang="zh" style="display:none">原文发表于《三联生活周刊》，技术史向特写。</span>
+
+    <div class="meta" data-lang="en">
+      <span>2023</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+      <span>Media History · Language · Infrastructure · Modernity</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>2023</span><span class="dot">·</span><span>特写</span><span class="dot">·</span>
+      <span>媒介史 · 语言 · 基础设施 · 现代性</span>
+    </div>
+
+    <span class="desc" data-lang="en">
+      A history of input, indexing, and standardization—how writing systems negotiate with machines.
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      从输入、检索到标准化：呈现书写系统如何与机器协商，并被重新组织。
+    </span>
+  </div>
+</a>
+
+<!-- 07 -->
+<a class="item" href="culture-yangshao.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">07</span>
+  </div>
+
+  <div class="item-text">
+    <strong data-lang="en">Southern Shanxi: A Crossroads in the Yangshao Era</strong>
+    <strong data-lang="zh" style="display:none">晋南地区，仰韶时代的交汇路口</strong>
+
+    <span class="note" data-lang="en">Originally published in <em>Sanlian Lifeweek</em> as archaeology reporting.</span>
+    <span class="note" data-lang="zh" style="display:none">原文发表于《三联生活周刊》，考古报道。</span>
+
+    <div class="meta" data-lang="en">
+      <span>2021</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+      <span>Archaeology · Civilization · Methods · Evidence</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>2021</span><span class="dot">·</span><span>特写</span><span class="dot">·</span>
+      <span>考古 · 文明 · 方法 · 证据</span>
+    </div>
+
+    <span class="desc" data-lang="en">
+      From sites to stratigraphy, an account of how archaeologists infer cultural contact and movement in deep time.
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      从遗址到地层：呈现考古学如何在深时段中推断文化交流与人群流动。
+    </span>
+  </div>
+</a>
+
+<!-- 08 -->
+<a class="item" href="culture-hubeialligator.html" data-topic="culture">
+  <div class="marker" aria-hidden="true">
+    <span class="line"></span>
+    <span class="index">08</span>
+  </div>
+
+  <div class="item-text">
+    <strong data-lang="en">The Hubei Alligator: A Failed “Adventure” in Species Revival</strong>
+    <strong data-lang="zh" style="display:none">湖北鳄，生物复苏的一次失败“冒险”</strong>
+
+    <span class="note" data-lang="en">Originally published in <em>Sanlian Lifeweek</em> as a science feature.</span>
+    <span class="note" data-lang="zh" style="display:none">原文发表于《三联生活周刊》，科学特写。</span>
+
+    <div class="meta" data-lang="en">
+      <span>2022</span><span class="dot">·</span><span>Reported Feature</span><span class="dot">·</span>
+      <span>Paleontology · Extinction · Revival · Scientific Uncertainty</span>
+    </div>
+    <div class="meta" data-lang="zh" style="display:none">
+      <span>2022</span><span class="dot">·</span><span>特写</span><span class="dot">·</span>
+      <span>古生物 · 灭绝 · 复苏 · 科学不确定性</span>
+    </div>
+
+    <span class="desc" data-lang="en">
+      A case about how scientific imagination meets ecological limits—what “revival” can claim, and what it cannot.
+    </span>
+    <span class="desc" data-lang="zh" style="display:none">
+      一个关于科学想象如何撞上生态边界的案例：所谓“复苏”能承诺什么，又无法承诺什么。
+    </span>
+  </div>
+</a>
 
   </div>
 
@@ -539,7 +669,7 @@ function setLang(lang){
   });
   document.getElementById('btnEN').classList.toggle('active', lang === 'en');
   document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
-  setCultureFilter('all', true);
+  setTechFilter('all', true);
 }
 
 /* progress */
@@ -550,34 +680,6 @@ function updateProgress(){
   const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
   document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
 }
-
-/* filter */
-const CultureItems = Array.from(document.querySelectorAll('#CultureList .item'));
-const chipGroups = Array.from(document.querySelectorAll('.chips'));
-
-function setCultureFilter(topic, silent){
-  chipGroups.forEach(group=>{
-    group.querySelectorAll('.chip').forEach(btn=>{
-      btn.classList.toggle('is-active', btn.getAttribute('data-filter') === topic);
-    });
-  });
-  CultureItems.forEach(item=>{
-    const t = item.getAttribute('data-topic');
-    const show = (topic === 'all') || (t === topic);
-    item.classList.toggle('is-hidden', !show);
-  });
-  if(!silent){
-    const y = document.querySelector('.toc').getBoundingClientRect().top + window.scrollY - 88;
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  }
-}
-
-chipGroups.forEach(group=>{
-  group.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.chip'); if(!btn) return;
-    setCultureFilter(btn.getAttribute('data-filter'));
-  });
-});
 
 /* init */
 updateProgress();
