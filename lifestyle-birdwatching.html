@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Birding in Guangzhou · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+     <header class="article-top">
+  <div class="breadcrumbs">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+    <a href="writing.html" data-lang="en">Writing</a>
+    <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+    <span class="sep">/</span>
+    <a href="lifestyle.html" data-lang="en">Lifestyle</a>
+    <a href="lifestyle.html" data-lang="zh" style="display:none">生活方式</a>
+    <span class="sep">/</span>
+    <span data-lang="en">Birdwatching</span>
+    <span data-lang="zh" style="display:none">观鸟</span>
+  </div>
+
+<h1 class="article-title" data-lang="en">Birding in Guangzhou: Once You Go, You’ll Understand</h1>
+<h1 class="article-title" data-lang="zh" style="display:none;">去广州观鸟，就对了</h1>
+
+<p class="article-deck" data-lang="en">
+  Tides, distance, and waiting: birdwatching as an urban way of seeing in Guangzhou.
+</p>
+<p class="article-deck" data-lang="zh" style="display:none">
+  潮汐、距离与等待：观鸟如何成为一种城市里的“观看方法”。
+</p>
+
+  <div class="article-meta">
+    <span data-lang="en">Lifestyle</span>
+    <span data-lang="zh" style="display:none;">生活方式</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Reported Feature</span>
+    <span data-lang="zh" style="display:none;">报道型特写</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Urban Nature / Birdwatching / Travel</span>
+    <span data-lang="zh" style="display:none;">城市自然 / 观鸟 / 行走</span>
+    <span class="dot">·</span>
+    <span data-lang="en">2019</span>
+    <span data-lang="zh" style="display:none;">2019</span>
+  </div>
+</header>
+
+<!-- ===== Hero visual ===== -->
+<figure class="article-hero">
+  <img src="assets/img/lifestyle-birdwatching.png" alt="birdwatching in Guangzhou" />
+<figcaption class="figure-caption" data-lang="en">
+  Figure: Birds resting in fishpond wetlands during high tide, Futian Mangrove Nature Reserve.
+</figcaption>
+<figcaption class="figure-caption" data-lang="zh" style="display:none;">
+  图：涨潮时停歇在基围鱼塘中的小鸟们，深圳福田红树林自然保护区。
+</figcaption>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 47, 2019).
+    <a href="assets/pdf/birdwatching.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+    <a href="https://mp.weixin.qq.com/s/SVcHNIW0vYfj3NPsnw3NMg" target="_blank" rel="noopener">WeChat Read ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2019 年第 47 期。
+    <a href="assets/pdf/birdwatching.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+    <a href="https://mp.weixin.qq.com/s/SVcHNIW0vYfj3NPsnw3NMg" target="_blank" rel="noopener">微信阅读连接 ↗</a>
+  </span>
+  
+</div>
+
+<!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+    This piece follows a beginner birdwatcher (“new bird”) through Guangzhou’s wetlands, campuses, and botanical gardens.
+    Birding is not only about rare sightings; it’s a method—keeping distance, reading tides, and learning to identify what you
+    used to overlook. Once you start naming birds, the city’s everyday scenery reorganizes itself.
+  </p>
+
+  <p data-lang="zh" style="display:none">
+    这篇文章以“新鸟”（新手观鸟者）的视角进入广州：湿地、公园、校园与植物园。
+    观鸟不只是“看稀罕”，更是一种观看方法——保持距离、理解潮汐、学会辨认那些曾被我们忽略的常见鸟。
+    当你开始给鸟命名，城市的日常景观也会被重新排列。
+  </p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+<ul data-lang="en">
+    <li>Why did birdwatching become a mainstream urban hobby in Guangzhou?</li>
+    <li>What does a “new bird” learn first—species, distance, or the city’s ecology?</li>
+    <li>How do wetlands, campuses, and botanical gardens turn into everyday “wild” spaces?</li>
+  </ul>
+
+  <ul data-lang="zh" style="display:none">
+    <li>观鸟为什么会在广州成为一项大众化的城市爱好？</li>
+    <li>作为“新鸟”，最先学到的是什么——鸟种、距离，还是城市生态？</li>
+    <li>湿地、校园、植物园如何变成城市里的日常“野地”？</li>
+  </ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+<!-- Excerpt 01 -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">Excerpt 1: The “Obsession” and the Moment of Seeing</p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">节选一：执念与“终于看清”的瞬间</p>
+
+  <blockquote data-lang="en">
+    <p>When I first started preparing this story, almost every seasoned “birder” told me Guangdong’s birds aren’t especially diverse. But whenever I asked if there were any “star” species, they all mentioned the same thing: go to Shenzhen’s mangroves and see if you can meet the black-faced spoonbill. It’s a strange name—and because it came up again and again, I remembered it immediately. I even developed a kind of obsession: this time, I had to see it.</p>
+    <p>Birdwatching involves a lot of chance. But “beginner’s luck” may exist. Not long after we entered the Futian Mangrove Nature Reserve, Tian Suixing pointed to the fishponds in the distance: “A flock of black-faced spoonbills.” There were eleven. They were resting on a shallow patch in the middle of the pond. We were so far away, and they had their necks tucked in, backs turned toward us—I struggled to tell what made them different from egrets at all. Same white body, long neck. Tian, however, was certain.</p>
+    <p>Later, as the tide went out, we returned to the river mouth. The water that had covered everything in the morning had receded, exposing the mudflat. And there—one black-faced spoonbill was feeding at close range. Only then did I finally see what it looked like. Unlike the elegant movements of its cousin the egret, the spoonbill looked almost comical. Once you’ve seen it even once, it becomes easy to recognize, even from far away.</p>
+    <p>Standing on the mudflat, it half-opened its long, flat black bill—shaped like a pipa—submerged it in the water, and swept rapidly left and right with its head. The moment it sensed food, it snapped its head up to swallow, then repeated the motion again and again. Its goofy-cute look made me think of a husky. It really is oddly lovable—no wonder it has become Guangdong’s “star bird.”</p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>当我刚开始准备这个选题的时候，几乎每位资深“鸟人”都会告诉我广东的鸟种并不丰富，但若是我追问有没有什么明星鸟种时，他们便会不约而同地提到，可以去深圳红树林，看看有没有机会遇到黑脸琵鹭。这是个很怪的名字，但因为被反复提及，我迅速记住了，甚至产生了某种执念：这次一定要看到它。</p>
+    <p>观鸟这种活动有着很大的偶然性，毕竟什么时候哪里会出现什么鸟，实在很难预测，但新手鸟运这种东西或许真的存在。才进入福田红树林自然保护区没多久，田穗兴便示意我们往远处的鱼塘看，“一群黑脸琵鹭”。共11只，全停歇在鱼塘中央的一处浅滩上，因为离得老远，并且它们还都缩着脖子，将屁股对着我们，我费了老大劲也无法分辨黑脸琵鹭看起来到底和白鹭有什么区别，一样雪白的身子，长长的脖子，但田穗兴很肯定这是黑脸琵鹭。</p>
+    <p>此刻艳阳高照，第一次退潮已经开始，田穗兴建议说，道凤塘河口的滩涂或许已经露了出来，我们可以再返回去看看。来到河口，早上还是汪洋海水的水面此时已经退去，露出来的滩涂上，数不清的弹涂鱼在阳光下迅速弹跳，让你不禁怀疑是真的有鱼在蹦跶还是光线的反射。而一只黑脸琵鹭正在近距离的滩涂上觅食。</p>
+    <p>这时，我才终于看清黑脸琵鹭的样子。和它的表兄弟白鹭优雅的觅食动作不同，黑脸琵鹭觅食起来颇具喜感，只要看过一次，即使离得再远，也非常容易辨认。它站在滩涂上，将那又扁又长、仿若琵琶的黑嘴半张着埋入海水之中，并且随着头部的左右摇摆快速扫动，一旦感应到有食物，便飞迅抬头咽下，然后继续重复。它又蠢又萌的样子令我联想起了哈士奇，让人不禁感慨，如此傻得可爱，傻得有特色，也真是怪不得能够成为广东的明星鸟呢。</p>
+  </blockquote>
+</div>
+
+
+<!-- Excerpt 02 -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">Excerpt 2: Birding as a Way to Learn the City</p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">节选二：观鸟作为“自然观察的钥匙”</p>
+
+  <blockquote data-lang="en">
+    <p>Why can raptors circle along the mountainside? Standing halfway up Baiyun Mountain, Lu Suijun pointed to the sky and asked his students. After their excited guesses, he explained: the city below warms the air, hot air rises, cold air sinks to fill the gap; this flow becomes wind, and raptors can spiral along the currents.</p>
+    <p>This was an outdoor practice class run by Guangzhou No.113 Middle School’s “Bird House,” themed “Go to Baiyun Mountain to see raptors.” Lu Suijun, the program lead, is a biology teacher and deputy secretary-general of the Guangdong Environmental Education Promotion Association.</p>
+    <p>Although the class was about raptors, we didn’t spot a single one on the way. Even woodland birds were hard to make out among the trees. Lu encouraged students to learn bird calls—so that even if you can’t see a bird, you can identify it by sound: “Hear that? The call that sounds like someone speaking with a mouthful of water is the red-whiskered bulbul. The light-vented bulbul’s voice is hoarser.” Many bird calls are distinctive; for example, the common white-breasted waterhen sounds like it’s crying “ku a, ku a.” One birding skill is to rely on sound—and in Guangzhou, some visually impaired students also join birding activities.</p>
+    <p>This matches the original intention behind Guangzhou’s birding education: using birdwatching as a key to natural observation. Lu said many students, through birding, go on to watch butterflies and insects, and come to love nature observation. He also enjoys bringing textbook knowledge back into the field, and teachers from other subjects can often find connections between their disciplines and birding.</p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>为何猛禽能够在山边盘旋？陆穗军站在白云山半山腰上，指着不远处的天空，对围绕在身边的学生们提问。等到他们叽叽喳喳给出自己的答案后，陆穗军便开始讲解道，远处下方的城市产生的热空气上升，而上空的冷空气下降补充，这种流动形成了风，令猛禽可以顺着气流盘旋。</p>
+    <p>这是广州市第113中学初中部鸟舍的一节野外实践课，主题是“去白云山看猛禽”。鸟舍的负责人陆穗军是该校的生物老师，也是广东省环境教育促进会副秘书长。</p>
+    <p>虽然说是看猛禽，但一路上我们不仅一只猛禽都未看到，甚至连站在树林间的林鸟都不容易分辨。陆穗军鼓励大家多多熟悉各种鸟类的声音，即使看不到，也能靠声音辨识鸟类，“听，这个像含着一口水一样的声音，是红耳鹎。而白头鹎的声音会更哑一些。”许多鸟的叫声都很有特色。比如广州有种很常见的白胸苦恶鸟，它的叫声听起来就像喊着“苦啊苦啊”。观鸟中的一项技巧是依靠声音去观察，在广州，不少视障学生也会参加各种观鸟活动。</p>
+    <p>实际上，这正符合了广州开展观鸟教育的初衷，将观鸟作为自然观察的钥匙。陆穗军表示不少学生通过观鸟，开始发展成观蝴蝶、观昆虫，喜欢上自然观察这件事情。他也乐得将课本中的知识在野外重新教学，而许多其它学科的老师，也能发现自己学科与观鸟之间的连接点。</p>
+  </blockquote>
+</div>
+
+
+<!-- Excerpt 03 -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">Excerpt 3: Five Minutes, and the Joy of Knowing</p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">节选三：五分钟与“我一天比一天快乐”</p>
+
+  <blockquote data-lang="en">
+    <p>“We’ll wait five minutes,” Liang Xuming told me. “If it doesn’t show up in five minutes, we’ll go look at other birds.”</p>
+    <p>Beginner’s luck was still protecting me. In less than five minutes, the Japanese robin appeared. It was sparrow-sized, standing on the steps in front of Chen Xujing’s former residence. It slightly raised its orange-brown throat; its round black eyes spun with each tilt of its head, as if scouting the surroundings. Then a red-flanked bluetail showed up nearby—its colors less vivid, a little grayish. Because they are in the same genus, someone joked, “The Japanese robin’s cousin is here.”</p>
+    <p>I asked Liang why he knew the Japanese robin would appear here. He said it was simple: the bird prefers shady, damp shrubs where insects are plentiful. Wild birds also fear people and won’t stay close to places right by the road. Once you narrow it down, there aren’t many suitable spots. So birding is often about reading the environment: wherever the conditions meet a bird’s needs, that’s where you might find the bird you’re looking for.</p>
+    <p>In just a few days, I moved from knowing nothing about birdwatching to gradually recognizing birds. A line from <em>A Bird in the Hand</em> described my feeling well: “But before that, I hardly noticed them. As I came to know them, I became happier day by day.” The original English title is “How to be a Bad Birdwatcher.” The author argues no one is a perfect birder, so there’s no need to demand that you identify every bird you see. Failing to name a bird doesn’t mean you’ve failed; it isn’t a signal to quit, nor does it mean birding is meaningless. The more you see, the more you discover, the more you enjoy. Going birdwatching is the right choice.</p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>“我们等五分钟，”梁旭明对我说，“五分钟不出现，我们就去看别的鸟。”</p>
+    <p>新手鸟运仍然在护佑着我，不到五分钟，日本歌鸲出现了。它体型小似麻雀，正站在陈序经故居前的台阶上，微微抬起橙棕色的喉部，黑色的圆眼珠随着脑袋的晃动滴溜溜转，似乎正在侦查周围的情况。紧接着，一只红尾歌鸲也出现在台阶附近，它的颜色没有日本歌鸲鲜艳，有些灰不溜秋地站在旁边，因为同是鹟科鸲属，有人笑道，“日本歌鸲的表弟来了。”</p>
+    <p>我问梁旭明，为什么他知道日本歌鸲会出现在这里。他说这实际上很简单，日本歌鸲喜欢荫蔽潮湿的灌木丛，因为那里虫子比较多，并且野生鸟类比较怕人，不会靠近紧邻马路的地方，排除下来，满足合适条件的地方就不多了。所以观鸟，很多时候，也是观察环境，哪里能够满足鸟类的生存环境需求，哪里就有可能发现你想看到的鸟。</p>
+    <p>短短几日，我从对观鸟一无所知的状态，变得开始逐渐认识鸟类。《窗外飞过一只鸟》中有句话很适合形容我的感受，“但在此之前，我几乎不会注意到他们，随着对他们的认识，我一天比一天快乐。”《窗外飞过一只鸟》的英文原标题叫作，“How to be a Bad Birdwathcer”（如何成为一个糟糕的观鸟者）。作者认为，没有人是完美的观鸟者，没必要苛求自己认出见到的每一只鸟，既然没人能做到——哪怕是世界上顶级的观鸟者，你又何必强求呢？遇到一只不认识的鸟，不代表你失败，也不是暗示你放弃，更不意味着享受观鸟毫无意义。只要看得越多，发现越多，享受也就越多。去观鸟就对了。</p>
+  </blockquote>
+</div>
+
+<!-- Demonstrates -->
+ <!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">写作呈现</h2>
+
+  <ul data-lang="en">
+    <li>Field reporting + participant observation: following “new birds” to understand a city-level hobby.</li>
+    <li>Scene-based narrative: tides, distance, and waiting as recurring motifs that carry the structure.</li>
+    <li>Service journalism: mapping urban birding “infrastructure” (wetlands, botanical garden tours, campus routes).</li>
+    <li>Urban ecology lens: how landscaping and renovation quietly reshape biodiversity.</li>
+  </ul>
+
+  <ul data-lang="zh" style="display:none">
+    <li>田野采访 + 参与式观察：跟随“新鸟”进入一项城市兴趣的内部。</li>
+    <li>场景叙事：以“潮汐/距离/等待”作为反复出现的结构线索。</li>
+    <li>服务信息：梳理广州观鸟的“基础设施”（湿地、植物园导览、校园路线）。</li>
+    <li>城市生态视角：维护、修缮与景观化如何悄然改变鸟的栖居。</li>
+  </ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="lifestyle.html">← Back to Lifestyle</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

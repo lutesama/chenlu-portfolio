@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>What Makes Art So Expensive? · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+     <header class="article-top">
+  <div class="breadcrumbs">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+    <a href="writing.html" data-lang="en">Writing</a>
+    <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+    <span class="sep">/</span>
+    <a href="art.html" data-lang="en">Art</a>
+    <a href="art.html" data-lang="zh" style="display:none">艺术</a>
+    <span class="sep">/</span>
+    <span data-lang="en">What Makes Art So Expensive?</span>
+    <span data-lang="zh" style="display:none">什么塑造了艺术品的天价？</span>
+  </div>
+
+<h1 class="article-title" data-lang="en">What Makes Art So Expensive?</h1>
+<h1 class="article-title" data-lang="zh" style="display:none;">什么塑造了艺术品的天价？</h1>
+
+<p class="article-lede" data-lang="en">
+    A reported feature on how “record prices” are manufactured — through information asymmetry, intermediaries, and a market that is structured to stay opaque.
+  </p>
+  <p class="article-lede" data-lang="zh" style="display:none">
+    一篇关于“天价”如何被制造出来的报道型特写：在信息不对称、中介网络与不透明规则中，价格如何被推上神坛。
+  </p>
+
+  <div class="article-meta">
+    <span data-lang="en">Art</span>
+    <span data-lang="zh" style="display:none;">艺术</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Reported Feature</span>
+    <span data-lang="zh" style="display:none;">报道型特写</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Art Market / Pricing / Institutions</span>
+    <span data-lang="zh" style="display:none;">艺术市场 / 定价 / 机构</span>
+    <span class="dot">·</span>
+    <span data-lang="en">2019</span>
+    <span data-lang="zh" style="display:none;">2019</span>
+  </div>
+</header>
+
+<!-- ===== Hero visual ===== -->
+<figure class="article-hero">
+  <img src="assets/img/art-artmarket.png" alt="Art market and auction context" loading="lazy">
+<figcaption class="figure-caption" data-lang="en">
+    The art market’s “record prices” are rarely just about the artwork.
+  </figcaption>
+ <figcaption class="figure-caption" data-lang="zh" style="display:none">
+    艺术品的“天价”往往不只关乎作品本身。
+  </figcaption>
+</figure>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 16, 2019).
+    <a href="assets/pdf/art-artmarket.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2019 年第 16 期。
+    <a href="assets/pdf/art-artmarket.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+  </span>
+  
+</div>
+
+<!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+  What does it really mean when an artwork becomes “expensive”? Based on interviews with British art market expert Georgina Adam and close observation of auction practices, this piece examines how value is constructed through intermediaries, information asymmetry, and long-standing market conventions.
+</p>
+
+<p data-lang="en">
+  Rather than judging the art market, the article focuses on how its mechanisms operate in practice — and why they continue to produce trust, desire, and inequality at the same time.
+</p>
+
+<p data-lang="zh" style="display:none">
+  当一件艺术品被标上“天价”，这究竟意味着什么？文章基于对英国资深艺术市场专家乔治娜·亚当（Georgina Adam）的采访，并结合对拍卖实践的观察，分析艺术品价格如何在中介机制、信息不对称与行业惯例中被建构。
+</p>
+
+<p data-lang="zh" style="display:none">
+  与其评判艺术市场是否合理，文章更关注这些机制如何在现实中运作，以及它们为何能在制造信任与欲望的同时，持续复制不平等。
+</p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+<ul class="kq" data-lang="en">
+  <li>How are “record prices” constructed — and who benefits from the market staying opaque?</li>
+  <li>What are the art market’s persistent gray zones (fakes, fraud, tax evasion, money laundering), and why do they endure?</li>
+  <li>How do galleries, collectors, and auction houses manage supply and resale — and how does that shape pricing?</li>
+</ul>
+
+<ul class="kq" data-lang="zh" style="display:none">
+  <li>“天价”是如何被建构出来的——谁从艺术市场的不透明中获益？</li>
+  <li>艺术市场的“灰色地带”包括哪些问题（赝品、欺诈、逃税、洗钱），为什么它们长期存在？</li>
+  <li>画廊、藏家与拍卖行如何控制供给与转售，从而影响价格形成？</li>
+</ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+
+<!-- ===== EXCERPT (Bilingual) — replace your current excerpt block with this ===== -->
+
+<div class="excerpt">
+
+  <!-- EN (default shown) -->
+  <div data-lang="en">
+    <p><strong>Intro</strong>: As exhibition-going becomes a new lifestyle trend, we grow increasingly puzzled by the money flows behind it.</p>
+
+    <p>
+      Even those least interested in art can hardly ignore the astronomical prices that have repeatedly flooded the news in recent years:
+      Leonardo da Vinci’s <em>Salvator Mundi</em>, which became the world’s most expensive artwork at US$450.312 million;
+      David Hockney’s <em>Portrait of an Artist (Pool with Two Figures)</em>, which set an auction record for a living artist at US$90.3125 million;
+      and Modigliani’s <em>Nu couché</em>, sold for US$157.2 million—the most expensive lot of 2018.
+      At the recently concluded 2019 Sotheby’s Hong Kong Spring Sales, American pop artist KAWS’s <em>The Kaws Album</em> (2005) sold for RMB 115.966 million,
+      at a premium of as much as 15 times—once again reigniting public debate over ever-rising art prices.
+    </p>
+
+    <p>
+      What, exactly, determines the price of a work? Why are some works so expensive?
+      What creates the enormous price gaps between artworks?
+      As exhibition-going becomes a new lifestyle trend, we grow increasingly puzzled by the money flows behind it.
+    </p>
+
+    <p>
+      Georgina Adam is a veteran British art-market expert with more than three decades of experience.
+      She has traveled to key art-world sites around the globe, drawing on extensive cases to write
+      <em>Dark Side of the Boom: The Excesses of the Art Market in the 21st Century</em>, a book that helps readers understand how the art market operates.
+      In the book, Adam guides us—often in the first person—through studio visits, freeports, art-fair openings, and countless “dazzling parties.”
+      Beneath these spectacles, she focuses on hidden backstories and shows how dealers, galleries, auction houses, collectors, and other players
+      push prices with invisible hands.
+      As one unnamed dealer put it, “This is the Wild West.”
+      Some prices have risen tenfold or even a hundredfold in just a few decades,
+      yet even industry insiders often do not fully understand how these deals actually work.
+    </p>
+
+    <p>
+      The book’s central thread is a notorious financial dispute in today’s art market.
+      Swiss businessman Yves Bouvier is a powerful freeport-storage magnate who built the Singapore and Luxembourg freeports,
+      providing “ultra-high-net-worth” clients with spaces to store high-value assets.
+      In these heavily protected warehouses, wealthy owners can store ever-accumulating tangible assets—wine, artworks, antique cars—
+      and complete sales and resales in extreme secrecy, without paying taxes.
+    </p>
+
+    <p>
+      Beyond that role, Bouvier also worked as an art intermediary.
+      Over the past decade, he helped Russian billionaire Dmitry Rybolovlev—known as the “fertilizer king”—acquire around 36 artworks and some furniture
+      for roughly US$2 billion, including <em>Salvator Mundi</em>, which Bouvier sold to Rybolovlev in 2013 for US$127.5 million.
+      In the art world, buyers and sellers typically transact through intermediaries, and keeping both parties’ identities confidential is commonplace.
+      Relying on this structural opacity, prices in Bouvier-handled transactions were entirely non-transparent.
+      Rybolovlev later claimed that only after a Manhattan-based art adviser, Sandy Heller, told him he had paid US$118 million for Modigliani’s
+      <em>Nu couché au coussin bleu</em>—far above the previous owner’s sale price of US$93.5 million—did he realize Bouvier had taken an enormous profit,
+      and he sued Bouvier for “fraud.”
+      Yet the loss was already done: when Rybolovlev later resold via Christie’s, most works failed to reach the prices he had paid through Bouvier.
+      For instance, Picasso’s <em>Joueur de flute et femme nue</em>, purchased for €25 million, ultimately sold at Christie’s for only €3.5 million.
+    </p>
+
+    <p>
+      Adam also records further disputes around <em>Salvator Mundi</em>.
+      In an earlier transaction, three sellers sued Sotheby’s, claiming they did not know that after the painting was sold through the auction house
+      for US$80 million, the buyer Bouvier resold it for US$127.5 million.
+      Sotheby’s fought off the lawsuit, saying it had not anticipated Rybolovlev would be the final buyer.
+      Another issue was authenticity: as Heller noted, it was not the kind of work an art adviser like her would recommend purchasing.
+      Yet because it had entered the National Gallery in London’s 2011 Leonardo da Vinci exhibition as an authentic work—
+      a form of national-institution endorsement—it ultimately achieved the record US$450.312 million price through Christie’s marketing.
+    </p>
+
+    <p>
+      This is only the tip of the iceberg. Across just over 200 pages, Adam cites more than 45 court cases:
+      how artists and their works become brands and commodities under expanding supply and demand;
+      how artworks, because of their portability, can be used for money laundering and tax evasion, moved easily across borders,
+      even entangling owners in the Panama Papers;
+      and a range of legal disputes—from appropriation controversies involving Richard Prince and Jeff Koons,
+      to famous forgery and authentication scandals such as the Wolfgang Beltracchi case.
+    </p>
+
+    <p><strong>In this interview with <em>Sanlian Lifeweek</em>, Georgina Adam shares the gray zones of the art market as she sees them.</strong></p>
+  </div>
+
+
+  <!-- ZH (default hidden) -->
+  <div data-lang="zh" style="display:none;">
+    <p><strong>导读</strong>：当观看艺术展览逐渐成为一种新的潮流生活方式时，我们越发对其背后的金钱流动感到困惑。</p>
+
+    <p>
+      即使是对艺术最不感兴趣的人群，也很难忽视近几年来频繁刷屏的天价艺术品：以4.50312亿美元成为全球最贵艺术品的达芬奇作品《救世主》（Salvator Mundi），以9031.25万美元打破在世艺术家拍卖纪录的大卫·霍克尼画作《艺术家肖像（泳池与两个人像）》（ Portrait of an Artist (Pool with Two Figures)），以1.572亿美元成交的2018年度最贵拍品、莫迪利亚尼的《向左侧卧的裸女》（Nu couche）……而就在刚刚结束的2019年苏富比香港春季拍卖会上，美国潮流艺术家KAWS创作于2005年的《The Kaws Album》，以1.15966亿元成交，溢价高达15倍，再一次引发了人们对于不断涌现的高价艺术品的关注和讨论。
+    </p>
+
+    <p>
+      究竟是什么决定了一件作品的价格？为什么有些作品那么贵？是什么造就了艺术品之间巨大的价格差异？当观看艺术展览逐渐成为一种新的潮流生活方式时，我们越发对其背后的金钱流动感到困惑。
+    </p>
+
+    <p>
+      乔治娜·亚当（Georgina Adam）是英国一位资深的艺术市场专家，有三十多年的职业生涯。 她走访全球重要的艺术事件发生地，引述大量艺术市场案例，完成了一本帮助人们了解艺术市场运作的著述：《繁荣的阴暗面：21世纪艺术品市场的过剩》（Dark Side of the Boom: The Excesses of the Art Market in the 21st Century） 。在这本书里，亚当饶有趣味地以第一人称视角，带领我们参观工作室、出席自由港和艺术博览会开幕，以及无数“炫目的派对”……在活动的表象下她更侧重于隐秘的幕后故事，并通过艺术市场上那些鲜为人知的阴谋诡计告诉读者，在一片繁荣的艺术市场背后， 艺术品经纪人、画廊、拍卖行、收藏家等不同机构和个人，都以一双双无形的手，推动着艺术品价格的走向。就像书中一位不愿透露姓名的交易商谈到艺术品市场时所说，“这是一片狂野的西部。”某些艺术品的价格在几十年内上涨了10倍甚至100倍，但即使是艺术行业的从业者，也不太清楚这些买卖是如何具体运作的。
+    </p>
+
+    <p>
+      其中贯穿本书全文的故事，是现在艺术市场臭名昭著的一起金钱纠纷。瑞士商人伊夫·布维耶（Yves Bouvier）是著名的自由港仓储巨头，他打造了新加坡自由港和卢森堡自由港，为那些“超高净值人士”提供了存放高价物品的空间。富豪们可以将愈来愈多的诸如葡萄酒、艺术品和古董车这样不断积累的有形资产放在“极度安全”的仓库里，在铜墙铁壁的保护下完成出售和转售，极其隐秘并且还不需要纳税。
+    </p>
+
+    <p>
+      除了这个身份外，布维耶还是一位艺术品经纪人，在过去10多年间，他帮助被誉为“化肥大王”的俄罗斯亿万富翁德米特里·雷博洛夫列夫（Dmitry Rybolovlev）以大约20亿美元购置了36件艺术品和一些家具，其中便包括了2017年创下世界纪录的达芬奇的《救世主》，这幅画是2013年布维耶以1.275亿美元卖给雷博洛夫列夫的。
+    </p>
+
+    <p>
+      艺术行业的买家和卖家往往都通过中间商在进行交易，并且对买卖双方的身份保密是一件非常平常的事情。依赖于这种行业的特殊性，由布维耶经手的交易，其销售价格完全不透明。据雷博洛夫列夫自称，直到来自曼哈顿的艺术顾问姗迪·海勒（Sandy Heller）向他透露，他以1.18亿美元买下的莫迪利亚尼《蓝垫子上的裸女》（Nu couche au coussin bleu）远高于前任所有者出售的9350万美元时，他才意识到布维耶从中获取了巨大的利润，于是以“诈骗”的罪名将他告上法庭。但此时巨大损失已然造成，在雷博洛夫列夫随后通过佳士得拍卖行进行转售时，这些作品中的多数都无法达到他通过布维耶买入的价格。比如他以2500万欧元购买的毕加索的《笛手与裸女》（Joueur de flute et femme nue），最终通过佳士得拍卖行才卖出350万欧元。
+    </p>
+
+    <p>
+      同时值得关注的是关于《救世主》的进一步纠纷。在前一次的交易中，亚当记述，这幅作品的三位卖家诉苏富比拍卖行，声称他们并不知道通过拍卖行以8000万美元卖出这幅作品后，买家布维耶又以1.275亿美元转售。但苏富比挡下了这份诉讼，表示他们并没有料到雷博洛夫列夫会是最后的买家。而这幅画作的另一个问题是它的真假争议，就像海勒所说，它并不是像她这样的艺术顾问会推荐购买的作品。然而因为它曾以真迹的形式进入了伦敦国家美术馆（London National Gallery） 在2011年举办的列奥纳多·达芬奇展览，有了国家级美术馆的某种认可，最终在佳士得的成功营销下达成了价值4.50312亿美元的最新天价销售。
+    </p>
+
+    <p>
+      这只是亚当在书中所展露的艺术世界的冰山一角。在这本书 200多页的篇幅中，她引用了45个以上的法庭案例，讲述了包括在不断扩张的供需关系下，艺术家及他们的作品如何逐渐成为一种品牌和商品；因为其便携性，艺术品如何被用来洗钱和逃税，在国家之间轻易转移，甚至导致它们的所有者卷入巴拿马文件；她也讲述了包括理查德·普林斯（Richard Prince）和杰夫·昆斯（Jeff Koons）等著名艺术家盗用他人作品的行为所引发的法律纠纷，震惊世界的沃夫冈·贝特莱奇（Wolfgang Beltracchi）伪造案在内的艺术品伪造和鉴定案件……
+    </p>
+
+    <p><strong>在《三联生活周刊》对她的这次专访中，乔治娜·亚当分享了她眼中艺术市场的灰色地带。</strong></p>
+  </div>
+
+
+<!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+<ul class="demo" data-lang="en">
+  <li><strong>System reporting:</strong> tracing how price is produced by intermediaries, conventions, and controlled transparency — not only by “taste.”</li>
+  <li><strong>Field-to-structure writing:</strong> using a concrete dispute/case to open a broader explanation of market mechanisms.</li>
+  <li><strong>Cultural analysis with accountability:</strong> naming the gray zones and separating what is illegal from what is “customary,” while asking what should change.</li>
+</ul>
+
+<ul class="demo" data-lang="zh" style="display:none">
+  <li><strong>系统性报道能力：</strong>追踪“价格”如何由中介网络、行业惯例与不透明机制共同生产，而不只归因于“审美”。</li>
+  <li><strong>从事件切入结构：</strong>以具体争议/案例为入口，层层拆解艺术市场的运行逻辑。</li>
+  <li><strong>可追责的文化分析：</strong>指出灰色地带并区分“违法”与“惯例”，并追问机制应如何被更新。</li>
+</ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="art.html">← Back to Art</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

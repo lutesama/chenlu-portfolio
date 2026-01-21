@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cycling Hainan · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+     <header class="article-top">
+  <div class="breadcrumbs">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+    <a href="writing.html" data-lang="en">Writing</a>
+    <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+    <span class="sep">/</span>
+    <a href="lifestyle.html" data-lang="en">Lifestyle</a>
+    <a href="lifestyle.html" data-lang="zh" style="display:none">生活方式</a>
+    <span class="sep">/</span>
+    <span data-lang="en">Cycling across Hainan</span>
+    <span data-lang="zh" style="display:none">慢骑海南行记</span>
+  </div>
+
+ <h1 class="article-title" data-lang="en">A Slow Ride for a Real Taste of the Island</h1>
+<h1 class="article-title" data-lang="zh" style="display:none;">慢骑海南行记</h1>
+
+<p class="article-deck" data-lang="en">
+  Only by cycling slowly around the island can you experience the real flavor of Hainan.
+</p>
+<p class="article-deck" data-lang="zh" style="display:none">
+  环岛休闲骑，才能体味地道的海南味。
+</p>
+
+  <div class="article-meta">
+  <span data-lang="en">Lifestyle</span>
+  <span data-lang="zh" style="display:none;">生活方式</span>
+  <span class="dot">·</span>
+  <span data-lang="en">Reported Feature</span>
+  <span data-lang="zh" style="display:none;">报道型特写</span>
+  <span class="dot">·</span>
+  <span data-lang="en">Cycling / Slow Travel / Place-based Reporting</span>
+  <span data-lang="zh" style="display:none;">骑行 / 慢旅行 / 地方书写</span>
+  <span class="dot">·</span>
+  <span data-lang="en">2023</span>
+  <span data-lang="zh" style="display:none;">2023</span>
+</div>
+</header>
+
+<!-- ===== Hero visual ===== -->
+<figure class="article-hero">
+  <img src="assets/img/lifestyle-cyclinghainan.png" alt="Glamping scene in Hangzhou" />
+ <figcaption class="figure-caption" data-lang="en">
+  Figure: Cycling through towns and countryside is often the only way to slow down enough to notice everyday life in Hainan.
+</figcaption>
+<figcaption class="figure-caption" data-lang="zh" style="display:none;">
+  图：在海南，只有骑行，才能真正放慢速度，进入乡镇与日常生活之中。
+</figcaption>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>Sanlian Lifeweek</em> (Issue 18, 2023).
+    <a href="assets/pdf/cyclinghainan.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+    <a href="https://mp.weixin.qq.com/s/yNLiZu0sEZXWVNucxamgiw" target="_blank" rel="noopener">WeChat Read ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《三联生活周刊》2023 年第 18 期。
+    <a href="assets/pdf/cyclinghainan.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+    <a href="https://https://mp.weixin.qq.com/s/yNLiZu0sEZXWVNucxamgiw" target="_blank" rel="noopener">微信阅读连接 ↗</a>
+  </span>
+  
+</div>
+
+<!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+  This reported feature follows a group of beginner cyclists riding along Hainan’s eastern coast. Rather than focusing on speed,
+  endurance, or completing a loop, it looks at cycling as a way of slowing down—entering towns, tea houses, countryside paths,
+  and everyday scenes that are often skipped by cars.
+</p>
+<p data-lang="zh" style="display:none">
+  这篇报道以一次海南东线环岛骑行为线索，关注的并非速度、成绩或完成度，而是“慢骑”本身。
+  通过进入乡镇、茶馆、椰林乡道与普通人的日常生活，骑行成为一种理解地方、重新调整节奏的方式。
+</p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+<ul>
+  <li data-lang="en">Why does “slow” matter more than distance or speed when cycling around Hainan?</li>
+  <li data-lang="zh" style="display:none">在海南骑行中，为什么“慢”比距离和速度更重要？</li>
+
+  <li data-lang="en">How does cycling allow travelers to enter towns and everyday life in ways cars cannot?</li>
+  <li data-lang="zh" style="display:none">骑行如何让人进入汽车无法抵达的乡镇与日常生活？</li>
+
+  <li data-lang="en">What kinds of people gather around cycling—leaders, beginners, solo riders—and how do they meet?</li>
+  <li data-lang="zh" style="display:none">骑行途中，不同的人如何相遇、结伴，又各自前行？</li>
+
+  <li data-lang="en">How does physical fatigue reshape one’s perception of place and time?</li>
+  <li data-lang="zh" style="display:none">身体的疲惫，如何反过来改变人对时间与地方的感知？</li>
+</ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">文章节选</h2>
+<!-- Excerpts -->
+
+<!-- Excerpt 01 -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">Excerpt 1: Laoba Tea, and the Pace of Hainan</p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">节选一：老爸茶与海南的节奏</p>
+
+  <blockquote data-lang="en">
+    <p>
+      Midway through the first day’s journey, it was only after a cup of “laoba tea” that the distinctiveness of cycling in Hainan truly revealed itself. People often say Hainan life is made of three things: Qiong opera, lottery tickets, and laoba tea. The moment I arrived in Haikou, the tea houses scattered through the streets—locals sitting in small groups around tables—left me with a strong impression of the island’s slow tempo.
+    </p>
+    <p>
+      In Hainanese, “laoba” usually refers to older men. But laoba tea is not only for “laoba.” From morning tea to afternoon tea to evening tea, a pot of tea with two or three small plates of pastries gathers everyone—men and women, young and old—to pass long hours in unhurried conversation. This tea-drinking spectacle is one of the most common street scenes in Hainan, especially around Haikou.
+    </p>
+    <p>
+      After finishing our morning goal of 60 kilometers, we entered Fengpo Town in Wenchang. Once our leader Azhong had collected the bikes, he took us to try the local specialty: plain-boiled Wenchang chicken. It was noon, the sun was fierce, and the afternoon target was not demanding—just a little over 30 kilometers—so he suggested we sit down again and try laoba tea. The teahouse was in town and fairly large. Under the outdoor umbrellas, five or six wooden tables were placed casually, and the plastic stools around them were already full: middle-aged men with bare arms, and also stylishly dressed young women.
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>
+      首日旅途过半，喝上“老爸茶”，骑行海南岛的独特之处才显露出来。都说海南人的生活由三部分构成：琼剧、彩票、老爸茶。早在刚刚抵达海口时，街头巷尾随处可见的茶馆，围在桌前三三两两的闲客，便给我留下了当地慢节奏生活的强烈印象。
+    </p>
+    <p>
+      海南话里，通常将上了年纪的男性称作“老爸”。但老爸茶不局限于“老爸”，从早茶、午茶到晚茶，一壶茶加上两三碟糕点，将男女老少们聚在一起，于闲谈之中不紧不慢地打发悠长的时间。这种吃茶盛景，构成了海南尤其是海口周边地区最常见的市井画面。
+    </p>
+    <p>
+      结束了上午60公里的骑行目标，我们进入文昌市冯坡镇，领队阿钟收车后，带我们品尝了当地特色美食白切文昌鸡。正值晌午，烈日当头，再加上下午的目标并不严峻，仅剩下30多公里路程，他提议我们不妨再坐下试试“老爸茶”。这间茶馆位于镇上，面积不小，室外的遮阳伞下随意摆放着五六张木桌，四周的塑料凳上早已坐满了客人，有光着臂膀的中年大哥，也有打扮入时的年轻姑娘。
+    </p>
+  </blockquote>
+</div>
+
+
+<!-- Excerpt 02 -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">Excerpt 2: Kumquat, Routes, and “Slow” as a Method</p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">节选二：金桔、路线与“慢”的方法</p>
+
+  <blockquote data-lang="en">
+    <p>
+      Because of the heat, we followed Azhong’s lead and ordered an iced kumquat-lemon black tea. After only two days in Hainan, we had already noticed something quickly—kumquat is the soul of Hainan food. In local eateries, you rarely find vinegar at the condiment station; instead there is a plate of small green kumquats with slits cut into them. Whether it was Wenchang chicken or a “zaopo vinegar” hotpot, the sour kumquat is an indispensable seasoning on locals’ dipping plates. The scent of kumquat is everywhere on this island; this acidity has long blended into everyday life.
+    </p>
+    <p>
+      When a large cup of lemon tea arrived—only five yuan—Azhong reminded us to stir carefully at the bottom: “It’s all sugar down there. If you mix it all at once, it’ll be very sweet.” He lifted the iron kettle we had ignored and gestured that it, too, was full of tea; once we finished, we could refill ourselves. “That’s why you stir slowly—otherwise later, when you refill, it won’t be sweet.” Only then did we understand how a single pot of tea could support hours of aimless conversation. What makes laoba tea most appealing is its looseness. In the calm murmur of talk, cup after cup is refilled, as if time itself is being sipped away—the big city’s frantic rhythm is completely worn down here. “Slow,” Azhong warned us again and again: “Since you’re already in Hainan, why rush?”
+    </p>
+    <p>
+      During the ride, Azhong always asked us to slow down—slower still—so we wouldn’t miss the scenery he had planned. I should add that our cycling group was a beginner team of five, including me and the photographer Huang Yu; the other three were all women. Feifei came alone from Hangzhou; Wang Jie and Teacher Qi were old friends who met in Haikou to set off together. The night before departure, we had an ice-breaking session. After hearing everyone’s background, Azhong realized almost none of us had long-distance cycling experience—only I, who came mainly for reporting, had ridden around Qinghai Lake. So he started redesigning routes for us: easier, with better scenery. Having many route options is also what makes riding around Hainan very different from the Sichuan–Tibet line or Qinghai Lake. Before joining, we had heard that “517 Cycling Post” was the biggest cyclists’ club on the island, so we went to consult them. The owner, Chonzi, told us Hainan’s road system is complex: national highways, township roads, village roads crisscross each other. Unlike Qinghai Lake or the Sichuan–Tibet line, you can’t just follow one road. And phone navigation often won’t recommend the distinctive routes, so people who come to loop the island on their own—without doing enough homework—often spend most of their time chasing cars on national highways and inhaling exhaust. After finishing, they may feel Hainan isn’t as beautiful as they imagined.
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>
+      老爸茶已经深深融入了海南人的市井生活因为天气炎热，我们都学着本地人阿钟先点了份加冰的金桔柠檬红茶。虽然才来海南没两日，但我们已经迅速捕捉到——金桔才是海南美食的灵魂。钻进那些充满当地特色的美食店铺，佐料区很少会有醋，取而代之的是一盘已被切开小口的青绿色小金桔。无论文昌鸡，还是糟粕醋火锅，酸酸的金桔从来都是本地人的“揾碟”里必不可少的调味料。金桔的香气在这座岛上无处不在，这份酸味早已融入了本地人的生活。
+    </p>
+    <p>
+      仅仅花费五元，满满当当的一大杯柠檬茶被送到面前后，阿钟提醒我们小心搅动杯底，“下面全是糖，全搅开会很甜”。他端起桌上被我们忽略的铁壶，示意里面也都是茶水，喝完可以自行续饮，“所以才要慢慢搅，不然过会儿续杯就不甜了”。大家这才恍然大悟，为何一壶茶水可以支撑数小时漫无目的的闲聊。老爸茶最吸引人的地方，便是这种随性。伴随着平和的交谈声，一杯又一杯被续上的茶水，仿佛将时间都吃了进去，大都市紧追慢赶的快节奏在这里全被消磨殆尽。“慢”，反反复复出现在阿钟对我们的告诫里，“既然都来了海南，还那么快干吗”。
+    </p>
+    <p>
+      骑行过程里，阿钟一直让我们慢点、再慢点，以免错过那些他精心安排的沿途风景。忘了介绍，跟着阿钟的这个骑行团，是个加上我和摄影记者黄宇也就五人的新手队伍，另外三人全是女性，菲菲一个人从杭州来的，王姐和祁老师本是老友，约在海口再一起出发的。出发前夜有个破冰环节，大家互相聊了聊各自情况，阿钟了解到队伍里几乎没人有过长途骑行经验——居然只有抱着采访任务过来打酱油的我骑过青海湖，于是他琢磨着为大家重新设计些难度更小、风景更好的路线。路线选择多，也是环海南岛与走川藏线或青海湖完全不一样的地方。早在参团前，我们打听到“517骑行驿站”是当地最大的骑行爱好者俱乐部，就上门咨询，负责人虫子向我们介绍说，海南岛的路况比较复杂，众多国道、乡道、村道互相交错，不像青海湖或川藏线，沿着一条路骑便好。而且，手机导航往往不会推荐那些独特的路线，所以经常有自己过来环岛的人因为没做足功课，大部分时间都在国道上追着汽车吸尾气，环完后会觉得海南并没自己想象的那么美丽。
+    </p>
+  </blockquote>
+</div>
+<!-- Excerpt 03 (Option A) -->
+<div class="excerpt">
+  <p class="excerpt-lead" data-lang="en">Excerpt 3: Only on a Bicycle Do the Senses Fully Open</p>
+  <p class="excerpt-lead" data-lang="zh" style="display:none">节选三：只有在自行车上，感官才能完全打开</p>
+
+  <blockquote data-lang="en">
+    <p>
+      Only on a bicycle can the senses fully open. Before coming to Hainan, I had never imagined the island could have such vivid pastoral scenery. Along the countryside paths, we often saw cattle and sheep grazing leisurely, and ducks happily playing in the waterways.
+    </p>
+    <p>
+      “Experience more, observe more,” Azhong often said. If you don’t learn to slow down, he thought you might as well ride at home—because even if you have a chance to return to Hainan, without cycling it’s still hard to go deep into the island’s corners and feel the “real Hainan.”
+    </p>
+    <p>
+      “Cycling is just a way,” he said.
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>
+      只有在自行车上，感官才能完全打开。来海南之前，未曾设想过海南会拥有如此生机勃勃的田园风光，途经乡间小道，常常可以看到牛羊悠然地吃草，鸭群欢乐地在河道嬉戏。
+    </p>
+    <p>
+      “多体验，多观察。”阿钟常常将这句话挂在嘴边。不学会放慢脚步，他认为还不如回家骑车，因为即便还有机会再来海南，若是不选择骑行，也很难像这样深入海南的各个角落里，去感受“真正海南”的一面。
+    </p>
+    <p>
+      “骑车只是一种方式。”他说。
+    </p>
+  </blockquote>
+</div>
+
+  <!-- Demonstrates -->
+ <!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+  <ul>
+    <li data-lang="en">
+      Cycling as a reporting method: using pace, detours, and bodily experience to understand place.
+    </li>
+    <li data-lang="zh" style="display:none">
+      将骑行作为报道方法：通过速度、绕行与身体感受进入地方。
+    </li>
+
+    <li data-lang="en">
+      Place-based lifestyle writing: portraying Hainan through tea houses, villages, and roadside encounters rather than landmarks.
+    </li>
+    <li data-lang="zh" style="display:none">
+      地方化的生活方式书写：通过茶馆、乡镇与路途中的相遇，而非景点来呈现海南。
+    </li>
+
+    <li data-lang="en">
+      A non-competitive view of movement: shifting travel writing away from achievement toward experience.
+    </li>
+    <li data-lang="zh" style="display:none">
+      去竞速化的移动叙事：将旅行从“完成目标”转向“获得体验”。
+    </li>
+  </ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="lifestyle.html">← Back to Lifestyle</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

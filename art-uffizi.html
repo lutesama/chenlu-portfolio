@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Uffizi · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+     <header class="article-top">
+  <div class="breadcrumbs">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+    <a href="writing.html" data-lang="en">Writing</a>
+    <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+    <span class="sep">/</span>
+    <a href="art.html" data-lang="en">Art</a>
+    <a href="art.html" data-lang="zh" style="display:none">艺术</a>
+    <span class="sep">/</span>
+    <span data-lang="en">The Uffizi</span>
+    <span data-lang="zh" style="display:none">乌菲齐美术馆</span>
+  </div>
+
+  <h1 class="article-title" data-lang="en">
+    The Uffizi’s first non-Italian director: what reforms is Eike Schmidt pushing?
+  </h1>
+  <h1 class="article-title" data-lang="zh" style="display:none;">
+    乌菲齐美术馆历史上的第一位非意大利籍馆长，正在推动哪些变革？
+  </h1>
+
+<p class="article-deck" data-lang="en">
+    On a closed night inside the Pitti Palace, Eike Schmidt and his colleagues began a long-planned gallery overhaul—moving Raphael’s Doni portraits into Room 41 to “stage a dialogue” with Michelangelo. This interview follows the larger visitor-first reforms behind that gesture: galleries, ticketing, education, conservation, and digital work.
+  </p>
+  <p class="article-deck" data-lang="zh" style="display:none;">
+    一次闭馆后的夜间调展，从皮蒂宫主画廊开始：施密特推动将拉斐尔的多尼夫妇肖像迁入乌菲齐41号展厅，与米开朗基罗作品并置“对话”。这次专访聚焦他上任三年多以来的改革：展厅重组、票务与反黄牛、教育部门扩建、藏品保护与数字化等。
+  </p>
+
+  <div class="article-meta">
+    <span data-lang="en">Art</span>
+    <span data-lang="zh" style="display:none;">艺术</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Interview</span>
+    <span data-lang="zh" style="display:none;">专访</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Museum / Management / Reform</span>
+    <span data-lang="zh" style="display:none;">美术馆 / 管理 / 改革</span>
+    <span class="dot">·</span>
+    <span data-lang="en">2018</span>
+    <span data-lang="zh" style="display:none;">2018</span>
+  </div>
+</header>
+
+<!-- ===== Hero visual ===== -->
+<figure class="article-hero">
+  <img src="assets/img/art-uffizi.png" alt="Uffizi Gallery, Florence" loading="lazy">
+<figcaption class="figure-caption" data-lang="en">
+  Director Eike Schmidt is giving a tour to the audience at the Pitti Palace. Image source: The New York Times
+</figcaption>
+<figcaption class="figure-caption" data-lang="zh" style="display:none">
+  埃克·施密特馆长在皮蒂宫为观众进行讲解，图片来源：纽约时报
+</figcaption>
+</figure>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published in <em>The Art Newspaper China</em> (Issue 61, 2018).
+    <a href="assets/pdf/art-uffizi.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+    <a href="https://mp.weixin.qq.com/s/UV0thXWfdXqUlWtRGk2qJA" target="_blank" rel="noopener">WeChat Read ↗</a>
+  </span>
+  <span class="pub-text" data-lang="zh"  style="display:none">
+    原文发表于《艺术新闻/中文版》2018 年第 61 期。
+    <a href="assets/pdf/art-uffizi.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+    <a href="https://mp.weixin.qq.com/s/UV0thXWfdXqUlWtRGk2qJA" target="_blank" rel="noopener">微信阅读连接 ↗</a>
+  </span>
+  
+</div>
+
+<!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+    This interview traces how museum reform becomes concrete: gallery reconfiguration (starting from the “worst rooms”), ticketing and anti-scalper measures, extended opening hours, education staffing and school programs, conservation upgrades, and experiments in social media and 3D digitization.
+  </p>
+  <p data-lang="zh" style="display:none;">
+    这篇专访把“美术馆改革”落到具体动作上：从“最差的展厅”开始的展陈重组、官网购票与反黄牛、延长开放时间、教育部门扩编与校园项目、空调与防护玻璃等保护措施，以及社交媒体与雕塑3D扫描等数字化尝试。
+  </p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题框架</h2>
+
+<ul data-lang="en">
+    <li>What does “visitor-friendly” reform mean in practice at the Uffizi?</li>
+    <li>How do extended hours, annual passes, and online ticketing change crowd pressure and access?</li>
+    <li>How can a museum expand education programs—from staffing to school partnerships and “art ambassadors”?</li>
+    <li>What are the hardest parts of reform (scalpers, fake ticket sites, internal resistance), and how are they tackled?</li>
+    <li>How are masterpieces protected amid heavy traffic—climate control, glazing, and display choices?</li>
+    <li>What role can digital work play (cataloguing, social media, 3D scanning) in access and research?</li>
+  </ul>
+
+  <ul data-lang="zh" style="display:none;">
+    <li>“对观众更友好”的改革，具体落在了哪些环节？</li>
+    <li>延长开放时间、年票与官网购票，如何改变拥挤与可达性？</li>
+    <li>教育项目如何从“几乎不存在”扩展到系统化的学校合作与“艺术大使”？</li>
+    <li>改革最大的阻力是什么（黄牛、假网站、内部惰性），又如何推进？</li>
+    <li>在人流密集的条件下，如何保护最重要的绘画与雕塑（空调、防护玻璃等）？</li>
+    <li>数字化工作（编目、社交媒体、3D扫描）如何服务公众与研究？</li>
+  </ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">节选</h2>
+
+<section class="excerpts">
+
+<!-- Excerpt -->
+ <div class="excerpt">
+
+  <blockquote data-lang="en">
+    <p>
+    On June 10, it was the first weekend after Uffizi Gallery director Eike Schmidt returned from his visit to China.
+      That night, after the museum closed to the public, he and several colleagues went to the main gallery of the Pitti Palace
+      to begin carrying out a long-planned major reform: relocating two important portraits painted by the Renaissance master
+      Raphael between 1504 and 1505—<em>Agnolo Doni</em> and <em>Maddalena Strozzi</em>—to Room 41 of the Uffizi.
+    </p>
+
+    <p>
+      In this newly arranged space—now called the “Raphael and Michelangelo Room”—the two portraits of the Florentine merchant
+      Agnolo Doni and his wife Maddalena Strozzi Doni are placed beside Michelangelo’s <em>Holy Family</em>.
+      “This will be revolutionary, because we are putting two masterpieces together, at the center of the gallery,
+      so that they can enter into dialogue,” Schmidt told <em>The Art Newspaper China</em> in an interview.
+    </p>
+
+    <p>
+      To allow visitors to view the diptych panels on the reverse of the Doni portraits, Schmidt and his curatorial team designed
+      a vertical glass display case so viewers can walk around the paintings and see both sides. On the back is a diptych on a theme
+      from Greek mythology, depicting Deucalion—the last survivor who built an ark after the great flood—and his wife Pyrrha.
+      The diptych was completed by an artist in Raphael’s workshop known as the “Master of Serumido,” expressing wishes for the Doni
+      couple’s marital happiness and many children.
+    </p>
+
+    <p>
+      Michelangelo’s <em>Holy Family</em> was also commissioned by the Doni couple, created a year after the portraits were completed.
+      It is presumed to have been made to celebrate the birth of their daughter Maria. In the new gallery, two earlier works by Raphael
+      are also placed alongside the Doni portraits.
+    </p>
+
+    <p>
+      “Our galleries contain some of the most famous works in the world. We need to think about how we can adjust their placement,
+      re-position and re-combine them, to stimulate people’s eyes and minds,” Schmidt explained. The “Raphael and Michelangelo Room”
+      is not the only space that has been reconfigured: the Botticelli rooms have already been redesigned, and the Leonardo rooms will be
+      rearranged within the next three weeks; later, works by Caravaggio and Rembrandt will also be shown side by side in another gallery.
+    </p>
+
+    <p>
+      “This will offer an international perspective on artistic development and art history. There are many opportunities here to look at works
+      directly—even without reading any wall texts, as people move through the galleries, they can already learn something from art history.
+      The redesign has been carefully considered and repeatedly tested and adjusted based on earlier experience. In the coming months,
+      we will do the same work for the remaining rooms,” Schmidt said.
+    </p>
+
+    <p>
+      Located in Florence, the birthplace of the Renaissance, the Uffizi was begun in 1560 as the offices of Cosimo I de’ Medici,
+      the first Grand Duke of Tuscany, and was completed in 1581. Holding extensive Medici collections of prints, paintings, and sculpture,
+      it officially opened to the public in 1756 and is among the best-known museums in the world. Yet since entering the twentieth century,
+      it has long been criticized for an outdated and inefficient ticketing system, summer queues that can be unbearable,
+      and poor internal facilities and visitor experience.
+    </p>
+
+    <p>
+      In November 2015, Schmidt—born in Freiburg, Germany—took over the museum amid controversy, becoming the first non-Italian director
+      in the Uffizi’s more than four-hundred-year history. His appointment was part of an Italian Ministry of Culture reform of museums and cultural heritage:
+      in August 2015, then-minister Dario Franceschini announced 20 new directors, seven of them non-Italian, aimed at reforming bureaucracy and outdated systems
+      within Italy’s cultural institutions. Schmidt was among the most closely watched appointments.
+    </p>
+
+    <p>
+      Schmidt is an internationally known art historian and curator specializing in sculpture. He served as a curator at the National Gallery of Art in Washington, D.C.
+      From 2001 to 2006 he moved to Los Angeles to become curator of sculpture and decorative arts at the J. Paul Getty Museum; he then worked briefly at Sotheby’s in London.
+      From 2009 to 2015, he was curator and head of the department of decorative arts, textiles, and sculpture at the Minneapolis Institute of Art.
+    </p>
+
+    <p>
+      Despite his extensive museum experience, Schmidt encountered difficulties immediately after taking office. In spring 2016, he set up loudspeakers outside Italy’s
+      most-visited museum to warn tourists waiting in line about scalpers and pickpockets. A few days later, three local police officers came to his office and fined him
+      329 dollars for broadcasting without authorization. The incident won him public sympathy, but did not stop his reform efforts.
+    </p>
+
+    <p>
+      By now, more than three years have passed since Schmidt took office. On September 1 of the previous year, Austrian culture minister Thomas Drozda announced at a press
+      conference that the German-born sculpture specialist would, after stepping down at the end of 2019, take up the directorship of Vienna’s Kunsthistorisches Museum.
+      During Schmidt’s visit to China, <em>The Art Newspaper China</em> interviewed him about the reforms he has pursued as a historically significant foreign director at the Uffizi.
+    </p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+    <p>
+      6月10日，这是乌菲齐美术馆（Uffizi Gallery）馆长埃克·施密特（Eike Schmidt）结束他对中国的访问后的第一个周末。当天夜晚，当场馆对观众关闭后，他与另外几位同事来到皮蒂宫（Palazzo Pitti）的主画廊，开始执行一项计划已久的重大改革：将由文艺复兴大师拉斐尔（Raphael）创作于1504至1505 年间的两幅重要肖像画——《阿格诺洛·多尼（Agnolo Doni）》及《玛达莱娜·斯特罗齐（Maddalena Strozzi）》转移至乌菲兹美术馆的41号展厅内。
+    </p>
+
+    <p>
+      在这间现在被称作“拉斐尔和米开朗基罗作品展厅”的新空间里，这两幅描绘佛罗伦萨富商阿格诺洛·多尼及其妻子玛达莱娜·斯特罗齐多尼夫妇的肖像画被放置在米开朗基罗（Michelangelo）所绘制的《圣家族》（Holy Family）旁边。“这将会是非常革命性的，因为我们把两幅巨作放在一起，置于展厅中央，使它们产生对话。”在接受《艺术新闻／中文版》专访时，施密特表示。
+    </p>
+
+    <p>
+      为了让观众有机会欣赏到多尼夫妇肖像画背后的双联画，施密特和其策展团队特别设计了一种立式玻璃展柜，让观众可以环绕画作走动同时欣赏到它们的正反面。两幅画作背面是一组古希腊神话主题的双联画，描绘的是在大洪水后，建造方舟逃过一劫的最后幸存者丢卡利翁（Deucalion）和他的妻子碧拉（Pyrrha）。这组双连画是由拉斐尔工作室中一位名为“塞鲁米多大师”（Master of Serumido）的艺术家创作完成，表达了对多尼夫妇婚姻幸福、多子多孙的美好祝愿。
+    </p>
+
+    <p>
+      而由另一位文艺复兴大师米开朗基罗创作的《圣家族》（Holy Family），也是艺术家为多尼夫妇定制的作品，诞生于两幅肖像画完成后一年。据推测，这幅作品应该是为了庆祝他们女儿玛利亚（Maria）的出生。此外，新展厅中，多尼夫妇的肖像画旁边还放置了另外两幅拉斐尔更早期的创作。
+    </p>
+
+    <p>
+      “我们的展厅中拥有世界上最著名的那些作品，需要思考的是我们可以如何对作品的位置进行调整，重新并置和组合，以激发大家的眼睛、大脑。”施密特介绍道，“拉斐尔和米开朗基罗作品展厅”并不是唯一一个经过调整的新展厅，此前波提切利（Botticelli）展厅已经重新布置完毕，而达芬奇（Da Vinci）展厅则将在未来三个星期内调整好，之后在另一个展厅中还将同时并列卡拉瓦乔（Caravaggio）与伦勃朗（Rembrandt）的作品。
+    </p>
+
+    <p>
+      “这将提供一种关于艺术发展和艺术史的国际视野。这里有着大量直接观看作品的机会，就算不阅读任何展品说明，当人们行走于展厅中，已经可以从艺术史中学到了一些东西。展厅的重新设计都经过深思熟虑，并不断根据此前的经验经过测试调整。在未来的几个月内，我们会对剩下的展厅进行同样的工作。”施密特表示。
+    </p>
+
+    <p>
+      位于文艺复兴起源地佛罗伦萨的乌菲齐美术馆，兴建始于1560年，曾是第一代托斯卡纳大公科西莫一世·德·美第奇（Cosimo I de' Medici）的办公室，直至1581年才完工，拥有大量美第奇家族收藏的版画、油画和雕塑作品，并于1756年正式向公众开放，是世界上最知名的美术馆之一。然而，这座美术馆在进入20世纪以来，长期都因为落后低效的票务系统、夏日门口令人感到崩溃的长队、差劲的内部服务设施和参观体验为人诟病。
+    </p>
+
+    <p>
+      2015年11月，出生于德国弗莱堡的施密特在一片争议声中接管了这座知名的美术馆，成为该美术馆四百多年历史上第一位非意大利籍馆长。这项任命是意大利文化部的一项针对意大利博物馆和文化遗产的改革的一部分。2015年8月，时任文化部长的达里奥·弗兰切斯基尼（Dario Franceschini）宣布任命了20位新的馆长，其中7位是非意大利籍，旨在改革意大利文化遗产机构内部官僚和落后体制。而施密特则是其中最为人关注的一位。
+    </p>
+
+    <p>
+      施密特是一名国际知名的艺术史学者和策展人，专攻雕塑领域。他曾担任华盛顿国家美术馆（National Gallery of Art）的策展人，随后在2001年到2006年期间，他先是搬到洛杉矶，成为保罗·盖蒂博物馆（J. Paul Getty Museum）雕塑和装饰艺术系的策展人，然后又在伦敦苏富比短暂工作了一段时间，随后在2009年至2015年，他则在明尼阿波利斯艺术学院（Minneapolis Institute of Art）担任装饰艺术、纺织品和雕塑系策展人及负责人一职。
+    </p>
+
+    <p>
+      尽管拥有丰富的博物馆经验，但施密特在上任时却立刻遭遇到了困境。2016年的春天，他在这座意大利最受欢迎的博物馆外设置了扩音器，提醒在外排队等待的游客提防黄牛党和扒手。然而，几天之后，3名当地警察来到他的办公室里，因为他未在得到授权的情况下进行广播对他处以了329美元的罚款。这件事令他获得了公众的同情，但并未阻止他继续改革的步伐。
+    </p>
+
+    <p>
+      时至今日，自施密特上任已经过去了3年多。而去年9月1日，奥地利文化部长托马斯·罗兹达（Thomas Drozda）在新闻发布会上宣布，这位德国出生的雕塑专家将在2019年底卸任后，将接任维也纳艺术史博物馆馆长一职。在施密特访问中国期间，《艺术新闻／中文版》针对其改革措施采访了这位对于乌菲齐美术馆颇具历史性意义的外籍馆长。
+    </p>
+  </blockquote>
+
+</div>
+
+<!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+<!-- English -->
+  <ul class="demo" data-lang="en">
+    <li>Ability to conduct in-depth interviews with leaders of major international cultural institutions</li>
+    <li>Capacity to translate complex museum reforms into clear, structured public narratives</li>
+    <li>Understanding of museums as institutional systems involving governance, curation, infrastructure, and audience experience</li>
+    <li>Skill in connecting curatorial decisions with broader cultural, political, and urban contexts</li>
+    <li>Editorial judgment in framing cultural change beyond promotional or celebratory discourse</li>
+  </ul>
+
+  <!-- Chinese -->
+  <ul class="demo" data-lang="zh" style="display:none">
+    <li>对国际重要文化机构核心管理者进行深度访谈的能力</li>
+    <li>将复杂的美术馆改革议题转化为清晰、可读公共叙事的能力</li>
+    <li>从制度、策展、空间与观众体验多重维度理解美术馆运作体系</li>
+    <li>将具体策展与管理决策放入更广阔的文化、政治与城市语境中讨论</li>
+    <li>在文化写作中保持独立判断，避免流于机构宣传或表层叙述</li>
+  </ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="art.html">← Back to Art</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>
