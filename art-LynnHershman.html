@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lynn Hershman Leeson· Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+     <header class="article-top">
+  <div class="breadcrumbs">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+    <a href="writing.html" data-lang="en">Writing</a>
+    <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+    <span class="sep">/</span>
+    <a href="art.html" data-lang="en">Art</a>
+    <a href="art.html" data-lang="zh" style="display:none">艺术</a>
+    <span class="sep">/</span>
+    <span data-lang="en">Lynn Hershman Leeson</span>
+    <span data-lang="zh" style="display:none">林恩·赫舍曼·利森</span>
+  </div>
+
+  <h1 class="article-title" data-lang="en">Lynn Hershman Leeson : her name is an “anti-body”</h1>
+<h1 class="article-title" data-lang="zh" style="display:none">林恩·赫舍曼·利森：她的名字是一剂抗体</h1>
+
+<p class="article-deck" data-lang="en">
+  In The Art Newspaper China’s “Art &amp; Tech” column, Lu Chen interviews pioneering media artist Lynn Hershman Leeson.
+  From early interactive works to AI, DNA storage, and the installation <em>Infinity Engine</em>, her practice probes identity,
+  surveillance, and biotechnology—while insisting on optimism amid invisible risks.
+</p>
+<p class="article-deck" data-lang="zh" style="display:none">
+  《艺术新闻》“Art &amp; Tech”栏目专访媒体与科技艺术先驱林恩·赫舍曼·利森。她从早期互动作品出发，
+  延展至人工智能、DNA存储与《无限引擎》等装置，持续追问身份、监控与生物技术，并在看不见的风险之中保持乐观。
+</p>
+
+  <div class="article-meta">
+    <span data-lang="en">Art</span>
+    <span data-lang="zh" style="display:none;">艺术</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Interview</span>
+    <span data-lang="zh" style="display:none;">专访</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Art & Technology / Surveillance</span>
+    <span data-lang="zh" style="display:none;">艺术与科技 / 监控</span>
+    <span class="dot">·</span>
+    <span data-lang="en">2018</span>
+    <span data-lang="zh" style="display:none;">2018</span>
+  </div>
+</header>
+
+<!-- ===== Hero visual ===== -->
+<figure class="article-hero">
+  <img src="assets/img/art-lynnhershman.jpg" alt="Lynn Hershman" loading="lazy">
+<figcaption class="figure-caption" data-lang="en">
+  Lynn Hershman Leeson holding the custom “LYNN HERSHMAN” antibody. © Laurids Jensen
+</figcaption>
+<figcaption class="figure-caption" data-lang="zh" style="display:none">
+  艺术家利森手持“LYNN HERSHMAN（林恩·赫舍曼）”抗体 © Laurids Jensen
+</figcaption>
+</figure>
+
+<section class="prose">
+
+
+<div class="publine">
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+    Originally published on <em>The Art Newspaper China</em>  (Issue 61, 2018).
+    <a href="assets/pdf/art-LynnHershman.pdf" target="_blank" rel="noopener">Read full article (PDF) ↗</a>
+    <a href="https://www.theartjournal.cn/archives/news/39630" target="_blank" rel="noopener">Web Read ↗</a>
+  </span>
+
+  <span class="pub-text" data-lang="zh" style="display:none">
+    原文发表于《艺术新闻/中文版》2018 年第 61 期。
+    <a href="assets/pdf/art-LynnHershman.pdf" target="_blank" rel="noopener">阅读全文（PDF）↗</a>
+    <a href="https://www.theartjournal.cn/archives/news/39630" target="_blank" rel="noopener">网页阅读链接 ↗</a>
+  </span>
+</div>
+
+<!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+This article situates Lynn Hershman Leeson as a pioneer whose work repeatedly precedes later technological realities, rather than framing her through contemporary hype.
+The interview prioritizes concrete artworks, exhibitions, and technical details to ground abstract discussions of identity, AI, and biotechnology.
+Rather than adopting a dystopian or celebratory tone, the piece maintains a critical but optimistic stance toward technology and human agency.
+  </p>
+  <p data-lang="zh" style="display:none;">
+本文将林恩·赫舍曼·利森定位为“始终走在时代之前”的先驱，而非被当下技术热潮重新包装的艺术家。
+通过具体作品、展览与技术细节，支撑关于身份、人工智能与生物技术的抽象讨论。
+在警惕技术风险的同时，保持审慎而不失乐观的立场，强调人类能动性而非技术决定论。
+  </p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题</h2>
+
+ <ul data-lang="en">
+    <li>How does her early work anticipate today’s questions of virtual identity and self-construction?</li>
+    <li>What happens when biotech becomes both medium and subject—DNA storage, antibodies, and profit-driven R&amp;D?</li>
+    <li>How does art turn surveillance and “voyeurism” into a two-way system—and what risks remain invisible?</li>
+  </ul>
+
+  <ul data-lang="zh" style="display:none">
+    <li>她的早期实践如何预示当下虚拟身份与自我建构的问题？</li>
+    <li>当生物技术既是媒介又是主题——DNA存储、抗体与利润驱动研发——会发生什么？</li>
+    <li>艺术如何把监控与“偷窥”变成双向系统，而哪些风险依旧“看不见”？</li>
+  </ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">节选</h2>
+
+<section class="excerpts">
+
+<!-- Excerpt -->
+ <div class="excerpt">
+
+  <blockquote data-lang="en">
+    <p>As one of the earliest and most influential media artists, Lynn Hershman Leeson has been exceptionally busy of late. Over the past four months, her solo exhibition <em>Lynn Hershman Leeson: Anti-Bodies</em> opened at Berlin’s KW Institute for Contemporary Art, where she also unveiled a new commissioned work, <em>the Novalis Hotel</em>, installed in KW’s public space at the Novalis Hotel—an expansion based on her iconic installation <em>the Dante Hotel</em>. In addition, she presented <em>Lynn Hershman Leeson: First Person Plural</em> at Basel’s House of Electronic Arts (HeK). At the same time, solo presentations of her work took place at ShanghART’s space in Singapore, Waldburger Wouters in Brussels, and Anglim Gilbert Gallery in San Francisco.</p>
+
+    <p>“As far back as I can remember, I’ve always been an artist.” Although trained with dual degrees in art and biology, Leeson insisted in her interview with <em>The Art Newspaper China</em> that, between the two, her identity as an artist comes first. With a mother who was a biologist and a family deeply rooted in the sciences, she loved making things with her hands from childhood. Over time, she fused her interest in science with artistic practice—an enduring core of her work as a 77-year-old artist—and went on to create many “firsts.”</p>
+  </blockquote>
+
+  <blockquote data-lang="zh" style="display:none">
+   <p>作为最早也是最有影响力的媒体艺术家之一，林恩·赫舍曼·利森（Lynn Hershman Leeson）最近很忙。过去4个月里，她位于柏林的KW当代艺术研究院（KW Institute for Contemporary Art）的个展“抗体（Lynn Hershman Leeson: Anti-Bodies）”开幕，并在KW位于诺瓦利斯酒店的公共空间发布了新委托作品《诺瓦利斯酒店》（the Novalis Hotel），这件作品是基于她标志性装置《但丁酒店》（the Dante Hotel）创作的；此外，她还在巴塞尔“电子艺术之家”（House of Electronic Arts, HeK）举办了名为“第一人称复数（Lynn Hershman Leeson: First Person Plural）”的展览；同时，香格纳画廊位于新加坡的空间、布鲁塞尔Waldburger Wouters画廊和旧金山Anglim Gilbert画廊都举办了艺术家的个人展览。</p>
+
+    <p>“从我记事起，我就一直是一名艺术家。”虽然拥有着艺术和生物学双学位，但利森在接受《艺术新闻》采访时，始终坚持两者之间，艺术家的身份略胜一筹。由于母亲是生物学家，同时家人也都从事科学领域的工作，从儿时开始，利森便喜爱动手制作东西。逐渐地，利森将她对科学的兴趣与艺术创作结合起来，成为长期以来这位现年77岁的艺术家对艺术探索的核心，并创造了许多“第一”。</p>
+  </blockquote>
+
+</div>
+
+<!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+  <ul data-lang="en">
+    <li>Ability to report at the intersection of art, technology, and gender politics—grounded in specific works, mechanisms, and institutions.</li>
+    <li>Skill in translating technical concepts (AI agents, DNA as storage, biotech antibodies) into readable cultural narratives without hype.</li>
+    <li>Editorial judgment to frame a “pioneer” story with evidence: building a clear arc from biography → key works → contemporary stakes and risks.</li>
+  </ul>
+
+  <ul data-lang="zh" style="display:none">
+    <li>在“艺术×技术×性别政治”的交叉地带进行报道的能力，并能以具体作品、技术机制与机构语境落地。</li>
+    <li>把 AI 代理、DNA 存储、生物制药抗体等技术议题转译为清晰可读的文化叙事，同时避免跟风式“技术神话”。</li>
+    <li>以证据组织“先驱”叙事：从生平与创作脉络出发，串联代表作与当下风险/伦理议题，形成完整的编辑框架。</li>
+  </ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="art.html">← Back to Art</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>

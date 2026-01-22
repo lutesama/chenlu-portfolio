@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tate Modern · Chen Lu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#fbfaf7;
+      --fg:#0f0f0f;
+      --muted:#565656;
+      --line:#e6e1d7;
+      --hair:#f0ece4;
+
+      --glass: rgba(251,250,247,.78);
+      --glassLine: rgba(230,225,215,.75);
+      --focus: rgba(15,15,15,.22);
+
+      --card: rgba(255,255,255,.55);
+      --serif: "Libre Baskerville", serif;
+      --sans: Inter,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:var(--sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--fg);text-decoration:none;}
+    a:hover{text-decoration:underline;text-underline-offset:4px;}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--focus);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .progress{height:2px;width:100%;background:transparent;}
+    .progress > i{display:block;height:2px;width:0%;background:var(--fg);opacity:.9;}
+
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:0 22px 96px;
+    }
+
+    /* ===== mast (match tech/index) ===== */
+    .mast-shell{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--glass);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--glassLine);
+    }
+    .mast{
+      max-width:1040px;
+      margin:0 auto;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .brand{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .right{
+      display:flex;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .nav{
+      display:flex;
+      gap:22px;
+      font-size:13.5px;
+      align-items:flex-end;
+    }
+    .nav a, .lang-toggle button{
+      color:var(--muted);
+      position:relative;
+      padding-bottom:2px;
+    }
+    .nav a:hover, .lang-toggle button:hover{
+      color:var(--fg);
+      text-decoration:none;
+    }
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-2px;
+      height:1px;
+      background:transparent;
+      transition:background .18s ease;
+    }
+    .nav a.is-active{color:var(--fg);}
+    .nav a.is-active::after{background:var(--fg);}
+
+    .lang-toggle{
+      display:flex;
+      align-items:flex-end;
+      gap:8px;
+      font-size:13.5px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .lang-toggle .sep{opacity:.55;padding-bottom:2px;}
+    .lang-toggle button{
+      font:inherit;
+      background:transparent;
+      border:0;
+      cursor:pointer;
+    }
+    .lang-toggle button.active{color:var(--fg);}
+
+    /* ===== Article layout ===== */
+    .main{padding-top:14px;}
+
+    /* 这一层控制“标题/导语/正文”的整体宽度 —— 和 tech 的正文列一致 */
+    .article-wrap{
+      max-width:860px;      /* 关键：与栏目页 section-container 对齐 */
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+
+    .article-top{
+      margin:26px 0 14px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .breadcrumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .breadcrumbs a{color:var(--muted);}
+    .breadcrumbs a:hover{color:var(--fg);text-decoration:none;}
+    .breadcrumbs .sep{opacity:.55;}
+
+    .article-title{
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:44px;
+      line-height:1.15;
+      margin:12px 0 12px;
+      letter-spacing:.1px;
+    }
+
+    /* 导语：两端对齐 + 宽度与正文一致 */
+    .article-deck{
+      font-size:16px;
+      color:var(--muted);
+      margin:0 0 10px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+
+    .article-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:baseline;
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .article-meta .dot{opacity:.55;}
+
+    /* 头图保留，但不引入“卡片框” */
+    .article-hero{
+      margin:22px 0 26px;
+      padding-top:18px;
+    }
+    .article-hero img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:6px;   /* 与栏目页 cover 一致 */
+    }
+    .figure-caption{
+      margin-top:10px;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+.publine{
+  margin: 16px 0 26px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.pub-label{
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+  margin-bottom: 4px;
+}
+
+.pub-text a{
+  margin-left: 6px;
+}
+
+    /* 正文：两端对齐 + 清爽的编辑感 */
+    .prose{
+      max-width:760px;     /* 正文略窄一点（和你 tech 的 item-text 逻辑接近） */
+    }
+    .prose p{
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 18px;
+      text-align:justify;
+      text-justify:inter-word;
+      hyphens:auto;
+    }
+    .prose h2{
+      font-family:var(--serif);
+      font-size:28px;
+      line-height:1.2;
+      margin:34px 0 12px;
+    }
+    .prose blockquote{
+      margin:22px 0;
+      padding:0 0 0 16px;
+      border-left:2px solid var(--line);
+      color:var(--muted);
+    }
+
+    .prose ul{
+      margin: 0 0 18px;
+      padding-left: 18px;
+    }
+
+    .prose li{
+      margin: 0 0 10px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    .article-nav{
+      margin-top:34px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .article-nav a{color:var(--muted);}
+    .article-nav a:hover{color:var(--fg);text-decoration:none;}
+
+    .info-card{
+      margin: 28px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+
+   .info-card h2{
+      margin-top: 16px;
+    }
+
+   .excerpt-lead {
+     margin: 2.5rem 0 0.5rem;
+     font-size: 0.85rem;
+     color: #777;
+     letter-spacing: 0.01em;
+   }
+
+    footer{
+      margin-top:90px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    footer a{color:var(--muted);}
+    footer a:hover{color:var(--fg);text-decoration:none;}
+
+    @media(max-width:860px){
+      .article-title{font-size:36px;}
+    }
+    @media(max-width:520px){
+      .mast{flex-direction:column;align-items:flex-start;}
+      .nav{flex-wrap:wrap;}
+      .right{gap:10px;}
+      .article-wrap{padding:0 18px 64px;}
+      .article-title{font-size:32px;}
+      .prose p{font-size:16px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+  <div class="mast-shell">
+    <div class="mast">
+      <a class="brand" href="index.html" aria-label="Back to home">Chen Lu</a>
+
+      <div class="right">
+        <nav class="nav" aria-label="Primary">
+          <a href="cases.html" data-lang="en">Cases</a>
+          <a href="cases.html" data-lang="zh" style="display:none">案例</a>
+
+          <a href="writing.html" class="is-active" data-lang="en">Writing</a>
+          <a href="writing.html" class="is-active" data-lang="zh" style="display:none">写作</a>
+
+          <a href="visual.html" data-lang="en">Visual</a>
+          <a href="visual.html" data-lang="zh" style="display:none">视觉</a>     
+      
+          <a href="about.html" data-lang="en">About</a>
+          <a href="about.html" data-lang="zh" style="display:none">关于</a>
+
+        </nav>
+
+        <div class="lang-toggle" aria-label="Language toggle">
+          <button id="btnEN" class="active" type="button" onclick="setLang('en')">EN</button>
+          <span class="sep">|</span>
+          <button id="btnCN" type="button" onclick="setLang('zh')">CN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <div class="article-wrap">
+
+     <header class="article-top">
+  <div class="breadcrumbs">
+    <a href="index.html" data-lang="en">Home</a>
+    <a href="index.html" data-lang="zh" style="display:none">首页</a>
+    <span class="sep">/</span>
+    <a href="writing.html" data-lang="en">Writing</a>
+    <a href="writing.html" data-lang="zh" style="display:none">写作</a>
+    <span class="sep">/</span>
+    <a href="art.html" data-lang="en">Art</a>
+    <a href="art.html" data-lang="zh" style="display:none">艺术</a>
+    <span class="sep">/</span>
+    <span data-lang="en">Tate Modern</span>
+    <span data-lang="zh" style="display:none">泰特现代美术馆</span>
+  </div>
+
+  <h1 data-lang="en">Tate Modern’s shift from elite audiences to the public — and why China’s private museums are often driven by real estate</h1>
+  <h1 data-lang="zh" style="display:none;">泰特现代美术馆从精英向大众的倾斜，中国私人美术馆的主要动力来自房地产</h1>
+
+  <p class="article-deck" data-lang="en">
+    From audience data to public programs, Tate Modern is rethinking what a museum is for — building “drop-in” civic space, strengthening networks, and redesigning interpretation. In this interview, Director Frances Morris also reflects on the real-estate logic behind many private museums in China.
+  </p>
+  <p class="article-deck" data-lang="zh" style="display:none;">
+    从观众画像到公共项目，泰特现代美术馆正在重新定义“美术馆为何存在”：建设可随时进入的公共空间、扩展跨机构网络、调整叙事与参与方式。在专访中，馆长弗朗西斯·莫里斯也谈到中国私人美术馆背后的房地产逻辑。
+  </p>
+
+  <div class="article-meta">
+    <span data-lang="en">Art</span>
+    <span data-lang="zh" style="display:none;">艺术</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Interview</span>
+    <span data-lang="zh" style="display:none;">专访</span>
+    <span class="dot">·</span>
+    <span data-lang="en">Museum / Audience / Public Programs</span>
+    <span data-lang="zh" style="display:none;">美术馆 / 观众 / 公共项目</span>
+    <span class="dot">·</span>
+    <span data-lang="en">2018</span>
+    <span data-lang="zh" style="display:none;">2018</span>
+  </div>
+</header>
+
+<!-- ===== Hero visual ===== -->
+<figure class="article-hero">
+  <img src="assets/img/art-tatemodern.png" alt="Tate Modern" loading="lazy">
+<figcaption class="figure-caption" data-lang="en">
+  Tate Modern, London. Image source: Ramboll.
+</figcaption>
+<figcaption class="figure-caption" data-lang="zh" style="display:none">
+  伦敦泰特现代美术馆，图片来源：Ramboll
+</figcaption>
+</figure>
+
+<section class="prose">
+
+<div class="publine">
+  
+  <span class="pub-label" data-lang="en">Publication</span>
+  <span class="pub-label" data-lang="zh" style="display:none">发表信息</span>
+
+  <span class="pub-text" data-lang="en">
+  Originally published on <em>The Art Newspaper China</em> digital platform, 2018.
+  <a href="https://mp.weixin.qq.com/s/jeHQEMlv4g5PzdXMA9oQ5w" target="_blank" rel="noopener">WeChat Read↗</a>
+</span>
+
+<span class="pub-text" data-lang="zh" style="display:none">
+  原文发表于《艺术新闻／中文版》数字平台（2018 年）。
+  <a href="https://mp.weixin.qq.com/s/jeHQEMlv4g5PzdXMA9oQ5w" target="_blank" rel="noopener">微信阅读链接 ↗</a>
+</span>
+  
+</div>
+
+<!-- Editor's note -->
+<h2 data-lang="en">Editor’s note</h2>
+<h2 data-lang="zh" style="display:none">编辑说明</h2>
+
+<p data-lang="en">
+      Tate Modern is one of the world’s most visited contemporary art museums — but its leadership is uneasy with an audience profile that skews highly educated and relatively affluent. In this interview, Director Frances Morris explains how Tate is shifting from a “temple of art” model toward a more open social space: building “drop-in” programs, expanding partnerships, improving digital access, and redesigning interpretation without forcing a single narrative. She also offers a pointed observation on China’s surge of private museums: many are propelled by real-estate development rather than collections or long-term public commitments.
+    </p>
+
+    <p data-lang="zh" style="display:none;">
+      泰特现代美术馆拥有世界级的到访量，但馆方对其观众构成的“精英化”保持警惕。在这次专访中，馆长弗朗西斯·莫里斯谈到泰特如何从“精英艺术殿堂”向更开放的公共集会空间转向：以“Tate Exchange”等可随时进入的项目扩展公众参与，强化与社区/学校及跨界机构的合作，通过数字内容与工具降低门槛，并在策展与阐释中避免强加单一叙事。她也直言，中国私人美术馆的扩张常常与房地产逻辑紧密相关，真正的挑战在于愿景、承诺与公众信任。
+    </p>
+
+ <!-- Key questions -->
+<h2 data-lang="en">Key questions</h2>
+<h2 data-lang="zh" style="display:none">核心问题</h2>
+
+<ul class="bullets" data-lang="en">
+      <li>How does Tate Modern expand beyond an “educated, affluent” audience profile?</li>
+      <li>What can “drop-in” public programs like Tate Exchange change inside a museum?</li>
+      <li>How can curators support diverse interpretations without imposing one narrative?</li>
+      <li>What role do networks (Plus Tate / Tate Connects) play in a national museum ecosystem?</li>
+      <li>Why does Frances Morris see real estate as a key driver behind many private museums in China?</li>
+    </ul>
+
+    <ul class="bullets" data-lang="zh" style="display:none;">
+      <li>泰特现代美术馆如何突破“高学历、相对富裕”的观众结构？</li>
+      <li>“Tate Exchange”这类可随时进入的公共项目会如何改变美术馆？</li>
+      <li>策展如何在不强加单一叙事的前提下，让不同背景观众都能参与？</li>
+      <li>“Plus Tate / Tate Connects”等网络在博物馆生态中扮演什么角色？</li>
+      <li>莫里斯为何认为中国许多私人美术馆的动力来自房地产？</li>
+    </ul>
+
+<!-- Selected excerpts -->
+<h2 data-lang="en">Selected excerpts</h2>
+<h2 data-lang="zh" style="display:none">节选</h2>
+
+<section class="excerpts">
+  <!-- English -->
+  <div class="excerpt" data-lang="en">
+    <blockquote>
+      Located on the south bank of the River Thames in London, Tate Modern faces St Paul’s Cathedral across the water and is connected by the Millennium Bridge. Since opening in 2000, it has remained one of the most popular museums of modern and contemporary art in the world.
+    </blockquote>
+
+    <blockquote>
+      However, Morris has expressed concern about the composition of Tate Modern’s audience and believes that change is urgently needed. Statistics show that 70% of its visitors have received higher education, 16% have a professional background in art, 53% are international visitors, 18% come from Black and minority ethnic backgrounds, family visitors account for only 10%, young people make up just 19%, and low-income groups represent only 6%.
+    </blockquote>
+
+    <blockquote>
+      Morris believes that although Tate Modern is an international museum, it has not established sufficiently strong connections with its local communities—an area she sees as crucial for the institution’s next phase of development. “People need to feel a sense of belonging in a comfortable space. Museums must be able to offer this, attracting more people to participate, do what they want to do, and form social connections. Social motivation will be one of the key driving forces,” she says.
+    </blockquote>
+
+    <blockquote>
+      “No museum should operate in isolation. Whether internationally or locally, we are all part of an important ecosystem, and we share core values.”
+    </blockquote>
+
+    <blockquote>
+      “Tate Exchange is truly fascinating. The space functions like a laboratory—everything within it is an experiment.”
+    </blockquote>
+
+    <blockquote>
+      “Rather than imposing a single narrative that restricts understanding, we aim to offer many different ways for people to engage with exhibitions.”
+    </blockquote>
+
+    <blockquote>
+      “I think this is a real issue. In my view, the proliferation of these museums is not necessarily matched by extraordinary collections or architectural ideas; one element driving museum development appears to be real estate.”
+    </blockquote>
+
+    <blockquote>
+      “The transition from private to public is not simply about bricks and mortar, but about vision and commitment—about how institutions serve the public and the relationship of trust between the private and the public. I am very interested to see which institutions will succeed in doing this.”
+    </blockquote>
+  </div>
+
+  <!-- Chinese -->
+  <div class="excerpt" data-lang="zh" style="display:none;">
+    <blockquote>
+      坐落于伦敦泰晤士河南岸的泰特现代美术馆，与圣保罗大教堂隔岸相望，并由千禧大桥连接起来，从2000年开放以来，它一直是世界上最受欢迎的现当代艺术博物馆。
+    </blockquote>
+
+    <blockquote>
+      然而，莫里斯仍然表示泰特现代美术馆的观众构成令她感到担忧，急需改变。在泰特现代美术馆的观众统计数据中显示，其中70%有接受过大学教育，16%具有专业的艺术背景，53％是国际访客，18%来自黑人和少数民族，家庭访客仅占据10%，年轻人只占比19%，而低收入群体只占到6%。
+    </blockquote>
+
+    <blockquote>
+      莫里斯认为泰特现代美术馆是一座国际博物馆，却并没有很好与社区建立联系，而这正是泰特现代美术馆在下一个阶段中需要进行更多尝试的地方。“人们需要在一个舒适的空间中找到归属感，美术馆需要能够满足这一点，吸引更多观众参与、做他们想做的事情，并产生相关社会联系。社会动机将是其中一个重要的驱动力。”
+    </blockquote>
+
+    <blockquote>
+      “任何博物馆都不应该单独行动。不论是国际上和地方上，我们都处于一个重要生态组织之中，并且拥有着共同的核心价值观。”
+    </blockquote>
+
+    <blockquote>
+      “Tate Exchange”真的非常有趣。这个项目空间就如同实验室般，一切都是一场实验。
+    </blockquote>
+
+    <blockquote>
+      “通过不强加一个特定的叙述来限制他们的理解，然后提供许多不同的方式来参与展览。”
+    </blockquote>
+
+    <blockquote>
+      “我认为这是一个真正的问题。在我看来，这些博物馆的扩散并不是为了匹配大量的奇妙藏品，或者去处理关于建筑的奇妙设想，博物馆发展的一个元素似乎是房地产。”
+    </blockquote>
+
+    <blockquote>
+      “我认为从私人到公众的转变不仅仅是关于砖块和灰泥，而是关于愿景和承诺、关于如何为公众服务、关于私人和公众之间的信任关系，所以我很期待会有哪些机构可以做到这一点。”
+    </blockquote>
+  </div>
+</section>
+
+<!-- Demonstrates -->
+<div class="info-card">
+  <h2 data-lang="en">What this demonstrates</h2>
+  <h2 data-lang="zh" style="display:none">它能证明什么</h2>
+
+  <ul class="demo" data-lang="en">
+    <li>Ability to interview leaders of major international art institutions and translate institutional strategy into public narratives</li>
+    <li>Evidence-based reporting: using audience demographics and participation metrics to frame editorial questions</li>
+    <li>Understanding museums as civic systems — public programs, education, community partnerships, and policy context</li>
+    <li>Skill in structuring long-form Q&amp;A into a coherent argument about access, inclusion, and institutional purpose</li>
+    <li>Independent judgment: connecting global museum practice to China’s private-museum boom and its real-estate drivers</li>
+  </ul>
+
+  <ul class="demo" data-lang="zh" style="display:none;">
+    <li>对国际一线美术馆馆长进行深度访谈，并将机构策略转化为公众可读叙事的能力</li>
+    <li>以数据支撑报道：从观众画像与参与指标中提炼问题意识与论据</li>
+    <li>将美术馆理解为公共系统：公共项目、教育、社区协作与政策语境，而不止展览本身</li>
+    <li>把长篇Q&amp;A组织为清晰论证：围绕“准入”“多元”“机构目的”展开结构化表达</li>
+    <li>保持独立判断：将全球机构经验放回中国语境，指出私人美术馆扩张与房地产动力的关联</li>
+  </ul>
+</div>
+
+</section>
+
+      <nav class="article-nav" aria-label="Article navigation">
+        <a href="art.html">← Back to Art</a>
+        <a href="writing.html">All Writing →</a>
+      </nav>
+
+    </div>
+
+    <footer>
+      <div>© Chen Lu</div>
+      <div><a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a></div>
+    </footer>
+  </div>
+
+  <script>
+    function setLang(lang){
+      document.querySelectorAll('[data-lang]').forEach(el=>{
+        el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+      });
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+      document.getElementById('btnCN').classList.toggle('active', lang === 'zh');
+    }
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const p = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('progressBar').style.width = p.toFixed(2) + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    window.addEventListener('resize', updateProgress);
+  </script>
+</body>
+</html>
