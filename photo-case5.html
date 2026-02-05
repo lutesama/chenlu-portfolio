@@ -182,26 +182,21 @@
     }
 
     /* 主图区域：不用瀑布流，保持“杂志版心”感 */
-    .hero{
-      width:100%;
-      background: var(--hair);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+   .hero{
+  width:100%;
+  background: var(--hair);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height: 52vh;      /* 可选：让舞台不至于太矮 */
+}
 
-      /* ✅ 关键：不要固定横向比例，否则竖图必裁 */
-      aspect-ratio: auto;
-      overflow: visible;
-    }
-    .hero img{
-      width:100%;
-      height:auto;
-      display:block;
-
-     /* ✅ 防止主图过高撑爆屏幕：你可以调这个值 */
-      max-height: 78vh;
-      object-fit: contain;
-    }
+.hero img{
+  width:100%;
+  height:auto;
+  max-height:78vh;
+  object-fit:contain;
+}
 
     .navbtn{
       position:absolute;
@@ -254,15 +249,34 @@
       line-height: 1.5;
     }
 
-    /* ===== Thumbnail strip ===== */
-    .strip{
-      display:flex;
-      gap:10px;
-      overflow:auto;
-      padding: 10px 2px 2px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
+.strip-toggle{
+  margin-top: 10px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12.5px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor:pointer;
+}
+.strip-toggle:hover{ color: var(--fg); border-color: var(--glassLine); }
+
+/* ===== Thumbnail strip ===== */
+.strip{
+  display:none;              /* ✅ 默认收起 */
+  gap:10px;
+  overflow:auto;
+  padding: 10px 2px 2px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.strip.is-open{
+  display:flex;              /* ✅ 展开时显示 */
+}
+
     .thumb{
       flex: 0 0 auto;
       width: 112px;
@@ -332,7 +346,6 @@
       .nav{ flex-wrap:wrap; }
       .page-title{ font-size:32px; }
       .navbtn{ width:40px; height:40px; }
-      .hero{ aspect-ratio: 4 / 3; }
     }
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
@@ -395,21 +408,26 @@
     <span data-lang="zh" style="display:none">项目</span>
   </div>
 
-  <h1 class="page-title" data-lang="en">Editorial stills — Fragrance</h1>
-  <h1 class="page-title" data-lang="zh" style="display:none">编辑影像｜香氛</h1>
+<h1 class="page-title" data-lang="en">Food & Events — Selected Works</h1>
+<h1 class="page-title" data-lang="zh" style="display:none">商业拍摄｜美食与活动</h1>
 
-  <p class="page-deck" data-lang="en">
-    Fragments collected without a fixed purpose.
-  <p class="page-deck" data-lang="zh" style="display:none">
-    一些没有既定目的的片段收集。
-  </p>
+<p class="page-deck" data-lang="en">
+  Selected photographs from a commissioned food and event project.
+</p>
+<p class="page-deck" data-lang="zh" style="display:none">
+  来自一次商业美食与线下活动项目的摄影作品选辑。
+</p>
 
-  <div class="meta" data-lang="en">
-    <span>2017</span><span class="dot">·</span><span>Photo essay</span><span class="dot">·</span><span>Shanghai</span>
-  </div>
-  <div class="meta" data-lang="zh" style="display:none">
-    <span>2017</span><span class="dot">·</span><span>影像随笔</span><span class="dot">·</span><span>上海</span>
-  </div>
+<div class="meta" data-lang="en">
+  <span>Commercial photography</span>
+  <span class="dot">·</span>
+  <span>Food & Events</span>
+</div>
+<div class="meta" data-lang="zh" style="display:none">
+  <span>商业摄影</span>
+  <span class="dot">·</span>
+  <span>美食与活动</span>
+</div>
 
   <div class="viewer">
     <div class="stage">
@@ -431,7 +449,7 @@
           </svg>
         </button>
 
-        <div class="counter" id="counter">1 / 4</div>
+        <div class="counter" id="counter">1 / 9</div>
       </div>
 
       <!-- Caption（双语） -->
@@ -439,6 +457,11 @@
         <div id="capEN" data-lang="en"></div>
         <div id="capZH" data-lang="zh" style="display:none"></div>
       </div>
+ 
+<button class="strip-toggle" id="stripToggle" type="button" aria-expanded="false">
+  <span data-lang="en">Show thumbnails</span>
+  <span data-lang="zh" style="display:none">展开缩略图</span>
+</button>
 
       <!-- 缩略条（可留可删；它是“免得你一直翻”的捷径） -->
       <div class="strip" id="strip" aria-label="Thumbnail strip"></div>
@@ -449,12 +472,16 @@
     <h2 data-lang="en">Notes</h2>
     <h2 class="zh" data-lang="zh" style="display:none">说明</h2>
 
-    <p data-lang="en">
-      Fragrance has no body. This series observes how presence can exist without form, without narrative, and without a subject. What is photographed is not the scent, but the space it quietly inhabits, and imagined closeness.
-    </p>
-    <p data-lang="zh" style="display:none">
-      香水没有身体。这组作品观察一种没有形态、没有叙事、也没有主体的存在方式。被拍摄的不是香味本身，而是它安静占据的空间，与被想象的亲近。
-    </p>
+ <p data-lang="en">
+ This series was photographed during a live food event, with attention placed on process rather than finished dishes.
+The rhythm of actions and the moment when materials are handled and transformed shape the core of the images.
+</p>
+
+<p data-lang="zh" style="display:none">
+  拍摄发生在一场线下美食活动中，我将注意力放在过程而非成品。
+动作的节奏、材料被处理的瞬间，构成了画面的主要内容。
+</p>
+
   </div>
 
   <footer>
@@ -501,17 +528,15 @@ window.addEventListener('resize', updateProgress);
 /* ===== Slides: replace with your images + captions =====
    建议：8–14 张最合适。太多就会变“相册”，太少又不成“essay”。 */
 const slides = [
-  { src: "assets/img/photocase2/1.jpg", alt: "Photo 01", capEN: "01", capZH: "01" },
-  { src: "assets/img/photocase2/2.jpg", alt: "Photo 02", capEN: "02", capZH: "02" },
-  { src: "assets/img/photocase2/3.jpg", alt: "Photo 03", capEN: "03", capZH: "03" },
-  { src: "assets/img/photocase2/4.jpg", alt: "Photo 04", capEN: "04", capZH: "04" },
-
-//以后再打开
-  //{ src: "assets/img/photocase2/5.jpg", alt: "Photo 05", capEN: "05", capZH: "05" },
-  //{ src: "assets/img/photocase2/6.jpg", alt: "Photo 06", capEN: "06", capZH: "06" },
-  //{ src: "assets/img/photocase2/7.jpg", alt: "Photo 07", capEN: "07", capZH: "07" },
-  //{ src: "assets/img/photocase2/8.jpg", alt: "Photo 08", capEN: "08", capZH: "08" },
-  //{ src: "assets/img/photocase2/9.jpg", alt: "Photo 09", capEN: "08", capZH: "08" }
+  { src: "assets/img/photocase5/1.jpg", alt: "Photo 01", capEN: "01", capZH: "01" },
+  { src: "assets/img/photocase5/2.jpg", alt: "Photo 02", capEN: "02", capZH: "02" },
+  { src: "assets/img/photocase5/3.jpg", alt: "Photo 03", capEN: "03", capZH: "03" },
+  { src: "assets/img/photocase5/4.jpg", alt: "Photo 04", capEN: "04", capZH: "04" },
+  { src: "assets/img/photocase5/5.jpg", alt: "Photo 05", capEN: "05", capZH: "05" },
+  { src: "assets/img/photocase5/6.jpg", alt: "Photo 06", capEN: "06", capZH: "06" },
+  { src: "assets/img/photocase5/7.jpg", alt: "Photo 07", capEN: "07", capZH: "07" },
+  { src: "assets/img/photocase5/8.jpg", alt: "Photo 08", capEN: "08", capZH: "08" },
+  { src: "assets/img/photocase5/9.jpg", alt: "Photo 09", capEN: "09", capZH: "09" }
 ];
 
 let idx = 0;
@@ -590,6 +615,14 @@ window.addEventListener('keydown', (e)=>{
     if(dx > 0) go(idx-1); else go(idx+1);
   }, {passive:true});
 })();
+
+const stripToggle = document.getElementById('stripToggle');
+if(stripToggle && strip){
+  stripToggle.addEventListener('click', ()=>{
+    const open = strip.classList.toggle('is-open');
+    stripToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+}
 
 /* Init */
 renderThumbs();
