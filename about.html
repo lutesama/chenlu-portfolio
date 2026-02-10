@@ -217,6 +217,23 @@
     .section ul{ margin:0; padding-left:18px; max-width: 820px; }
     .section li{ margin:6px 0; }
 
+
+.edu-list{
+  margin:0;
+  padding-left:18px; /* 跟 .section ul 一样，保证圆点对齐 */
+  max-width:820px;
+}
+.edu-list li{
+  margin:10px 0;
+}
+.edu-note{
+  display:block;     /* 让说明行独占一行 */
+  margin-top:6px;
+  font-size:12px;    /* 小一号 */
+  color:var(--muted);
+  line-height:1.6;
+}
+
     footer{
       margin-top:90px;
       padding-top:18px;
@@ -306,14 +323,14 @@
         <div class="author-meta">
           <!-- Contact directly under photo -->
           <div class="contact" data-lang="en">
+            CHEN Lu <br>
             Based in China <br>
             <a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a><br>
-            <a href="assets/pdf/ChenLu_CV.pdf" target="_blank" rel="noopener" aria-label="Open CV PDF">Download CV ↗</a>
           </div>
           <div class="contact" data-lang="zh" style="display:none">
+            陈璐 <br>
             常驻中国<br>
             <a href="mailto:lutesama@gmail.com">lutesama@gmail.com</a><br>
-            <a href="assets/pdf/ChenLu_CV.pdf" target="_blank" rel="noopener" aria-label="Open CV PDF">下载 CV ↗</a>
           </div>
         </div>
       </div>
@@ -334,36 +351,52 @@
       <ul data-lang="zh" style="display:none">
         <li><strong>创意叙事</strong>：深度报道、评论、解释型内容。</li>
         <li><strong>品牌叙事</strong>：内容策略与传播方案。</li>
-        <li><strong>媒体与研究</strong>：采访、案头研究、信息整合。</li>
+        <li><strong>媒体与研究</strong>：采访、研究分析、信息整合。</li>
         <li><strong>跨媒体影响力</strong>：将选题转化为多形态传播。</li>
       </ul>
     </section>
 
-    <section class="section">
-      <h2 data-lang="en">Education</h2>
-      <h2 data-lang="zh" style="display:none">教育经历</h2>
+  <section class="section">
+  <h2 data-lang="en">Education</h2>
+  <h2 data-lang="zh" style="display:none">教育背景</h2>
 
-      <ul>
-        <li data-lang="en">MSc, Museum Studies — University of Leicester</li>
-        <li data-lang="zh" style="display:none">理学硕士，博物馆学 — 莱斯特大学</li>
+  <!-- EN -->
+  <ul class="edu-list" data-lang="en">
+    <li>
+      <strong>MSc Museum Studies, University of Leicester, UK (2013–2015)</strong>
+      <span class="edu-note">Distinction thesis: Digital Business Models for Museums</span>
+    </li>
+    <li>
+      <strong>BEng Digital Media Technology, Central China Normal University (2009–2013)</strong>
+      <span class="edu-note">Top 10% · Scholarships (3 years) · Early creative & AR experimentation</span>
+    </li>
+  </ul>
 
-        <li data-lang="en">BEng, Digital Media Technology — Central China Normal University</li>
-        <li data-lang="zh" style="display:none">工科学士，数字媒体技术 — 华中师范大学</li>
-      </ul>
-    </section>
+  <!-- ZH -->
+  <ul class="edu-list" data-lang="zh" style="display:none">
+    <li>
+      <strong>博物馆学理学硕士｜英国莱斯特大学｜2013–2015</strong>
+      <span class="edu-note">优秀论文（Distinction）：如何为博物馆建立一个数字化商业模式？</span>
+    </li>
+    <li>
+      <strong>数字媒体技术工学学士｜华中师范大学｜2009–2013</strong>
+      <span class="edu-note">专业前 10%｜连续三年校级奖学金｜早期创意与 AR 实验实践</span>
+    </li>
+  </ul>
+</section>
 
     <section class="section">
       <h2 data-lang="en">Experience</h2>
       <h2 data-lang="zh" style="display:none">工作经历</h2>
 
       <ul data-lang="en">
-        <li>Sanlian Lifeweek — Senior Reporter</li>
-        <li>Art Newspaper China — Editor</li>
-      </ul>
+  <li>Sanlian Lifeweek — Senior Reporter (Tech & Culture)</li>
+  <li>Art Newspaper China — Editor (Art & Tech)</li>
+</ul>
 
       <ul data-lang="zh" style="display:none">
-        <li>《三联生活周刊》— 资深记者</li>
-        <li>《艺术新闻/中文版》— 编辑</li>
+        <li>《三联生活周刊》— 资深记者（科技与文化议题）</li>
+        <li>《艺术新闻/中文版》— 编辑（艺术与科技方向）</li>
       </ul>
     </section>
 
